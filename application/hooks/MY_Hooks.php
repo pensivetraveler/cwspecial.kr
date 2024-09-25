@@ -26,7 +26,8 @@ class MY_Hooks
     {
         $dotenv = new Symfony\Component\Dotenv\Dotenv();
         $dotenv->usePutenv();
-        $dotenv->load(FCPATH.'.env.'.getenv('CI_ENV'));
+		if(getenv('CI_ENV') && file_exists(FCPATH.'.env.'.getenv('CI_ENV')))
+        	$dotenv->load(FCPATH.'.env.'.getenv('CI_ENV'));
     }
 
     public function SystemOfInspection()

@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('email', 'session', 'encrypt', 'encryption', 'database', 'user_agent', 'upload', 'josa', 'form_validation');
+$autoload['libraries'] = array('email', 'session', 'encryption', 'database', 'user_agent', 'upload', 'josa', 'form_validation');
 
 /*
 | -------------------------------------------------------------------
@@ -134,4 +134,8 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('Model_User', 'Model_File', 'Model_User_Token', 'Model_Sys_Cfg', 'Model_Sys_Code');
+if(getenv('DB_PORT')) {
+	$autoload['model'] = array('Model_User', 'Model_File', 'Model_User_Token', 'Model_Sys_Cfg', 'Model_Sys_Code');
+}else{
+	$autoload['model'] = array();
+}

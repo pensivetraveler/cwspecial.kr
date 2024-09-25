@@ -50,45 +50,45 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 class MY_Input extends CI_Input
 {
-    /**
-     * chrome 80 cookie issue를 해결하기 위함.
-     * @param $name
-     * @param $value
-     * @param $expire
-     * @param $domain
-     * @param $path
-     * @param $prefix
-     * @param $secure
-     * @param $httponly
-     * @return void
-     */
-    public function set_cookie($name = '', $value = '', $expire = '', $domain = '', $path = '/', $prefix = '', $secure = false, $httponly = false)
-    {
-        if (PHP_VERSION_ID < 70300) {
-            // PHP 7.3 이전 버전에서는 헤더에 직접 SameSite 속성을 추가
-            $cookie = [
-                'name'     => $prefix.$name,
-                'value'    => $value,
-                'expire'   => $expire,
-                'domain'   => $domain,
-                'path'     => $path,
-                'secure'   => $secure,
-                'httponly' => $httponly,
-            ];
-            header('Set-Cookie: '.http_build_query($cookie, '', '; ').'; SameSite=None');
-        } else {
-            // PHP 7.3 이후부터는 setcookie()에서 SameSite 속성을 지원
-            $options = array(
-                'expires'  => $expire,
-                'path'     => $path,
-                'domain'   => $domain,
-                'secure'   => $secure,
-                'httponly' => $httponly,
-                'samesite' => 'None', // 혹은 'Lax', 'Strict'로 설정 가능
-            );
-            setcookie($prefix.$name, $value, $options);
-        }
-    }
+//    /**
+//     * chrome 80 cookie issue를 해결하기 위함.
+//     * @param $name
+//     * @param $value
+//     * @param $expire
+//     * @param $domain
+//     * @param $path
+//     * @param $prefix
+//     * @param $secure
+//     * @param $httponly
+//     * @return void
+//     */
+//    public function set_cookie($name = '', $value = '', $expire = '', $domain = '', $path = '/', $prefix = '', $secure = false, $httponly = false, $samesite = NULL)
+//    {
+//        if (PHP_VERSION_ID < 70300) {
+//            // PHP 7.3 이전 버전에서는 헤더에 직접 SameSite 속성을 추가
+//            $cookie = [
+//                'name'     => $prefix.$name,
+//                'value'    => $value,
+//                'expire'   => $expire,
+//                'domain'   => $domain,
+//                'path'     => $path,
+//                'secure'   => $secure,
+//                'httponly' => $httponly,
+//            ];
+//            header('Set-Cookie: '.http_build_query($cookie, '', '; ').'; SameSite=None');
+//        } else {
+//            // PHP 7.3 이후부터는 setcookie()에서 SameSite 속성을 지원
+//            $options = array(
+//                'expires'  => $expire,
+//                'path'     => $path,
+//                'domain'   => $domain,
+//                'secure'   => $secure,
+//                'httponly' => $httponly,
+//                'samesite' => 'None', // 혹은 'Lax', 'Strict'로 설정 가능
+//            );
+//            setcookie($prefix.$name, $value, $options);
+//        }
+//    }
 
     /**
      * Fetch from array

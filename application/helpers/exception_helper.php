@@ -81,7 +81,8 @@ if ( ! function_exists('get_path'))
     {
         $whole_uri = _HTTP.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $path_info = explode('/', str_replace(BASE_URL, '', $whole_uri));
-        return array_values(array_filter($path_info))[0];
+		$arr = array_values(array_filter($path_info));
+		return count($arr) > 0 ? $arr[0] : '';
     }
 }
 

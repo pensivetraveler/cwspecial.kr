@@ -15,11 +15,13 @@ class MY_Controller_WEB extends MY_Controller
     protected array $validateMessages;
     protected array $validateCallback;
 
+	public string $baseViewPath;
     public array $data;
     public array $titleList;
     public array $addCSS;
     public array $addJS;
     public array $jsVars;
+	public int $perPage;
 
     public function __construct()
     {
@@ -30,17 +32,22 @@ class MY_Controller_WEB extends MY_Controller
         if($this->router->class === 'common') redirect('/welcome');
 
         $this->load->library('Authorization_token', ['config' => 'extra/jwt_config']);
+		$this->load->library('pagination');
+		$this->load->helper('html');
+
+		$this->form_validation->set_error_delimiters('', '');
 
         $this->identifier = '';
         $this->validateMessages = [];
         $this->validateCallback = [];
 
+		$this->baseViewPath = 'web/layout/index';
         $this->data = [];
         $this->titleList = [];
         $this->addCSS = [];
-        $this->addJS['head'] = [];
-        $this->addJS['tail'] = [];
+		$this->addJS = ['head' => [], 'tail' => []];
         $this->jsVars = [];
+		$this->perPage = 10;
     }
 
     protected function validateToken()
@@ -76,12 +83,12 @@ class MY_Controller_WEB extends MY_Controller
         }
     }
 
-    protected function setTitleList($data = [])
-    {
-        $this->titleList = $data;
-    }
+	protected function setTitleList($data = [])
+	{
+		$this->titleList = $data;
+	}
 
-    /**
+	/**
      * 페이징 함수를 함수를 이용해서 가공해준다.
      * @param $url       유지할 URI
      * @param $totalRow  총 Row 수
@@ -89,16 +96,12 @@ class MY_Controller_WEB extends MY_Controller
      * @param $config    페이징 환경설저
      * @return mixed     가공된 Paging 정보
      */
-    public function getPaging($url, $totalRow, $perPage, $config = []) {
-        $this->load->library('pagination');
-
+	protected function getPaginationLinks($url, $totalRow, $perPage, $config = [])
+	{
         $page = $this->input->get('page');
         $page = $page ? intVal($page) : 1;
 
         $numLinks = ($page <= 4) ? (9 - $page) : 4;
-
-        if($this->_isMobile)
-            $numLinks = 1;
 
         // 페이징 환경설정
         $pagingConfig = [
@@ -112,14 +115,6 @@ class MY_Controller_WEB extends MY_Controller
             'first_link' => '&lt;&lt;',
             'last_link' => "&gt;&gt;",
             'query_string_segment' => 'page',
-            'first_tag_open' => '<div class="nc-paging-first">',
-            'first_tag_close' => '</div>',
-            'prev_tag_open' => '<div class="nc-paging-prev">',
-            'prev_tag_close' => '</div>',
-            'next_tag_open' => '<div class="nc-paging-next">',
-            'next_tag_close' => '</div>',
-            'last_tag_open' => '<div class="nc-paging-last">',
-            'last_tag_close' => '</div>',
         ];
 
         $config = array_merge($pagingConfig, $config);
@@ -128,4 +123,23 @@ class MY_Controller_WEB extends MY_Controller
 
         return $this->pagination->create_links();
     }
+
+	protected function viewApp($data)
+	{
+		$data['title'] = get_site_title(APP_NAME_EN, $this->titleList);
+		$data['addCSS'] = $this->addCSS;
+		$data['addJS'] = $this->addJS;
+		$data['dialog'] = $this->session->flashdata('dialog');
+		$data['class'] = $this->router->class;
+		$data['method'] = $this->router->method;
+		$data['titleList'] = $this->titleList;
+
+		$data = array_merge($this->data, $data);
+		$this->output->set_header('Last-Modified: ' . gmdate("D, d M Y H:i:s") . ' GMT');
+		$this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0',false);
+		$this->output->set_header('Pragma: no-cache');
+		$this->output->set_header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+
+		if(!$this->config->item('error_occurs')) $this->load->view($this->baseViewPath, $data);
+	}
 }
