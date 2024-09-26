@@ -1,7 +1,9 @@
 <?php
-$config['admin_base_config'] = true;
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-$config['admin_menu_default'] = [
+$config['admin_base_config_loaded'] = true;
+
+$config['admin_menu'] = [
     'dashboard' => [
         'icon' => 'ri-home-smile-line',
         'title' => 'Home',

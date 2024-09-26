@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+$config['admin_form_config_loaded'] = true;
+
 $config['form_side_prefix'] = 'form_side-';
 $config['form_page_prefix'] = 'form_page-';
 

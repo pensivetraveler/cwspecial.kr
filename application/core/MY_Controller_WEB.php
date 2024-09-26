@@ -50,7 +50,12 @@ class MY_Controller_WEB extends MY_Controller
 		$this->perPage = 10;
     }
 
-    protected function validateToken()
+	protected function auth(): bool
+	{
+		return true;
+	}
+
+	protected function validateToken()
     {
         $token = $this->input->post('token')?:$this->session->userdata('token');
         if(is_empty($token)){
@@ -141,5 +146,12 @@ class MY_Controller_WEB extends MY_Controller
 		$this->output->set_header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
 		if(!$this->config->item('error_occurs')) $this->load->view($this->baseViewPath, $data);
+	}
+
+	protected function addJsVars($data)
+	{
+		foreach ($data as $key => $val) {
+			$this->jsVars[$key] = $val;
+		}
 	}
 }
