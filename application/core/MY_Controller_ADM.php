@@ -5,6 +5,7 @@ class MY_Controller_ADM extends MY_Controller_WEB
 {
 	public string $href;
 	public array $headerData;
+	public bool $sideForm;
 
     public function __construct()
     {
@@ -19,6 +20,9 @@ class MY_Controller_ADM extends MY_Controller_WEB
 		$this->lang->load('form_validation', $this->config->item('language'));
 		$this->lang->load('custom_form_validation', $this->config->item('language'));
 
+		$this->auth();
+
+		$this->sideForm = false;
 		$this->headerData = [];
 		$this->titleList = ['Admin'];
 		$this->href = '';
@@ -28,7 +32,7 @@ class MY_Controller_ADM extends MY_Controller_WEB
 			'API_PARAMS' => [],
 		];
 
-		$this->auth();
+		$this->setProperties();
 
 		if(ENVIRONMENT === 'development') $this->output->enable_profiler(TRUE);
     }
@@ -246,7 +250,7 @@ class MY_Controller_ADM extends MY_Controller_WEB
 		parent::viewApp($data);
 	}
 
-	protected function initFormSetting($data = [])
+	protected function setProperties($data = [])
 	{
 		$this->columns = $this->setColumns();
 		$this->jsVars = [
@@ -265,7 +269,7 @@ class MY_Controller_ADM extends MY_Controller_WEB
 
 	protected function setColumns($name = ''): array
 	{
-		if(!$name) $name = 'form_'.strtolower($this->router->class);
+		if(!$name) $name = 'form_'.strtolower($this->router->class).'_config';
 		if(empty($this->config->item($name))){
 			log_message('error', "setColumns : config {$name} does not exist.");
 			trigger_error("setColumns : config {$name} does not exist.", E_USER_ERROR);
