@@ -3,7 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['admin_base_config_loaded'] = true;
 
-$config['admin_menu'] = [
+$config['admin_menu_top_default'] = [
+
+];
+
+$config['admin_menu_left_default'] = [
     'dashboard' => [
         'icon' => 'ri-home-smile-line',
         'title' => 'Home',

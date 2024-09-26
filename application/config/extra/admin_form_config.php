@@ -64,6 +64,92 @@ $config['base_form_config'] = [
     ],
 ];
 
+$config['form_users_config'] = [
+	[
+		'field' => 'student_id',
+		'label' => 'lang:student.student_id',
+		'form' => false,
+		'list' => true,
+	],
+	[
+		'field' => 'user_id',
+		'label' => 'lang:user.user_id',
+		'form' => false,
+		'list' => true,
+	],
+	[
+		'field' => 'code',
+		'label' => 'lang:student.code',
+		'form' => false,
+		'list' => true,
+	],
+	[
+		'field' => 'name',
+		'label' => 'lang:user.name',
+		'form' => false,
+		'list' => true,
+	],
+	[
+		'field' => 'id',
+		'label' => 'lang:user.id',
+		'form' => false,
+		'list' => true,
+	],
+	[
+		'field' => 'tel',
+		'label' => 'lang:user.tel',
+		'form' => false,
+		'list' => true,
+	],
+//	[
+//		'field' => 'write_count',
+//		'label' => 'lang:user.write_count',
+//		'form' => false,
+//		'list' => true,
+//	],
+	[
+		'field' => 'disabilities_yn',
+		'label' => 'lang:user.disabilities_yn',
+		'form' => false,
+		'list' => true,
+	],
+	[
+		'field' => 'aac_yn',
+		'label' => 'lang:user.aac_yn',
+		'form' => false,
+		'list' => true,
+	],
+	[
+		'field' => 'created_id',
+		'label' => 'lang:common.created_id',
+		'form' => false,
+		'list' => false,
+	],
+	[
+		'field' => 'recent_dt',
+		'label' => 'lang:common.recent_dt',
+		'form' => true,
+		'rules' => 'trim',
+		'errors' => [],
+		'category' => 'basic',
+		'type' => 'text',
+		'subtype' => 'readonly',
+		'icon' => 'ri-calendar-line',
+		'form_text' => '',
+		'attributes' => [
+			'placeholder' => 'YYYY-MM-DD',
+		],
+		'form_attributes' => [
+			'view_mod' => 'edit',
+		],
+		'default' => '',
+		'list' => true,
+		'list_attributes' => [],
+	],
+];
+
+////////////////////////////////////////////////////////////////////////////////////
+
 $config['form_administrators'] = [
     [
         'field' => 'admin_id',

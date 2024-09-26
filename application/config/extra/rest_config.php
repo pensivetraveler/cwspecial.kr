@@ -298,7 +298,7 @@ $config['rest_database_group'] = 'default';
 | The table name in your database that stores API keys
 |
 */
-$config['rest_keys_table'] = 'user_token';
+$config['rest_keys_table'] = 'user_key';
 
 /*
 |--------------------------------------------------------------------------
@@ -336,8 +336,7 @@ $config['rest_keys_table'] = 'user_token';
 |   ) ;
 |  |
 */
-$config['rest_enable_keys'] = false;
-//$config['rest_enable_keys'] = true;
+$config['rest_enable_keys'] = true;
 
 /*
 |--------------------------------------------------------------------------
@@ -348,7 +347,7 @@ $config['rest_enable_keys'] = false;
 | column name to match e.g. my_key
 |
 */
-$config['rest_key_column'] = 'token';
+$config['rest_key_column'] = 'key';
 
 /*
 |--------------------------------------------------------------------------
@@ -390,8 +389,7 @@ $config['rest_key_length'] = 40;
 | 2012/06/12. See RFC 6648 specification for more details
 |
 */
-//$config['rest_key_name'] = 'X-API-KEY';
-$config['rest_key_name'] = 'Authorization';
+$config['rest_key_name'] = 'X-API-KEY';
 
 /*
 |--------------------------------------------------------------------------
