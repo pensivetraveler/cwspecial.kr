@@ -336,7 +336,7 @@ $config['rest_keys_table'] = 'user_key';
 |   ) ;
 |  |
 */
-$config['rest_enable_keys'] = true;
+$config['rest_enable_keys'] = false;
 
 /*
 |--------------------------------------------------------------------------
