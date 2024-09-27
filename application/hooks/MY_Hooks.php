@@ -48,12 +48,12 @@ class MY_Hooks
     {
         $CI =& get_instance();
 
-        if(!isset($CI->session)){  //Check if session lib is loaded or not
-            $CI->load->library('session');  //If not loaded, then load it here
+		//Check if lib is loaded or not, and if not loaded, then load it here
+        if(!isset($CI->session)){
+            $CI->load->library('session');
         }
-
-        if(!isset($CI->PHPtoJS)){  //Check if session lib is loaded or not
-            $CI->load->library('PHPtoJS', $CI->config->item('phptojs.namespace')?['namespace' => $CI->config->item('phptojs.namespace')]:[]);  //If not loaded, then load it here
+        if(!isset($CI->PHPtoJS)){
+            $CI->load->library('PHPtoJS', $CI->config->item('phptojs.namespace')?['namespace' => $CI->config->item('phptojs.namespace')]:[]);
         }
 
         if (
