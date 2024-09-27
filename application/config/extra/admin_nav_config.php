@@ -18,10 +18,10 @@ $config['admin_menu_side'] = [
         'className' => [],
         'subMenu' => [],
     ],
-	'Users' => [
+	'Students' => [
 		'icon' => 'ri-team-line',
-		'title' => 'Users Management',
-		'route' => '/admin/users',
+		'title' => 'Students Management',
+		'route' => '/admin/students',
 		'params' => [
 			'layout' => 'side-menu',
 		],
