@@ -124,7 +124,7 @@ class MY_Controller_WEB extends MY_Controller
 
         $config = array_merge($pagingConfig, $config);
 
-        $this->pagination->initialize($config);
+         $this->pagination->initialize($config);
 
         return $this->pagination->create_links();
     }
@@ -148,10 +148,14 @@ class MY_Controller_WEB extends MY_Controller
 		if(!$this->config->item('error_occurs')) $this->load->view($this->baseViewPath, $data);
 	}
 
-	protected function addJsVars($data)
+	protected function addJsVars($data, $afterConstruct = false)
 	{
-		foreach ($data as $key => $val) {
-			$this->jsVars[$key] = $val;
+		if(!$afterConstruct) {
+			foreach ($data as $key => $val) {
+				$this->jsVars[$key] = $val;
+			}
+		}else{
+			$this->phptojs->append($data);
 		}
 	}
 }
