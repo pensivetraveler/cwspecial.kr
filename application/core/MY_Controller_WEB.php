@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class MY_Controller_WEB extends MY_Controller
 {
+	protected string $defaultController = '';
     protected string $table;
     protected string $identifier;
     protected array $primaryKeyList;
@@ -28,8 +29,6 @@ class MY_Controller_WEB extends MY_Controller
         parent::__construct();
 
         $this->load->helper('html');
-
-        if($this->router->class === 'common') redirect('/welcome');
 
         $this->load->library('Authorization_token', ['config' => 'extra/jwt_config']);
 		$this->load->library('pagination');
