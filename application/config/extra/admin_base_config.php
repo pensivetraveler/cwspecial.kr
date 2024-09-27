@@ -7,7 +7,7 @@ $config['admin_menu_top_default'] = [
 
 ];
 
-$config['admin_menu_left_default'] = [
+$config['admin_menu_side_default'] = [
     'dashboard' => [
         'icon' => 'ri-home-smile-line',
         'title' => 'Home',
