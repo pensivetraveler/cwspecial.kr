@@ -118,7 +118,6 @@ if ( ! function_exists('get_error_response'))
 				$msg = addslashes($error['msg']);
 			}
 		}
-		print_data($msg);
 
         if(get_path() === 'api') {
             $response = [
