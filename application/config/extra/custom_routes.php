@@ -11,8 +11,8 @@ $route['except_folders'] = ['app', 'api', 'adm', 'admin', 'module'];
 | - Home/1 의 경우 Home/index/1 로 매핑.
 |--------------------------------------------------------------------------
 */
-$route['(?!app|api|adm|admin|module).*'] = 'web/$0';
 $route['(?!app|api|adm|admin|module)([^/]+)/(:num)'] = 'web/$1/index/$2';
+$route['(?!app|api|adm|admin|module).*'] = 'web/$0';
 
 /*
 |--------------------------------------------------------------------------
