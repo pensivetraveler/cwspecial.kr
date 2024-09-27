@@ -110,13 +110,23 @@ if ( ! function_exists('get_error_response'))
 {
     function get_error_response($preset, $error): array
     {
+		$msg = null;
+		if(isset($error['msg'])) {
+			if(is_array($error['msg'])) {
+				$msg = $error['msg'];
+			}else{
+				$msg = addslashes($error['msg']);
+			}
+		}
+		print_data($msg);
+
         if(get_path() === 'api') {
             $response = [
                 'errorCode' => $preset['code'],
                 'errorMessage' => $preset['msg'],
                 'errorBody' => [
                     'Type' => addslashes($error['type']),
-                    'Message' => addslashes($error['msg']),
+                    'Message' => $msg,
                     'Filename' => $error['location']??null,
                     'Line Number' => $error['line']??null,
                 ],
@@ -128,7 +138,7 @@ if ( ! function_exists('get_error_response'))
                     'param' => null,
                     'value' => $error['line']??null,
                     'type' => addslashes($error['type']),
-                    'msg' => addslashes($error['msg']),
+                    'msg' => $msg,
                 ]]
             ]);
         }
