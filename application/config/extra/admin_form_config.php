@@ -64,7 +64,7 @@ $config['base_form_config'] = [
     ],
 ];
 
-$config['form_users_config'] = [
+$config['form_students_config'] = [
 	[
 		'field' => 'student_id',
 		'label' => 'lang:student.student_id',
