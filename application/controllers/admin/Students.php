@@ -1,5 +1,4 @@
-<?php
-defined('BASEPATH') or exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once __DIR__ . '/Common.php';
 
@@ -12,7 +11,9 @@ class Students extends Common
 		$this->titleList[] = 'Users Management';
 		$this->href = base_url('/admin/' . $this->router->class);
 		$this->viewPath = 'admin/' . $this->router->class;
-		$this->sideForm = true;
+		$this->addJsVars([
+			'API_URI' => '/adm/students',
+		]);
 	}
 
 	protected function setProperties($data = [])

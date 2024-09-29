@@ -11,10 +11,8 @@ class Common extends MY_Controller_WEB
 
 	public function index()
 	{
-		if($this->defaultController) {
-			redirect("/".(get_path()?get_path().'/':'').$this->defaultController);
-		}else{
-			$this->load->view('welcome_message');
-		}
+		parent::index();
+
+		$this->load->view('welcome_message');
 	}
 }

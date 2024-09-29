@@ -3,13 +3,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class MY_Controller_ADM extends MY_Controller_WEB
 {
-	public string $href;
-	public array $headerData;
+	public array $pageConfig;
+	public string $pageType;
 	public bool $sideForm;
+	public array $headerData;
+	public string $href;
+	public array $columns;
+	public string $viewPath;
 
-    public function __construct()
-    {
-        parent::__construct();
+
+	public function __construct()
+	{
+		parent::__construct();
 
 		$this->baseViewPath = 'admin/layout/index';
 
@@ -20,26 +25,34 @@ class MY_Controller_ADM extends MY_Controller_WEB
 		$this->lang->load('form_validation', $this->config->item('language'));
 		$this->lang->load('custom_form_validation', $this->config->item('language'));
 
-		$this->auth();
-
+		$this->titleList = ['Admin'];
+		$this->pageConfig = [];
+		$this->pageType = 'form';
 		$this->sideForm = false;
 		$this->headerData = [];
-		$this->titleList = ['Admin'];
 		$this->href = '';
+		$this->viewPath = '';
 		$this->jsVars = [
 			'TITLE' => $this->router->class,
 			'API_URI' => '',
 			'API_PARAMS' => [],
 		];
 
-		$this->setProperties();
-
+		if($this->router->class !== 'common') $this->setProperties();
 		if(ENVIRONMENT === 'development') $this->output->enable_profiler(TRUE);
-    }
+	}
 
 	public function index()
 	{
-		$this->list();
+		parent::index();
+
+		if(empty($this->pageConfig)) {
+			$data['subPage'] = '';
+			$data['backLink'] = WEB_HISTORY_BACK;
+			$this->viewApp($data);
+		}else{
+			$this->{"{$this->pageConfig['type']}"}();
+		}
 	}
 
 	public function list()
@@ -209,7 +222,7 @@ class MY_Controller_ADM extends MY_Controller_WEB
 
 	protected function viewApp($data)
 	{
-		if(!array_key_exists('subPage', $data) || empty($data['subPage'])) {
+		if(!array_key_exists('subPage', $data)) {
 			foreach ([$this->router->class, 'layout'] as $subdivide) {
 				$path = get_path().DIRECTORY_SEPARATOR.$subdivide.DIRECTORY_SEPARATOR;
 				$view = '';
@@ -252,25 +265,46 @@ class MY_Controller_ADM extends MY_Controller_WEB
 
 	protected function setProperties($data = [])
 	{
-		$this->columns = $this->setColumns();
-		$this->jsVars = [
-			'LIST_VIEW_URI' => $this->href,
-			'DETAIL_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'view',
-			'ADD_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'add',
-			'EDIT_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'edit',
-			'IDENTIFIER' => $this->setIdentifier(),
-			'LIST_COLUMNS' => $this->setListColumns(),
-			'FORM_DATA' => $this->setFormData(),
-			'FORM_REGEXP' => $this->config->item('regexp'),
-			'SIDE_FORM' => $this->sideForm,
-		];
+		if(!is_empty($this->config->item('admin_page_config'), strtolower($this->router->class))){
+			$this->pageConfig = array_merge(
+				$this->config->item('admin_page_base_config'),
+				$this->config->item('admin_page_config')[strtolower($this->router->class)]);
+		}
+
+		$this->pageType = $this->pageConfig['type'];
+		if($this->pageConfig['properties']['formExist']) $this->sideForm = $this->pageConfig['formProperties']['formType'] === 'side';
+
+		if($this->pageConfig['properties']['listExist']) {
+			$this->columns = $this->setColumns();
+			$this->jsVars = [
+				'LIST_VIEW_URI' => $this->href,
+				'DETAIL_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'view',
+				'ADD_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'add',
+				'EDIT_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'edit',
+				'IDENTIFIER' => $this->setIdentifier(),
+				'LIST_COLUMNS' => $this->setListColumns(),
+				'LIST_PLUGIN' => $this->pageConfig['listProperties']['listPlugin'],
+				'FORM_DATA' => $this->setFormData(),
+				'FORM_REGEXP' => $this->config->item('regexp'),
+				'SIDE_FORM' => $this->sideForm,
+			];
+		}
+
 		$this->addJsVars($data);
 	}
 
 	protected function setColumns($name = ''): array
 	{
-		if(!$name) $name = 'form_'.strtolower($this->router->class).'_config';
-		if(empty($this->config->item($name))){
+		if(!$name) {
+			foreach (['list', 'form'] as $pre) {
+				if($this->config->item($pre.'_'.strtolower($this->router->class).'_config')) {
+					$name = $pre.'_'.strtolower($this->router->class).'_config';
+					break;
+				}
+			}
+		}
+
+		if(empty($name) || empty($this->config->item($name))){
 			log_message('error', "setColumns : config {$name} does not exist.");
 			trigger_error("setColumns : config {$name} does not exist.", E_USER_ERROR);
 		}else{
@@ -523,7 +557,7 @@ class MY_Controller_ADM extends MY_Controller_WEB
 			'classes' => [],
 			'onclick' => [],
 			'render' => [],
-			'bs' => [],
+			'options' => [],
 		];
 	}
 

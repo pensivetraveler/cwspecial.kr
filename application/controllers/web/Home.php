@@ -8,9 +8,4 @@ class Home extends Common
 	{
 		parent::__construct();
 	}
-
-	function index($key = 0)
-	{
-		$this->load->view('welcome_message');
-	}
 }
