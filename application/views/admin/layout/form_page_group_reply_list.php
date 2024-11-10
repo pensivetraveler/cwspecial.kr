@@ -1,5 +1,5 @@
 <?php extract($item['data']); ?>
-<div class="row mb-4 form-validation-row">
+<div class="row mb-4 form-validation-unit">
     <?=form_label(lang($item['label']), '', ['class' => 'col-sm-2 col-form-label'])?>
     <div class="col-sm-10">
         <div class="input-group input-group-merge mb-3">
@@ -29,6 +29,6 @@
                 echo form_label(lang($reply_content['label']), $reply_content['id']);
             ?>
         </div>
-        <?=get_admin_form_text($reply_content['form_text'])?>
+        <?=get_admin_form_text($reply_content)?>
     </div>
 </div>

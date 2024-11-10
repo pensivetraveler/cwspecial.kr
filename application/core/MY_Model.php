@@ -13,9 +13,16 @@ class MY_Model extends CI_Model
     public array $intList = [];
     public array $fileList = [];
 
-    function __construct()
+	public bool    $isAutoincrement = false;
+	public bool    $isDelYn = false;
+	public bool    $isUseYn = false;
+	public bool    $isCreatedDt = false;
+	public bool    $isCreatedId = false;
+	public bool    $isUpdatedDt = false;
+
+	function __construct()
     {
-		log_message('info', 'Model Class Initialized');
+        log_message('info', 'Model Class Initialized');
         $this->load->database();
     }
 
@@ -88,7 +95,7 @@ class MY_Model extends CI_Model
     */
     public function getDataPDO($table, $select = [], $where = [])
     {
-        if(count($where) > 0) $this->db->where($where);
+        $this->db->where($where);
         if(count($select) > 0) $this->db->select($select);
 
         $result = $this->db->get($table)->row();
@@ -106,15 +113,14 @@ class MY_Model extends CI_Model
 
     public function getListPDO($table, $select = [], $where = [])
     {
-        if(count($where) > 0) $this->db->where($where);
+        $this->db->where($where);
         if(count($select) > 0) $this->db->select($select);
         return $this->db->get($table)->result();
     }
 
     public function getCntPDO($table, $where = [])
     {
-        if(count($where) > 0) $this->db->where($where);
-        $this->db->select('COUNT(*) AS cnt');
+        $this->db->where($where);
         return $this->db->count_all_results($table);
     }
 
@@ -194,19 +200,21 @@ class MY_Model extends CI_Model
     | 사용 공통 함수
     |--------------------------------------------------------------------------
     */
-    public function where($table, $where, $like = [])
+	public function where($table, $where, $like = [])
     {
-        foreach ($where as $key=>$val) {
-            if(is_numeric($key)) {
-                $this->db->where($table.'.'.$val);
-            }else{
-                if(is_array($val)) {
-                    $this->db->where_in($table.'.'.$key, $val);
-                }else{
-                    $this->db->where($table.'.'.$key, $val);
-                }
-            }
-        }
+		if(count($where) > 0) {
+			foreach ($where as $key=>$val) {
+				if(is_numeric($key)) {
+					$this->db->where($table.'.'.$val);
+				}else{
+					if(is_array($val)) {
+						$this->db->where_in($table.'.'.$key, $val);
+					}else{
+						$this->db->where($table.'.'.$key, $val);
+					}
+				}
+			}
+		}
 
         if(count($like) > 0) {
             $this->db->group_start();
@@ -238,7 +246,13 @@ class MY_Model extends CI_Model
             }else{
                 foreach ($data as $key => $value) $this->db->order_by($key, $value);
             }
-        }
+        }else{
+			if($this->identifier && $this->isAutoincrement === true) {
+				$this->orderBy(["$this->table.$this->identifier" => 'DESC']);
+			}else if($this->isCreatedDt) {
+				$this->orderBy(["$this->table.".CREATED_DT_COLUMN_NAME => 'DESC']);
+			}
+		}
     }
 
     /*
@@ -246,30 +260,35 @@ class MY_Model extends CI_Model
     | 기타 테이블 및 컬럼 정보
     |--------------------------------------------------------------------------
     */
-    public function getTableInfo($table)
+    public function getTableInfo($table = '')
     {
-        return $this->db
-            ->where('table_schema', $this->db->database)
-            ->where('table_name', $table)
-            ->order_by('ordinal_position')
-            ->get('INFORMATION_SCHEMA.columns')
-            ->result_array();
+		if(!$table) $table = $this->table;
+		return $this->getListQuery("
+			SELECT * 
+			FROM
+			    INFORMATION_SCHEMA.columns
+			WHERE
+			    1=1
+				AND table_schema = ?
+				AND table_name = ?
+		", [
+			$this->db->database,
+			$this->db->dbprefix.$table
+		]);
     }
 
-    public function getColumnList($table)
-    {
-        $tableInfo = $this->getTableInfo($table);
-        return array_column($tableInfo, 'COLUMN_NAME');
+    public function getTableColumns($table = ''): array
+	{
+		if(!$table) $table = $this->table;
+        $result = array_map(function($item) {
+			return (array)$item;
+		}, $this->getTableInfo($table));
+        return array_column($result, 'COLUMN_NAME');
     }
 
-    function getFields($tableName = '')
+    public function getTableFields($table = '')
     {
-        if(!$tableName){
-            if($this->table){
-                return $this->db->list_fields($this->table);
-            }
-        }else{
-            return $this->db->list_fields($tableName);
-        }
+		if(!$table) $table = $this->table;
+		return $this->db->list_fields($table);
     }
 }

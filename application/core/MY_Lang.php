@@ -255,7 +255,7 @@ class MY_Lang extends CI_Lang {
 
     protected function find_line($line, $languages)
     {
-        if(strpos($line, '.') === false || substr($line, -1, 1) === '.'){
+        if(!str_contains($line, '.') || str_ends_with($line, '.')){
             $value = $languages[$line] ?? false;
         }else{
             $keys = explode('.', $line);

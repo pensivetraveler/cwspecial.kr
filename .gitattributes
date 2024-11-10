@@ -21,3 +21,7 @@ tests/travis/ export-ignore
 # User Guide source files and compiled files
 user_guide_src export-ignore
 user_guide export-ignore
+
+* text eol=auto
+*.html linguist-detectable=false
+*.css linguist-detectable=false

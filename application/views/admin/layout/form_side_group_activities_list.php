@@ -42,7 +42,7 @@
 									$sort_order['attributes'],
 								);
 							?>
-							<div class="col-sm-12 form-validation-row">
+							<div class="col-sm-12 form-validation-unit">
                                 <div class="input-group input-group-merge mb-3">
                                     <div class="form-floating form-floating-outline">
                                         <?php

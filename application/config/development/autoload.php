@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('array', 'url', 'file', 'function', 'cookie', 'inflector', 'directory', 'path', 'download', 'language', 'model',);
+$autoload['helper'] = array('string', 'array', 'url', 'file', 'function', 'cookie', 'inflector', 'directory', 'path', 'download', 'language', 'model', 'format');
 
 /*
 | -------------------------------------------------------------------
@@ -134,8 +134,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-if(getenv('DB_PORT')) {
-	$autoload['model'] = array('Model_File', 'Model_Sys_Cfg', 'Model_Sys_Code');
-}else{
-	$autoload['model'] = array();
-}
+$autoload['model'] = array('Model_User', 'Model_File', 'Model_User_Token', 'Model_User_Autologin', 'Model_Sys_Cfg', 'Model_Sys_Code');

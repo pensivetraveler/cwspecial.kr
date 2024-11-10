@@ -1,5 +1,5 @@
 <?php extract($item['data']); ?>
-<div class="row mb-4 form-validation-row">
+<div class="row mb-4 form-validation-unit">
 	<?=form_label(lang($item['label']), '', ['class' => 'col-sm-2 col-form-label'])?>
 	<div class="col-sm-10">
 		<div class="input-group input-group-merge mb-2">
@@ -10,6 +10,7 @@
 						'name' => $zipcode['field'],
 						'id' => $zipcode['id'],
 					], $zipcode['default'], $zipcode['attributes']);
+					echo form_label(lang($zipcode['label']), $zipcode['id']);
 				?>
 			</div>
 			<?=form_button([
@@ -27,6 +28,7 @@
 						'name' => $addr1['field'],
 						'id' => $addr1['id'],
 					], $addr1['default'], $addr1['attributes']);
+					echo form_label(lang($addr1['label']), $addr1['id']);
 				?>
 			</div>
 		</div>
@@ -37,10 +39,11 @@
 						'name' => $addr2['field'],
 						'id' => $addr2['id'],
 					], $addr2['default'], $addr2['attributes']);
+					echo form_label(lang($addr2['label']), $addr2['id']);
 				?>
 			</div>
 		</div>
-		<?=get_admin_form_text($item['form_text'])?>
+		<?=get_admin_form_text($item)?>
 		<div class="daum-addr-container">
 			<div id="daumAddrWrap_<?=$item['group']?>" data-group-name="<?=$item['group']?>">
 				<img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" onclick="foldDaumPostcode(this.parentElement)" alt="접기 버튼">

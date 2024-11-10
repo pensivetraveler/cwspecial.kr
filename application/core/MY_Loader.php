@@ -7,26 +7,29 @@ class MY_Loader extends CI_Loader
 
     public function view($view, $vars = array(), $return = FALSE)
     {
-        $valid = true;
-        if(!in_array($view, $this->loaded_views)) {
-            // 로드된 뷰를 기록
-            $this->loaded_views[] = $view;
-            // 로드된 뷰를 config에 기록
-            $CI =& get_instance();
-            $list = [];
-            foreach ($this->loaded_views as $item) {
-                $array = explode('/', $item);
-                $list[] = end($array);
+        $valid = !empty($view);
+        $array = explode('/', $view);
+        $filename = end($array);
+
+        if(in_array($filename, $this->unique_views)) {
+            if(!in_array($view, $this->loaded_views)) {
+                // 로드된 뷰를 기록
+                $this->loaded_views[] = $view;
+                // 로드된 뷰를 config에 기록
+                $CI =& get_instance();
+                $list = [];
+                foreach ($this->loaded_views as $item) {
+                    $array = explode('/', $item);
+                    $list[] = end($array);
+                }
+                $CI->config->set_item('loaded_views', $list);
+            }else{
+                // 이미 로드된 view 라면 unique view가 아닌 경우에만 return
+                $valid = false;
             }
-            $CI->config->set_item('loaded_views', $list);
-        }else{
-            $array = explode('/', $view);
-            $filename = end($array);
-            // 이미 로드된 view 라면 unique view가 아닌 경우에만 return
-            if(in_array($filename, $this->unique_views)) $valid = false;
         }
 
-        if(!file_exists(VIEWPATH.$view.'.php')) {
+        if($valid && !file_exists(VIEWPATH.$view.'.php')) {
             $valid = false;
             trigger_error("viewApp : View file '$view' does not exist.", E_USER_ERROR);
         }

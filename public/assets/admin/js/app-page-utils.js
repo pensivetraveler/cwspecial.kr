@@ -322,10 +322,19 @@ function executeAjax(obj = {}, test = false) {
 
 function submitAjax(selector, options = {}, test = false) {
     const form = document.querySelector(selector);
-    const formData = getFormData(form);
+    const formData = options.hasOwnProperty('data') ? options.data : getFormData(form);
+
+	let url;
+	if(!options.hasOwnProperty('url')) {
+		url = common.API_URI;
+		if(form[common.IDENTIFIER]) url += '/' + form[common.IDENTIFIER].value;
+		if(common.API_PARAMS.length) url += '?' + new URLSearchParams(common.API_PARAMS).toString();
+	}else{
+		url = options.url;
+	}
 
     options = Object.assign({
-        url : common.API_URI + '/' + form[common.IDENTIFIER].value + '?' + new URLSearchParams(common.API_PARAMS).toString(),
+        url : url,
         method: 'post',
         headers: {
             'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
@@ -338,32 +347,15 @@ function submitAjax(selector, options = {}, test = false) {
             showAlert({
                 type: 'success',
                 title: 'Complete',
-                text: form.mode.value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
+                text: form['_mode'].value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
             });
         },
     }, options);
 
     if(test) {
         form.querySelectorAll('input, textarea, select').forEach(function(node) {
-            if(!node.name) return;
-            if(node.type === 'hidden') return;
-
-            if(node.type === 'file') {
-                if(node.files.length === 0) node.setAttribute('disabled', 'disabled');
-            }else{
-                if(node.hasAttribute('data-detect-changed') && !Boolean(node.getAttribute('data-detect-changed'))) {
-                    return;
-                }else if(node.getAttribute('required') === 'required') {
-                    return;
-                }else if(node.hasAttribute('required-mod')) {
-                    const requireMod = node.getAttribute('required-mod').split('|');
-                    if(!requireMod.includes(form.mode.value)) {
-                        node.setAttribute('disabled', 'disabled');
-                    }
-                }else if(Boolean(node.getAttribute('data-input-changed')) === false) {
-                    node.setAttribute('disabled', 'disabled');
-                }
-            }
+			if(!node.name) return;
+			if(!checkInputSubmittable(node, form)) node.setAttribute('disabled', 'disabled');
         });
 
         form.action = options.url;
@@ -385,38 +377,39 @@ function getFormData(form = null) {
     const formData = new FormData();
     form.querySelectorAll('input, textarea, select').forEach(function(node) {
         if(!node.name) return;
-
-        if(node.type === 'file') {
-            if(node.files.length > 0) formData.append(node.name, node.files[0]);
-        }else{
-            if(node.hasAttribute('data-detect-changed') && !Boolean(node.getAttribute('data-detect-changed'))) {
-                formData.append(node.name, node.value)
-            }else if(node.type === 'hidden') {
-                formData.append(node.name, node.value)
-            }else if(node.type === 'checkbox') {
-                if(node.checked === true) formData.append(node.name, node.value);
-            }else{
-                let appendItem = false;
-                if(node.getAttribute('required') === 'required') {
-                    appendItem = true;
-                }else if(node.hasAttribute('required-mod')) {
-                    console.log(node)
-                    const requireMod = node.getAttribute('required-mod').split('|');
-                    if(requireMod.includes(form.mode.value)) {
-                        appendItem = true;
-                    }
-                }else if(Boolean(node.getAttribute('data-input-changed')) === true) {
-                    console.log(node)
-                    appendItem = true;
-                }
-
-                if(appendItem) formData.append(node.name, node.value);
-            }
-        }
+		if(checkInputSubmittable(node, form)){
+			if(node.type === 'file') {
+				formData.append(node.name, node.files[0]);
+			}else{
+				formData.append(node.name, node.value);
+			}
+		}
     });
     logFormData(formData);
 
     return formData;
+}
+
+function checkInputSubmittable(node, form) {
+	if(node.type === 'file') {
+		if(node.files.length > 0) return true;
+	}else{
+		if(node.hasAttribute('data-detect-changed') && !isAttributeValueTrue(node, 'data-detect-changed')) {
+			return true;
+		}else if(node.type === 'hidden') {
+			return true;
+		}else if(node.type === 'checkbox') {
+			if(node.checked === true) return true;
+		}else if(node.getAttribute('required') === 'required') {
+			return true;
+		}else if(node.hasAttribute('required-mod')) {
+			const requireMod = node.getAttribute('required-mod').split('|');
+			if(requireMod.includes(form['_mode'].value)) return true;
+		}else if(isAttributeValueTrue(node, 'data-input-changed')) {
+			return true;
+		}
+	}
+	return false;
 }
 
 function reformatFormData(form, data, regexp = {}, side = false) {
@@ -471,7 +464,6 @@ function reformatFormData(form, data, regexp = {}, side = false) {
             };
         }
 
-        const rules = [];
         curr.rules.split(/\|(?![^\[]*\])/).forEach(raw => {
             if(!raw.length) return;
             if(['required', 'trim'].includes(raw)) return;
@@ -479,41 +471,47 @@ function reformatFormData(form, data, regexp = {}, side = false) {
 
             if (!rule || ![...Object.keys(customValidatorsPreset.rules), ...Object.keys(regexp)].includes(rule)) {
                 console.warn(`reformatFormData : Rule '${rule || raw}' of '${curr.field}' doesn't have any matched validator.`);
+				item.validators['baseValidator'] = {
+					message: `The field id not valid (${camelize(rule)})`,
+				}
                 return;
             }else{
-                rules.push(rule)
-
                 if (validatorName = customValidatorsPreset.inflector(rule)) {
-                    const { regex, options: getOptions } = customValidatorsPreset.rules[rule];
+					const { regex, options: getOptions, message: getMessage } = customValidatorsPreset.rules[rule];
+
+					let message;
+					if(getMessage === undefined) {
+						message = curr.errors?.[rule] && curr.errors[rule];
+					}else{
+						message = getMessage;
+					}
+
                     if (!regex) {
                         console.warn(`${rule} regex is not set.`);
                         item.validators[validatorName] = {
-                            ...(curr.errors?.[rule] && { message: curr.errors[rule] })
+							...(message && { message: message })
                         };
                     }else{
                         if(matches = customValidatorsPreset.extractor(regex, raw)){
                             item.validators[validatorName] = {
                                 ...item.validators[validatorName],
                                 ...getOptions(form, item, matches),
-                                ...(curr.errors?.[rule] && { message: curr.errors[rule] })
+								...(message && { message: message })
                             };
-                            console.log(item.validators)
                         }
                     }
                 }else{
-                    console.warn(`reformatFormData : ${rule} validator is not set.`);
+					if(Object.keys(regexp).includes(rule)) {
+						item.validators[camelize(rule)] = {
+							regexp: new RegExp(regexp[rule].exp, regexp[rule].flags)
+						};
+						if(curr.errors.hasOwnProperty(rule)) item.validators[camelize(rule)].message = curr.errors[rule];
+					}else{
+						console.warn(`reformatFormData : ${rule} validator is not set.`);
+					}
                 }
             }
         });
-
-        if(Object.keys(regexp).length > 0) {
-            for(const rule of Object.keys(regexp)) {
-                if( rules.includes(rule) ) {
-                    item.validators.regexp = { regexp: new RegExp(regexp[rule].exp, regexp[rule].flags) };
-                    if(curr.errors.hasOwnProperty(rule)) item.validators.regexp.message = curr.errors[rule];
-                }
-            }
-        }
 
         acc[curr.field] = item;
         return acc; // 항상 acc를 반환
@@ -524,13 +522,14 @@ function setFormListItem(selector, data, field) {
     if(!isValidSelector(selector) || document.querySelector(selector) === null) return;
 
     let html = '';
-    if(!isEmpty(data[field.field])) {
+	const key = field.form_attributes.list_field ?? field.field;
+    if(!isEmpty(data[key])) {
         let list = [];
-        isArray(data[field.field]) ? list = data[field.field] : list.push(data[field.field]);
+        isArray(data[key]) ? list = data[key] : list.push(data[key]);
         list.forEach((item) => {
             if(common.IDENTIFIER && data.hasOwnProperty(common.IDENTIFIER)) item[common.IDENTIFIER] = data[common.IDENTIFIER];
             const identifier = common.IDENTIFIER?data[common.IDENTIFIER]:null;
-            switch (field.subtype) {
+            switch (field.form_attributes.list_type ?? field.subtype) {
                 case 'thumbnail' :
                     html += setFormListItemThumbnail(field, item, identifier);
                     break;
@@ -546,10 +545,10 @@ function setFormListItem(selector, data, field) {
             }
         });
         document.querySelector(selector).classList.remove('d-none');
-        if(field.subtype === 'readonly') document.querySelector(selector).closest('.form-validation-row').classList.remove('d-none');
+        if(field.subtype === 'readonly') document.querySelector(selector).closest('.form-validation-unit').classList.remove('d-none');
     }else{
         document.querySelector(selector).classList.add('d-none');
-        if(field.subtype === 'readonly') document.querySelector(selector).closest('.form-validation-row').classList.add('d-none');
+        if(field.subtype === 'readonly') document.querySelector(selector).closest('.form-validation-unit').classList.add('d-none');
     }
 
     document.querySelector(selector).innerHTML = html;
@@ -655,9 +654,96 @@ function setFormListItemReplyList(field, item, identifier = '') {
     const url = location.origin+location.pathname;
     const fullItem = JSON.stringify(item).replace(/"/g, "'");
     return `
-        <li class="form-list-item mb-1 p-2" data-identifier-val="${identifier}" data-full-item="${fullItem}">
+        <li class="form-list-item mb-1 ps-0 p-2" data-identifier-val="${identifier}" data-full-item="${fullItem}">
             <p class="h6 mb-1">${item.content}</p>
             <p class="text-end mb-0">${item.created_id} ${item.created_dt}</p>
         </li>
     `;
+}
+
+function setFlatpickr(node) {
+	const option = {
+		// See https://flatpickr.js.org/formatting/
+		dateFormat: 'Y-m-d',
+		positionElement: document.querySelector(`#${node.id}`),
+		onReady: function(selectedDates, dateStr, instance) {
+			// Center the popup relative to the input
+			instance.calendarContainer.classList.add('flatpickr-side-position');
+		},
+		// After selecting a date, we need to revalid”ate the field
+		onChange: function (data, value, full) {
+			$(full.input).trigger('change'); // 'change' 이벤트 강제로 발생
+		},
+	};
+
+	if(node.classList.contains('flatpickr-date')) {
+		Object.assign(option, {
+			enableTime: false,
+			dateFormat: 'Y-m-d',
+		})
+	}else if(node.classList.contains('flatpickr-time')) {
+		Object.assign(option, {
+			enableTime: true,
+			noCalendar: true,
+			// See https://flatpickr.js.org/formatting/
+			dateFormat: 'h:i K',
+			// time_24hr: false,
+		})
+	}
+
+	node.flatpickr(option);
+}
+
+function setCleave(node) {
+	console.log(node)
+	if(node.classList.contains('cleave-hp')) {
+		new Cleave(node, {
+			phone: true,
+			delimiter: '-',
+			phoneRegionCode: 'KR'
+		});
+	}else if(node.classList.contains('cleave-fulldate')) {
+		new Cleave(node, {
+			date: true,
+			delimiter: '-',
+			datePattern: ['Y', 'm', 'd']
+		});
+	}else if(node.classList.contains('cleave-year')) {
+		new Cleave(node, {
+			date: true,
+			datePattern: ['Y']
+		});
+	}else if(node.classList.contains('cleave-month')) {
+		new Cleave(node, {
+			date: true,
+			datePattern: ['m']
+		});
+	}else if(node.classList.contains('cleave-date')) {
+		new Cleave(node, {
+			date: true,
+			datePattern: ['d']
+		});
+	}else if(node.classList.contains('cleave-time')) {
+		new Cleave(node, {
+			time: true,
+			timePattern: ['h', 'm']
+		});
+	}else if(node.classList.contains('cleave-hour')) {
+		new Cleave(node, {
+			time: true,
+			timePattern: ['h']
+		});
+	}else if(node.classList.contains('cleave-minute')) {
+		new Cleave(node, {
+			time: true,
+			timePattern: ['m']
+		});
+	}else if(node.classList.contains('form-input_text-cleave-version')) {
+		new Cleave(node, {
+			delimiter: '.',
+			blocks: [1, 1, 1],
+			uppercase: false,
+			numericOnly: true
+		});
+	}
 }

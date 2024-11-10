@@ -1,5 +1,271 @@
 'use strict';
 
+class listRender {
+	_this;
+	_fields = [];
+	_identifier;
+	_columns;
+	_columnLength;
+
+	constructor() {
+		this._this = this;
+	}
+
+	fields (columns, identifier = null) {
+		this._columns = columns;
+		this._columnLength = columns.length;
+		this._identifier = identifier;
+
+		for(const [idx, column] of this._columns.entries()) {
+			const index = idx+2;
+			if(this.render.hasOwnProperty(camelize(column.format))) {
+				this._fields.push(this.render[camelize(column.format)](index));
+			}else{
+				let render;
+				if(this.hasOwnProperty(column.field)) {
+					render = this.render[column.field](index, column);
+				}else{
+					render = this.render.common(index, column);
+				}
+
+				for(const key of ['searchable', 'orderable']) {
+					if(!render.hasOwnProperty(key)) {
+						render[key] = true;
+					}
+				}
+
+				this._fields.push(render);
+			}
+		}
+
+		return this._fields;
+	}
+
+	render = {
+		rowNum: function (index) {
+			return {
+				targets: index,
+				searchable: false,
+				orderable: false,
+				render: function (data, type, full, meta) {
+					return meta.row + meta.settings._iDisplayStart + 1;
+				}
+			}
+		},
+		actions: function(index) {
+			return {
+				targets: index,
+				searchable: false,
+				orderable: false,
+				render: function (data, type, full, meta) {
+					const dataId = common.IDENTIFIER?full[common.IDENTIFIER]:'';
+					return (
+						'<div class="d-flex align-items-center gap-50">' +
+						`<a href="javascript:;" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect delete-record" data-bs-toggle="tooltip" title="Delete Record" data-id="${dataId}"><i class="ri-delete-bin-7-line ri-20px"></i></a>`+
+						`<a href="javascript:;" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect edit-record" title="Edit Record" data-id="${dataId}"><i class="ri-edit-box-line me-2"></i></a>` +
+						'</div>'
+					);
+				}
+			}
+		},
+		select: function(index) {
+			return {
+				targets: index,
+				searchable: false,
+				orderable: false,
+				render: function (data, type, full, meta) {
+					const wrap = document.createElement('div');
+					wrap.classList.add('bootstrap-select');
+					return wrap;
+				}
+			}
+		},
+		common: function(index, column) {
+			return {
+				targets: index,
+				render: function (data, type, full, meta) {
+					return this.renderColumn(data, type, full, meta, column);
+				}
+			};
+		},
+	};
+
+	renderColumn = (data, type, full, meta, column) => {
+		let wrap;
+		switch (column.format) {
+			case 'button':
+				wrap = document.createElement('button');
+				wrap.classList.add('btn', 'btn-info', 'waves-effect', 'waves-light', 'pe-3', 'ps-3');
+				break;
+			case 'text':
+			case 'icon':
+			case 'img':
+			default :
+				wrap = document.createElement('span');
+				wrap.classList.add('d-inline-block')
+				break;
+		}
+
+		// class
+		if (column.classes.length)
+			for (const className of classed) wrap.classList.add(className);
+
+		// inner
+		let inner;
+		if (['recent_dt', 'created_dt', 'updated_dt'].includes(column.field)) {
+			const dateObj = new Date(data);
+			inner = dateObj.getFullYear().toString() + '-' + (dateObj.getMonth() + 1).toString().padStart(2, '0') + '-' + dateObj.getDate().toString().padStart(2, '0');
+		} else {
+			if (column.onclick.hasOwnProperty('kind')
+				&& column.onclick.kind === 'download'
+				&& !column.text
+			) {
+				column.text = 'Download';
+			}
+
+			switch (column.format) {
+				case 'text':
+					inner = column.text ? getLocale(column.text, common.LOCALE) : data;
+					break;
+				case 'button':
+					if (['popup', 'redirect', 'download'].includes(column.onclick.kind) && (data === null || data.length === 0))
+						return '-';
+					inner = column.text ? getLocale(column.text, common.LOCALE) : getLocale(column.field, common.LOCALE);
+					break;
+				case 'icon':
+					inner = `<i class="${column.icon}"></i>`;
+					break;
+				case 'img':
+					if (data === null || !data.length || !data[0].hasOwnProperty('file_link')) return '-';
+					inner = `<img class="img-thumbnail d-inline rounded-2 overflow-hidden" src="${data[0].file_link}">`;
+					wrap.setAttribute('data-bs-content', inner);
+					break;
+				case 'select':
+					break;
+				default :
+					inner = '-';
+			}
+		}
+
+		// return
+		if (isArray(full[column.field])) {
+			const html = full[column.field].reduce((acc, curr) => {
+				return acc += this.toHTML(curr, full, column, wrap, inner);
+			}, '');
+			return `<div>${html}</div>`;
+		} else {
+			return this.toHTML(data, full, column, wrap, inner);
+		}
+	}
+
+	toHTML = (data, full, column, wrap, inner) => {
+		// attrs
+		let value;
+		if(data === undefined) {
+			value = '';
+		}else{
+			value = typeof data === 'object'?JSON.stringify(data):data;
+		}
+
+		const attrs = {
+			...Object.fromEntries(
+				Object.entries({
+					identifier : full[common.IDENTIFIER],
+					value : value,
+				}).map(([key, value]) => [`data-${key}`, value])
+			)
+		};
+
+		if(Object.keys(column.onclick).length) {
+			wrap.classList.add('cursor-pointer');
+			attrs.onclick = this.getOnClick(data, full, column);
+			if(column.onclick.kind === 'bs') {
+				if(Object.keys(column.onclick.attrs).length) {
+					Object.entries(column.onclick.attrs).map(([key, value]) => attrs[`data-bs-${key}`] = value )
+				}
+			}
+		}
+
+		Object.entries(attrs).map(([key, value]) => wrap.setAttribute(key, value));
+
+		// return
+		wrap.innerHTML = inner;
+		return wrap.outerHTML;
+	}
+
+	button = (data, type, full, meta, column) => {
+		const wrap = document.createElement('button');
+		wrap.classList.add('btn', 'btn-info', 'waves-effect', 'waves-light', 'pe-3', 'ps-3');
+
+		// class
+		if(column.classes.length)
+			for(const className of classed) wrap.classList.add(className);
+
+		if(column.onclick.hasOwnProperty('kind')
+			&& column.onclick.kind === 'download'
+			&& !column.text
+		) {
+			column.text = 'Download';
+		}
+
+		const inner = column.text?getLocale(column.text, common.LOCALE):getLocale(column.field, common.LOCALE);
+
+		// return
+		if(isArray(full[column.field])) {
+			const html = full[column.field].reduce((acc, curr) => {
+				return acc += this.toHTML(curr, full, column, wrap, inner);
+			}, '');
+			return `<div>${html}</div>`;
+		}else{
+			return this.toHTML(data, full, column, wrap, inner);
+		}
+	}
+
+	getOnClick = (data, full, column) => {
+		let onClick = '';
+		if(column.hasOwnProperty('onClick') || column.hasOwnProperty('onclick')) {
+			const key = column.hasOwnProperty('onClick')?'onClick':'onclick';
+			if(!column[key].kind) throw new Error(`listRender.onClick : onclick kind is not defined. (${column.field})`);
+
+			switch (column[key].kind) {
+				case 'popup' :
+					break;
+				case 'redirect' :
+					if(column[key].hasOwnProperty('params') && column[key].attrs.hasOwnProperty('target'))
+						if(column[key].attrs.target === '_blank') return `window.open('${data}', "_blank")`;
+					return `location.href="${data}"`;
+				case 'download' :
+					if(data === null || !data.file_id) return '';
+					return `location.href="${common.CURRENT_URI}/downloader/${data.file_id}"`;
+				case 'bs' :
+					break;
+				default :
+					if(window[column[key].kind] === undefined) return '';
+
+					let params = 'null';
+					if(column[key].params) {
+						if(typeof column[key].params === 'object') {
+							if(
+								(Array.isArray(column[key].params) && column[key].params.length)
+								||
+								(!Array.isArray(column[key].params) && Object.keys(column[key].params).length)
+							){
+								params = JSON.stringify(column[key].params);
+							}
+						}else{
+							params = typeof column[key].params != "string"?column[key].params:`'${column[key].params}'`;
+						}
+					}
+					return `${column[key].kind}(this, ${params})`;
+			}
+		}
+		return onClick;
+	}
+}
+const aaa = new listRender();
+const fields = aaa.fields(common.LIST_COLUMNS, common.IDENTIFIER);
+
+
 let fv, offCanvasEl;
 
 // Datatable (jquery)
@@ -31,16 +297,18 @@ $(function () {
         throw new Error(`th and LIST_COLUMNS length are not matched.`);
 
     var dt = dt_table.DataTable({
-        scrollX: true,
+		scrollX: true,
+		scrollCollapse: true,
         processing: true,
         serverSide: true,
-        ajax: getAjaxOptions({
+		ajax: getAjaxOptions({
             url: common.API_URI,
             headers: {
                 'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
             },
             data: function(data) {
                 const req = {
+					_mode : 'list',
                     ...common.API_PARAMS,
                     ...{
                         format: 'datatable',
@@ -49,8 +317,43 @@ $(function () {
                         limit: data.length,
                         searchWord: data.search.value || '',
                         searchCategory: data.search.category || '',
-                    }
+                    },
                 };
+
+				if($('#formFilter').length) {
+					const filters = {
+						where : {},
+						like : {
+							field : null,
+							value : null,
+						},
+						date : {
+							start_date : null,
+							end_date : null,
+							on_date : null,
+						}
+					};
+
+					if($('#formFilter').find('[name="_onloaded"]').val() === '1') {
+						filters.like.field = $('#formFilter').find('[name="like[field]"]').val() ?? null;
+						filters.like.value = $('#formFilter').find('[name="like[value]"]').val() ?? null;
+						filters.like.start_date = $('#formFilter').find('[name="date[start_date]"]').val() ?? null;
+						filters.like.end_date = $('#formFilter').find('[name="date[end_date]"]').val() ?? null;
+						filters.like.on_date = $('#formFilter').find('[name="date[on_date]"]').val() ?? null;
+
+						$('#formFilter').find('[name^="where"]').each(function() {
+							const match = this.name.match(/\[(.*?)\]/);
+							if (match) {
+								const key = match[1];
+								filters.where[key] = this.value;
+							}
+						});
+					}
+
+					req.filters = filters;
+				}
+				console.log(req.filters)
+
                 return req;
             },
             complete: function(data) {
@@ -92,6 +395,7 @@ $(function () {
                     selectAllRender: '<input type="checkbox" class="form-check-input">'
                 }
             },
+			// ...fields,
             ...common.LIST_COLUMNS.map(function (column, index) {
                 switch (column.format) {
                     case 'row_num' : // Row Num
@@ -127,6 +431,8 @@ $(function () {
                         }
                     default :
                         return {
+							searchable: true,
+							orderable: false,
                             targets: 2+index,
                             render: function (data, type, full, meta) {
                                 if(column.render && column.render.callback && typeof window[`${column.render.callback}`] !== 'function'){
@@ -155,25 +461,27 @@ $(function () {
             }),
         ],
         order: [[2, 'desc']],
-        dom:
-            '<"row"' +
-            '<"col-md-2 d-flex align-items-center justify-content-md-start justify-content-center"<"dt-action-buttons mt-5 mt-md-0"B>>' +
-            '<"col-md-10"<"d-flex align-items-center justify-content-md-end justify-content-center"<"me-4"f><"add-record">>>' +
-            '>t' +
-            '<"row"' +
-            '<"col-sm-12 col-md-6"i>' +
-            '<"col-sm-12 col-md-6"p>' +
-            '>',
+		dom:
+			'<"card-header d-flex border-top rounded-0 flex-wrap pb-md-0 pt-0 justify-content-end"' +
+			// '<"d-flex justify-content-start align-items-center me-5 ms-n2"<"search-category-wrap me-2">f>' +
+			// '<"me-5 ms-n2"f>' +
+			'<"d-flex justify-content-start justify-content-md-end align-items-baseline"<"dt-action-buttons d-flex align-items-start align-items-md-center justify-content-sm-center gap-4"lB>>' +
+			'>t' +
+			'<"row mx-1"' +
+			'<"col-sm-12 col-md-6"i>' +
+			'<"col-sm-12 col-md-6"p>' +
+			'>',
         language: {
-            sLengthMenu: 'Show _MENU_',
+			sLengthMenu: '_MENU_',
             search: '',
             searchPlaceholder: getLocale('Search', common.LOCALE),
+			info: '검색결과 총 _TOTAL_ 개 데이터 중 _START_ ~ _END_ 표시'
         },
         // Buttons with Dropdown
         buttons: [
             {
                 extend: 'collection',
-                className: 'btn btn-label-primary dropdown-toggle me-4 waves-effect waves-light',
+				className: 'btn btn-outline-secondary dropdown-toggle me-4 waves-effect waves-light',
                 text: `<i class="ri-external-link-line me-sm-1"></i> <span class="d-none d-sm-inline-block">${getLocale('Export', common.LOCALE)}</span>`,
                 buttons: [
                     {
@@ -239,39 +547,50 @@ $(function () {
                     },
                 ]
             },
+			{
+				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">'+getLocale('Add New Record', common.LOCALE)+'</span>',
+				className: 'add-new btn btn-primary waves-effect waves-light',
+				action: function () {
+					if(!common.SIDE_FORM && common.ADD_VIEW_URI.length) {
+						location.href = common.ADD_VIEW_URI;
+					}else{
+						readyFrmInputs(formRecord, 'add', common.FORM_DATA);
+					}
+				}
+			}
         ],
-        // For responsive popup
-        responsive: {
-            details: {
-                display: $.fn.dataTable.Responsive.display.modal({
-                    header: function (row) {
-                        return 'Details of ' + common.TITLE;
-                    }
-                }),
-                type: 'column',
-                renderer: function (api, rowIdx, columns) {
-                    var data = $.map(columns, function (col, i) {
-                        return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                            ? '<tr data-dt-row="' +
-                            col.rowIndex +
-                            '" data-dt-column="' +
-                            col.columnIndex +
-                            '">' +
-                            '<td>' +
-                            col.title +
-                            ':' +
-                            '</td> ' +
-                            '<td>' +
-                            col.data +
-                            '</td>' +
-                            '</tr>'
-                            : '';
-                    }).join('');
-
-                    return data ? $('<table class="table"/><tbody />').append(data) : false;
-                }
-            }
-        },
+        // // For responsive popup
+        // responsive: {
+        //     details: {
+        //         display: $.fn.dataTable.Responsive.display.modal({
+        //             header: function (row) {
+        //                 return 'Details of ' + common.TITLE;
+        //             }
+        //         }),
+        //         type: 'column',
+        //         renderer: function (api, rowIdx, columns) {
+        //             var data = $.map(columns, function (col, i) {
+        //                 return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
+        //                     ? '<tr data-dt-row="' +
+        //                     col.rowIndex +
+        //                     '" data-dt-column="' +
+        //                     col.columnIndex +
+        //                     '">' +
+        //                     '<td>' +
+        //                     col.title +
+        //                     ':' +
+        //                     '</td> ' +
+        //                     '<td>' +
+        //                     col.data +
+        //                     '</td>' +
+        //                     '</tr>'
+        //                     : '';
+        //             }).join('');
+		//
+        //             return data ? $('<table class="table"/><tbody />').append(data) : false;
+        //         }
+        //     }
+        // },
         preDrawCallback: function(settings) {
             // console.log('preDrawCallback', settings)
             // $('<div class="loading">Loading</div>').appendTo('body');
@@ -280,26 +599,34 @@ $(function () {
             // ajax 옵션을 사용해서 테이블이 완전히 초기화되고 데이터가 로드되고 그려지는 시점
             // console.log('initComplete', settings);
             // $('div.loading').remove();
-        },
+
+			if($('#formFilter').length > 0) {
+				$('#formFilter').on('preparePlugins', (e) => {
+					const form = document.getElementById(e.detail.formSelector);
+					if(form !== null && form.querySelector('[name="_onloaded"]') !== undefined)
+						form.querySelector('[name="_onloaded"]').value = 1;
+				});
+
+				preparePlugins(document.querySelector('#formFilter'));
+
+				$('.form-type-filter').find('.btn-search').on('click', function(e) {
+					dt.ajax.reload();
+				});
+
+				$('.form-type-filter').find('.btn-reset').on('click', function(e) {
+					e.preventDefault();
+					$('.form-type-filter')[0].reset();
+					if($('.form-type-filter').find('.form-select').length) {
+						$('.form-type-filter').find('.form-select').trigger('change')
+					}else{
+						dt.ajax.reload();
+					}
+				});
+			}
+		},
         drawCallback: function(settings) {
             // console.log('drawCallback', settings)
             // 테이블의 draw 이벤트가 발생할 때마다 취해야 하는 action 을 실행
-        }
-    });
-
-    $('.add-record').html(
-        `<button class='btn btn-primary waves-effect waves-light'>
-            <i class='ri-add-line me-0 me-sm-1 d-inline-block d-sm-none'></i>
-            <span className='d-none d-sm-inline-block'>${getLocale('Add New Record', common.LOCALE)}</span>
-        </button>`
-    );
-
-    // To open offCanvas, to add new record
-    $('.dataTables_wrapper').on('click', '.add-record', function() {
-        if(!common.SIDE_FORM && common.ADD_VIEW_URI.length) {
-            location.href = common.ADD_VIEW_URI;
-        }else{
-            readyFrmInputs(formRecord, 'add', common.FORM_DATA);
         }
     });
 
@@ -355,13 +682,9 @@ $(function () {
     });
 
     if(common.SIDE_FORM) {
-        const offCanvasElement = document.querySelector('#offcanvasRecord'),
-            formRecord = document.getElementById('formRecord');
-
-        if(offCanvasElement === null) throw new Error(`offCanvasElement is not exist`);
-        if(formRecord === null) throw new Error(`formRecord is not exist`);
-
-        offCanvasEl = new bootstrap.Offcanvas(offCanvasElement);
+        const offCanvasElement = document.querySelector('#offcanvasRecord');
+		if(offCanvasElement === null) throw new Error(`offCanvasElement is not exist`);
+		offCanvasEl = new bootstrap.Offcanvas(offCanvasElement);
 
         // Define Events of offCanvas
         offCanvasElement.addEventListener('show.bs.offcanvas', function(e) {
@@ -374,11 +697,11 @@ $(function () {
         });
 
         offCanvasElement.addEventListener('hide.bs.offcanvas', function(e) {
-            // console.log('offcanvas hide');
+            console.log('offcanvas hide');
         });
 
         offCanvasElement.addEventListener('hidden.bs.offcanvas', function(e) {
-            initializeForm();
+			resetFrmInputs(document.getElementById('formRecord'), common.FORM_DATA);
             fv.resetForm(true);
 
             if ($('[data-repeater-item]').length) {
@@ -387,6 +710,10 @@ $(function () {
                 });
             }
         });
+
+		const formRecord = document.getElementById('formRecord');
+		if(formRecord === null) throw new Error(`formRecord is not exist`);
+		preparePlugins(formRecord);
 
         formRecord.addEventListener('readyFrmInputs', (e) => {
             offCanvasEl.show();
@@ -399,7 +726,11 @@ $(function () {
             offCanvasEl.show();
         });
 
-        for(const rule of Object.keys(customValidatorsPreset.validators))
+		formRecord.addEventListener('transFrmValues', (e) => {
+			offCanvasEl.hide();
+		});
+
+		for(const rule of Object.keys(customValidatorsPreset.validators))
             FormValidation.validators[rule] = customValidatorsPreset.validators[rule];
 
         // Form validation for Add new record
@@ -416,7 +747,7 @@ $(function () {
                         rowSelector: function(field, ele) {
                             switch (field) {
                                 default:
-                                    return '.form-validation-row';
+                                    return '.form-validation-unit';
                             }
                         },
                     }),
@@ -452,6 +783,8 @@ $(function () {
         }).on('core.form.validating', function(event) {
             // 유효성 검사 시작 전
             console.log('%c The form validation has started.', 'color: green')
+			const form = event.formValidation.form;
+			if(form['_event'] !== undefined) form['_event'].value = 'submit';
         }).on('core.validator.validating', function(event) {
             // 특정 요소에 대한 유효성 검사 시작 전
             console.log('%c Validator for the field ' + event.field + ' is validating.', 'color: skyblue');
@@ -468,6 +801,7 @@ $(function () {
                 console.log('Invalid validator:', event.validator);
                 console.log('Invalid field:', event.field);
                 console.log('Error message:', event.result.message);
+				console.log('Result Object:',event.result)
                 console.log('------------------------------------------------------------');
             }
         }).on('core.form.valid', function(event) {
@@ -478,24 +812,21 @@ $(function () {
             // You need to grab the form data and create an Ajax request to send them
             submitAjax('#formRecord', {
                 success: function(response) {
-                    console.log(response)
                     showAlert({
                         type: 'success',
                         title: 'Complete',
-                        text: formRecord.mode.value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
+                        text: formRecord['_mode'].value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
                         callback: dt.ajax.reload,
                         params: [null, false]
                     });
                     updateFormLifeCycle('transFrmValues', formRecord);
-                    offCanvasEl.hide();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.warn(jqXHR.responseJSON)
                     if(jqXHR.status === 422) {
                         jqXHR.responseJSON.errors.forEach(error => {
                             if(fv.fields.hasOwnProperty(error.param)) {
-                                fv.updateFieldStatus(error.param, 'Invalid', 'notEmpty');
-                                fv.updateMessage(error.name, 'notEmpty', error.message);
+								fv.updateFieldStatus(error.param, 'Invalid', customValidatorsPreset.inflector(error.type));
                             }
                         });
                     }else{
@@ -617,8 +948,9 @@ function renderColumnHTML(data, full, column, wrap, inner) {
 }
 
 function renderSelectColumn(data, type, full, meta, column) {
-    wrap = document.createElement('div');
+    const wrap = document.createElement('div');
     wrap.classList.add('bootstrap-select');
+	return data;
 }
 
 function renderButtonColumn(data, type, full, meta, column) {

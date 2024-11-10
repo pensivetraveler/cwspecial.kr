@@ -68,6 +68,16 @@ const customValidatorsPreset = {
             },
             validatorName : 'identical',
         },
+		required_if_value : {
+			regex : '^required_if_value\\[(.*?)\\]$',
+			options : function(form, item, matches) {
+				return {
+					field: matches[1].split('|')[0],
+					value: matches[1].split('|')[1],
+				};
+			},
+			validatorName : 'requiredIfValue',
+		},
         required_if_empty_data : {
             regex : '^required_if_empty_data\\[(.*?)\\]$',
             options : function(form, item, matches) {
@@ -111,6 +121,17 @@ const customValidatorsPreset = {
             },
             validatorName : 'isNumeric',
         },
+		is_unique : {
+			regex : '^is_unique\\[(.*?)\\]$',
+            options : function(form, item, matches) {
+				const name = `${form.querySelector(item.selector).name}_unique`;
+				const hiddenId = form.querySelector(`[name="${name}"]`) ? form.querySelector(`[name="${name}"]`).id : null;
+				return {
+					hiddenId: hiddenId,
+				};
+            },
+            validatorName : 'isUnique',
+        },
         max_files : {
             regex : '^max_files\\[(.*?)\\]$',
             options : function(form, item, matches) {
@@ -124,65 +145,159 @@ const customValidatorsPreset = {
         },
     },
     validators : {
+		baseValidator : function () {
+			return {
+				validate: function(input) {
+					let valid = false;
+					const node = input.element;
+					const form = node.closest('form');
+
+					return {
+						node: node,
+						form: form,
+						valid: valid,
+					};
+				},
+				message : 'hi',
+			}
+		},
+		requiredIfValue : function() {
+			return {
+				validate: function(input) {
+					let valid = false;
+					const node = input.element;
+					const form = node.closest('form');
+
+					const field = input.options.field;
+					const value = input.options.value;
+
+					valid = true;
+					if(form.querySelector(`[name=${field}]`)) {
+						if(form.querySelector(`[name=${field}]`).value === value) valid = isEmpty(node.value);
+					}
+
+					return {
+						node: node,
+						form: form,
+						valid: valid,
+					};
+				},
+				message : 'hi',
+			}
+		},
         requiredMod : function() {
             return {
                 validate: function(input) {
-                    const mode = document.getElementById('formRecord').mode.value;
+					let valid = false;
+					const node = input.element;
+					const form = node.closest('form');
+                    const mode = form['_mode'].value;
                     const required = input.options.mod.split('|').includes(mode);
+
                     if(required) {
-                        return {
-                            valid : input.value !== null && input.value !== '' && input.value.trim() !== '',
-                        };
+						valid = node.value !== null && node.value !== '' && node.value.trim() !== '';
                     }else{
-                        return {
-                            valid : true,
-                        };
+						valid = true;
                     }
+
+					return {
+						node: node,
+						form: form,
+						valid : valid,
+						mode: mode,
+						required: required,
+					};
                 }
             }
         },
         requiredIfEmpty : function() {
             return {
                 validate: function(input) {
-                    const list = document.getElementById(input.options.listId);
-                    if(list.children.length > 0) {
-                        return {
-                            valid : true,
-                        }
-                    }else{
-                        return {
-                            valid : input.value !== null && input.value !== '' && input.value.trim() !== '',
-                        };
-                    }
+					let valid = false;
+					const node = input.element;
+					const form = node.closest('form');
+					const list = document.getElementById(input.options.listId);
+
+					if(list.children.length > 0) {
+						valid = true;
+					}else{
+						valid = node.value !== null && node.value !== '' && node.value.trim() !== '';
+					}
+
+					return {
+						node: node,
+						form: form,
+						valid : valid,
+						list: list,
+					};
                 }
             }
         },
         isNumeric : function() {
             return {
                 validate: function(input) {
-                    let valid = false;
+					let valid = false;
+					const node = input.element;
+					const form = node.closest('form');
+
                     // 값이 문자열일 경우, 숫자로 변환할 수 있는지 확인
-                    if (typeof input.value === 'string') valid = /^-?\d*\.?\d+$/.test(input.value);
+                    if (typeof input.element.value === 'string') valid = /^-?\d*\.?\d+$/.test(input.element.value);
                     // 값이 숫자일 경우, 문자열로 변환 후 검사
-                    if (typeof input.value === 'number') valid = /^-?\d*\.?\d+$/.test(input.value.toString());
-                    return {valid: valid};
+                    if (typeof input.element.value === 'number') valid = /^-?\d*\.?\d+$/.test(input.element.value.toString());
+
+                    return {
+						node: node,
+						form: form,
+						valid: valid,
+					};
                 }
             }
         },
+		isUnique : function () {
+			return {
+				validate: function(input) {
+					let valid = false;
+					const node = input.element;
+					const form = node.closest('form');
+
+					let message = '';
+					if(form['_event'].value !== 'submit') {
+						valid = true;
+					}else{
+						const mode = form['_mode'].value;
+						if(input.options.hiddenId) valid = form.querySelector(`#${input.options.hiddenId}`).value === '1';
+						if(!valid && mode === 'edit' && input.getAttribute('data-original-value') === input.value) valid = true;
+						if(!valid) message = '중복 검사를 실행해주세요.';
+					}
+
+					return {
+						node: node,
+						form: form,
+						valid: valid,
+						hidden: form.querySelector(`#${input.options.hiddenId}`),
+						...(message && {message : message}),
+					};
+				}
+			}
+		},
         checkFileCounts : function() {
             return {
                 validate: function(input) {
+					let valid = false;
+					const node = input.element;
+					const form = node.closest('form');
                     const list = document.getElementById(input.options.listId);
                     const max = parseInt(input.options.max);
-                    if(list.children.length < max) {
-                        return {
-                            valid: true,
-                        }
-                    }else{
-                        return {
-                            valid: false,
-                        }
-                    }
+
+					valid = list.children.length < max;
+
+					return {
+						node: node,
+						form: form,
+						valid: valid,
+						list: list,
+						max: max,
+					};
                 }
             }
         }

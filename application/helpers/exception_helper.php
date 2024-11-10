@@ -80,9 +80,9 @@ if ( ! function_exists('get_path'))
     function get_path(): string
     {
         $whole_uri = _HTTP.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-		$path_info = explode('/', str_replace(function_exists('base_url')?base_url():BASE_URL, '', $whole_uri));
-		$arr = array_values(array_filter($path_info));
-		return count($arr) > 0 ? $arr[0] : '';
+        $path_info = explode('/', str_replace(function_exists('base_url')?base_url():BASE_URL, '', $whole_uri));
+        $arr = array_values(array_filter($path_info));
+        return count($arr) > 0 ? $arr[0] : '';
     }
 }
 
@@ -110,14 +110,14 @@ if ( ! function_exists('get_error_response'))
 {
     function get_error_response($preset, $error): array
     {
-		$msg = null;
-		if(isset($error['msg'])) {
-			if(is_array($error['msg'])) {
-				$msg = $error['msg'];
-			}else{
-				$msg = addslashes($error['msg']);
-			}
-		}
+        $msg = null;
+        if(isset($error['msg'])) {
+            if(is_array($error['msg'])) {
+                $msg = $error['msg'];
+            }else{
+                $msg = addslashes($error['msg']);
+            }
+        }
 
         if(get_path() === 'api') {
             $response = [

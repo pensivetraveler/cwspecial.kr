@@ -1,4 +1,5 @@
 <?php
+$lang['Filters'] = 'Filters';
 $lang['actions'] = 'Actions';
 $lang['Do you really want to delete?'] = 'Do you really want to delete?';
 $lang['You can\'t undo this action'] = 'You can\'t undo this action.';
@@ -29,3 +30,4 @@ $lang['Enter The Whole YouTube Link'] = 'Enter The Whole YouTube Link.';
 $lang['Upload File Only'] = 'Upload %s File Only.';
 $lang['Store'] = 'Store';
 $lang['Download'] = 'Download';
+$lang['Uploads List'] = '%s List';

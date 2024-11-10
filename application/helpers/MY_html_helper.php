@@ -48,13 +48,58 @@ function add_javascript($list)
     }
 }
 
-function alert_back($msg)
-{
-    $script = "<script>".PHP_EOL;
-    if($msg) $script .= "alert('{$msg}');".PHP_EOL;
-    $script .= "history.back();".PHP_EOL;
-    $script .= "</script>".PHP_EOL;
-    echo $script;exit;
+/**
+ * Alert 띄우기
+ */
+if ( ! function_exists('alert')) {
+	function alert($msg = '', $url = '')
+	{
+		if (empty($msg)) {
+			$msg = '잘못된 접근입니다';
+		}
+		echo '<meta http-equiv="content-type" content="text/html; charset=' . config_item('charset') . '">';
+		echo '<script type="text/javascript">alert("' . $msg . '");';
+		if (empty($url)) {
+			echo 'history.go(-1);';
+		}
+		if ($url) {
+			echo 'document.location.href="' . $url . '"';
+		}
+		echo '</script>';
+		exit;
+	}
+}
+
+
+/**
+ * Alert 후 창 닫음
+ */
+if ( ! function_exists('alert_close')) {
+	function alert_close($msg = '')
+	{
+		if (empty($msg)) {
+			$msg = '잘못된 접근입니다';
+		}
+		echo '<meta http-equiv="content-type" content="text/html; charset=' . config_item('charset') . '">';
+		echo '<script type="text/javascript"> alert("' . $msg . '"); window.close(); </script>';
+		exit;
+	}
+}
+
+
+/**
+ * Alert 후 부모창 새로고침 후 창 닫음
+ */
+if ( ! function_exists('alert_refresh_close')) {
+	function alert_refresh_close($msg = '')
+	{
+		if (empty($msg)) {
+			$msg = '잘못된 접근입니다';
+		}
+		echo '<meta http-equiv="content-type" content="text/html; charset=' . config_item('charset') . '">';
+		echo '<script type="text/javascript"> alert("' . $msg . '"); window.opener.location.reload();window.close(); </script>';
+		exit;
+	}
 }
 
 function get_redirect_script($link): string
@@ -113,6 +158,8 @@ function get_icon_classname_by_type($type): string
             return 'ri-chat-4-line';
         case "date" :
             return 'ri-calendar-line';
+        case "time" :
+            return 'ri-time-line';
         case "pdf" :
             return 'ri-file-pdf-2-fill';
         default :

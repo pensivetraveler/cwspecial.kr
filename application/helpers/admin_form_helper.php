@@ -40,48 +40,92 @@ function get_admin_form_textarea($item, $formType = '')
     }
 }
 
-function get_admin_form_checkbox($item, $formType = '')
+function get_admin_form_choice($item, $formType = '')
 {
-    if($item['subtype'] === 'single') {
-        $output = '<div class="checkbox-wrapper option-stack-vertical d-flex flex-wrap align-items-start justify-content-start flex-column pt-4 pb-1 mb-3">';
-        foreach ($item['options'] as $value=>$text) {
-            $id = $item['field'];
-            $output .= "<label class='form-check' for='$id'>";
-            $output .= form_checkbox([
-                'name' => $item['field'],
-                'value' => $value,
-                'checked' => false,
-                'id' => $id,
-                'class' => 'form-check-input',
-            ], '', false, $item['attributes']);
-            $output .= "<span class='form-check-label'>".lang($text)."</span>";
-            $output .= '</label>';
-        }
-        $output .= '</div>';
-    }else{
-        if($item['subtype'] === 'vertical') {
-            $output = '<div class="checkbox-wrapper option-stack-vertical d-flex flex-wrap align-items-start justify-content-start flex-column">';
-        }else{
-            $output = '<div class="checkbox-wrapper option-stack-horizon d-flex flex-wrap align-items-center justify-content-start">';
-        }
-        $count = 0;
-        foreach ($item['options'] as $value=>$text) {
-            $id = $item['field'].'_'.($count+1);
-            $output .= "<label class='form-check me-3' for='$id'>";
-            $output .= form_checkbox([
-                'name' => $item['field'].'[]',
-                'value' => $value,
-                'checked' => false,
-                'id' => $id,
-                'class' => 'form-check-input',
-            ], '', false, $item['attributes']);
-            $output .= "<span class='form-check-label'>".lang($text)."</span>";
-            $output .= '</label>';
-            $count++;
-        }
-        $output .= '</div>';
-    }
-    return $output;
+	$wrapClassList = ['choice-wrapper', 'd-flex', 'flex-wrap', 'px-3'];
+	$inner = '';
+
+	$direction = $item['form_attributes']['option_stack'] ?? 'horizon';
+	if(!isset($item['form_attributes']['wrap_with_border'])) {
+		$withBorder = false;
+	}else{
+		$withBorder = $item['form_attributes']['wrap_with_border'];
+	}
+
+	if($item['subtype'] === 'single') {
+		$wrapClassList = array_merge($wrapClassList, [
+			'option-stack-vertical', 'align-items-start', 'justify-content-start', 'flex-column', 'pt-4', 'pb-1', 'mb-3'
+		]);
+
+		foreach ($item['options'] as $value=>$text) {
+			$id = $item['field'];
+			$input = $item['type'] === 'radio'?get_admin_form_radio($item, $value, $text):get_admin_form_checkbox($item, $value, $text);
+			$inner .= convert_selector_to_html("label.form-check[for='$id']", true, $input);
+		}
+	}else{
+		if($direction === 'vertical') {
+			$wrapClassList = array_merge($wrapClassList, [
+				'option-stack-vertical', 'align-items-start', 'justify-content-start', 'flex-column'
+			]);
+		}else{
+			$wrapClassList = array_merge($wrapClassList, [
+				'option-stack-horizon', 'align-items-center', 'justify-content-start'
+			]);
+		}
+
+		$count = 0;
+		foreach ($item['options'] as $value=>$text) {
+			$id = $item['field'].'_'.($count+1);
+			$labelClassList = ['form-check', 'me-3'];
+
+			if($direction === 'vertical' && $count === count($item['options']) - 1) $labelClassList[] = 'mb-0';
+
+			$input = $item['type'] === 'radio'?get_admin_form_radio($item, $value, $text):get_admin_form_checkbox($item, $value, $text);
+			$inner .= convert_selector_to_html("label.".implode('.', $labelClassList)."[for='$id']", true, $input);
+
+			$count++;
+		}
+	}
+
+	if($withBorder) {
+		$wrapClassList = array_merge($wrapClassList, [
+			'px-3', 'border', 'border-input', 'rounded-3',
+		]);
+	}
+
+	return convert_selector_to_html('div.'.implode('.', $wrapClassList), true, $inner);
+}
+
+function get_admin_form_checkbox($item, $value, $text)
+{
+	$id = $item['field'];
+	$name = $item['field'].($item['subtype'] === 'single'?'':'[]');
+
+	$output = form_checkbox([
+		'name' => $name,
+		'value' => $value,
+		'checked' => false,
+		'id' => $id,
+		'class' => 'form-check-input',
+	], '', false, $item['attributes']);
+	$output .= "<span class='form-check-label'>".lang($text)."</span>";
+	return $output;
+}
+
+function get_admin_form_radio($item, $value, $text)
+{
+	$id = $item['field'];
+	$name = $item['field'];
+
+	$output = form_radio([
+		'name' => $name,
+		'value' => $value,
+		'checked' => false,
+		'id' => $id,
+		'class' => 'form-check-input',
+	], '', false, $item['attributes']);
+	$output .= "<span class='form-check-label'>".lang($text)."</span>";
+	return $output;
 }
 
 function get_admin_form_text($data, $add_class = array(), $attributes = array()): string
@@ -98,12 +142,14 @@ function get_admin_form_text($data, $add_class = array(), $attributes = array())
     }else{
         $line = get_instance()->lang->line($text);
         $icon = $text['icon'] ?? '';
-        if($icon) $line = get_icon($icon, false, $text['icon_size'] ?? '', '.ms-1.align-middle').convert_selector_to_html('span.ms-1.align-middle', true, $line);
+        if($icon) $line = get_icon($icon, false, $text['icon_size'] ?? '', '.ms-1.align-middle').convert_selector_to_html('span.mx-1.align-middle', true, $line);
     }
 
-    if(!is_empty($data['form_attributes'], 'sample_file')) {
-        $line .= nbs().'('.anchor($data['form_attributes']['sample_file'], 'Sample', ['download' => 'sample']).')';
-    }
+	if(isset($data['form_attributes'])){
+		if(!is_empty($data['form_attributes'], 'sample_file')) {
+			$line .= '('.anchor($data['form_attributes']['sample_file'], 'Sample', ['download' => 'sample']).')';
+		}
+	}
 
     if(is_string($add_class)){
         $default['class'][] = $add_class;
@@ -116,10 +162,11 @@ function get_admin_form_text($data, $add_class = array(), $attributes = array())
     return '<div '._parse_form_attributes($attributes, $default).'>'.$line.'</div>';
 }
 
-function get_admin_form_list_item($item, $formType): string
+function get_admin_form_list_item($item, $formType, $below = true, $disk = false, $label = false): string
 {
     if($item['form_attributes']['with_list']) {
-        $classList = ['form-list-item-wrap', 'list-unstyled', 'mb-0', 'p-2', 'bg-lighter', 'rounded-3', 'w-px-400', 'mw-100'];
+        $classList = ['form-list-item-wrap', 'mb-0', 'p-2', 'bg-lighter', 'rounded-3', 'w-px-400', 'mw-100'];
+		$classList[] = $disk?'list-styled':'list-unstyled';
         if($item['subtype'] === 'readonly') {
             $classList[] = 'form-list-item-wrap_readonly';
         }elseif($item['form_attributes']['list_sorter']) {
@@ -136,7 +183,8 @@ function get_admin_form_list_item($item, $formType): string
         if($formType === 'side') {
             $inner = convert_selector_to_html('div.form-floating.form-floating-outline', true, $inner);
         }
-        return convert_selector_to_html('div.input-group.input-group-merge', true, $inner);
+		if($label) $inner .= form_label(lang($item['label'].'-list'), $item['id'].'-list');
+        return convert_selector_to_html('div.input-group.input-group-merge'.($below?'.mt-2':'.mb-2'), true, $inner);
     }else{
         return '';
     }
@@ -189,8 +237,10 @@ function get_admin_form_attributes($item, $form_type): array
 
     // form_attributes
     if($item['form_attributes']['with_btn']) $classList[] = 'form-input_with-button';
-    foreach ($item['form_attributes'] as $key=>$val) {
-        $key = 'data-'.str_replace('_', '-', $key);
+
+	foreach ($item['form_attributes'] as $key=>$val) {
+		if($val === false) $val = 0;
+		$key = 'data-'.str_replace('_', '-', $key);
         if(is_array($val)) $val = json_encode($val, JSON_UNESCAPED_UNICODE);
         $val = str_replace('"', '\'', $val);
         $item['attributes'][$key] = $val;
@@ -209,24 +259,21 @@ function get_admin_form_attributes($item, $form_type): array
     }
 
     if($item['type'] === 'select') {
+		$classList[] = 'form-select';
         switch ($item['subtype']) {
             case 'selectpicker' :
                 $classList = array_diff(array_merge($classList, [
-                    'w-100', 'selectpicker',
+					'w-100', 'selectpicker',
                 ]), ['form-control']);
                 break;
             case 'select2' :
                 $classList = array_diff(array_merge($classList, [
-                    'form-select', 'select2',
+                    'select2',
                 ]), ['form-control']);
-                if($item['category'] === 'group' && $item['group_attributes']['group_repeater']) {
-                    $key = array_search('select2', $classList);
-                    $classList = array_replace($classList, [$key => 'select2-repeater']);
-                }
                 break;
             case 'select2-repeater' :
                 $classList = array_diff(array_merge($classList, [
-                    'form-select', 'select2-repeater',
+                    'select2-repeater',
                 ]), ['form-control']);
                 break;
         }
@@ -248,8 +295,13 @@ function get_admin_form_attributes($item, $form_type): array
     if($item['type'] === 'tel') {
         switch ($item['subtype']) {
             case 'cleave-hp' :
+				$classList[] = 'cleave cleave-hp';
                 $attributes['placeholder'] = '010-1234-5678';
                 break;
+			case 'cleave-fulldate' :
+				$classList[] = 'cleave cleave-fulldate';
+				$attributes['placeholder'] = 'YYYY-MM-DD';
+				break;
             default :
                 break;
         }
@@ -258,16 +310,19 @@ function get_admin_form_attributes($item, $form_type): array
     if($item['type'] === 'date') {
         switch ($item['subtype']) {
             case 'flatpickr' :
-            case 'cleave-fulldate' :
-                $attributes['placeholder'] = 'YYYY-MM-DD';
-                break;
+				$classList[] = 'flatpickr flatpickr-date';
+				$attributes['placeholder'] = 'YYYY-MM-DD';
+				break;
             case 'cleave-year' :
+				$classList[] = 'cleave cleave-year';
                 $attributes['placeholder'] = 'YYYY';
                 break;
             case 'cleave-month' :
+				$classList[] = 'cleave cleave-month';
                 $attributes['placeholder'] = 'MM';
                 break;
             case 'cleave-date' :
+				$classList[] = 'cleave cleave-date';
                 $attributes['placeholder'] = 'DD';
                 break;
             default :
@@ -277,13 +332,18 @@ function get_admin_form_attributes($item, $form_type): array
 
     if($item['type'] === 'time') {
         switch ($item['subtype']) {
+			case 'flatpickr' :
+				$classList[] = 'flatpickr flatpickr-time';
             case 'cleave-time' :
+				$classList[] = 'cleave cleave-time';
                 $attributes['placeholder'] = 'hh:mm';
                 break;
             case 'cleave-hour' :
+				$classList[] = 'cleave cleave-hour';
                 $attributes['placeholder'] = 'hh';
                 break;
             case 'cleave-minute' :
+				$classList[] = 'cleave cleave-minute';
                 $attributes['placeholder'] = 'mm';
                 break;
             default :
@@ -306,50 +366,60 @@ function get_admin_form_attributes($item, $form_type): array
         }
     }
 
-    // rules
-    $rules = preg_split('/\|(?![^\[]*\])/', $item['rules']);
-    if(in_array('required', $rules)) $attributes['required'] = 'required';
+	// group category
+	if($item['category'] === 'group' && $item['group_attributes']['group_repeater']) {
+		foreach (['select2'] as $key) {
+			$key = array_search($key, $classList);
+			if($key) $classList = array_replace($classList, [$key => $key.'-repeater']);
+		}
+	}
 
-    if($matches = preg_grep('/^exact_length\[\d+\]$/', $rules)) {
-        $option = reset($matches);
-        if (preg_match('/^exact_length\[(\d+)\]$/', $option, $matches)) {
-            $number = $matches[1];
-            $attributes['minlength'] = $number;
-            $attributes['maxlength'] = $number;
-        }
-    }
+	// rules
+	if(isset($item['rules'])) {
+		$rules = preg_split('/\|(?![^\[]*\])/', $item['rules']);
+		if(in_array('required', $rules)) $attributes['required'] = 'required';
 
-    if($matches = preg_grep('/^min_length\[\d+\]$/', $rules)) {
-        $option = reset($matches);
-        if (preg_match('/^min_length\[(\d+)\]$/', $option, $matches)) {
-            $number = $matches[1];
-            $attributes['minlength'] = $number;
-        }
-    }
+		if($matches = preg_grep('/^exact_length\[\d+\]$/', $rules)) {
+			$option = reset($matches);
+			if (preg_match('/^exact_length\[(\d+)\]$/', $option, $matches)) {
+				$number = $matches[1];
+				$attributes['minlength'] = $number;
+				$attributes['maxlength'] = $number;
+			}
+		}
 
-    if($matches = preg_grep('/^max_length\[\d+\]$/', $rules)) {
-        $option = reset($matches);
-        if (preg_match('/^max_length\[(\d+)\]$/', $option, $matches)) {
-            $number = $matches[1];
-            $attributes['maxlength'] = $number;
-        }
-    }
+		if($matches = preg_grep('/^min_length\[\d+\]$/', $rules)) {
+			$option = reset($matches);
+			if (preg_match('/^min_length\[(\d+)\]$/', $option, $matches)) {
+				$number = $matches[1];
+				$attributes['minlength'] = $number;
+			}
+		}
 
-    if($matches = preg_grep('/^min\[\d+\]$/', $rules)) {
-        $option = reset($matches);
-        if (preg_match('/^min\[(\d+)\]$/', $option, $matches)) {
-            $number = $matches[1];
-            $attributes['min'] = $number;
-        }
-    }
+		if($matches = preg_grep('/^max_length\[\d+\]$/', $rules)) {
+			$option = reset($matches);
+			if (preg_match('/^max_length\[(\d+)\]$/', $option, $matches)) {
+				$number = $matches[1];
+				$attributes['maxlength'] = $number;
+			}
+		}
 
-    if($matches = preg_grep('/^max\[\d+\]$/', $rules)) {
-        $option = reset($matches);
-        if (preg_match('/^max\[(\d+)\]$/', $option, $matches)) {
-            $number = $matches[1];
-            $attributes['max'] = $number;
-        }
-    }
+		if($matches = preg_grep('/^min\[\d+\]$/', $rules)) {
+			$option = reset($matches);
+			if (preg_match('/^min\[(\d+)\]$/', $option, $matches)) {
+				$number = $matches[1];
+				$attributes['min'] = $number;
+			}
+		}
+
+		if($matches = preg_grep('/^max\[\d+\]$/', $rules)) {
+			$option = reset($matches);
+			if (preg_match('/^max\[(\d+)\]$/', $option, $matches)) {
+				$number = $matches[1];
+				$attributes['max'] = $number;
+			}
+		}
+	}
 
     // class
     $attributes['class'] = implode(' ', $classList);
@@ -422,4 +492,14 @@ function set_admin_form_value($field, $default = '', $view = null, $html_escape 
     }else{
         return set_value($field, $default, $html_escape);
     }
+}
+
+function get_help_block($data)
+{
+	$defaults = array_merge(array(
+		'tag' => 'span',
+		'text' => '',
+	), $data);
+
+	return "<{$defaults['tag']} "._attributes_to_string($data['attr']).">".$defaults['text']."</{$defaults['tag']}>";
 }

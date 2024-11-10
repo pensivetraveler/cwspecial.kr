@@ -1,5 +1,5 @@
 <?php extract($item['data']); ?>
-<div class="col-sm-12 form-validation-row">
+<div class="col-sm-12 form-validation-unit">
 	<div class="input-group input-group-merge mb-3">
 		<span id="<?=$zipcode['field']?>-ico" class="input-group-text"><i class="ri-building-line ri-18px"></i></span>
 		<div class="form-floating form-floating-outline">
@@ -41,7 +41,7 @@
 			?>
 		</div>
 	</div>
-	<?=get_admin_form_text($item['form_text'])?>
+	<?=get_admin_form_text($item)?>
 	<div class="daum-addr-container">
 		<div id="daumAddrWrap_<?=$item['group']?>" data-group-name="<?=$item['group']?>">
 			<img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" onclick="foldDaumPostcode(this.parentElement)" alt="접기 버튼">

@@ -1,3 +1,24 @@
+<?php
+$bodyAttrsList = [
+		'data-class' => $class ?? '',
+		'data-method' => $method ?? '',
+];
+if (ENVIRONMENT === 'production') {
+	$bodyAttrsList = array_merge($bodyAttrsList, [
+//		'oncontextmenu' => 'return false',
+//		'onselectstart' => 'return false',
+//		'ondragstart' => 'return true',
+//		'onkeydown' => 'return false',
+	]);
+}
+$bodyAttrs = implode(' ', array_map(
+		function ($key, $value) {
+			return $key . '="' . $value . '"';
+		},
+		array_keys($bodyAttrsList),
+		$bodyAttrsList
+));
+?>
 <html
 	lang="ko"
 	class="light-style layout-navbar-fixed layout-menu-fixed layout-compact"
@@ -40,8 +61,6 @@
 		<!-- Core CSS -->
 		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/css/rtl/core.css');?>" class="template-customizer-core-css"/>
 		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/css/rtl/theme-default.css');?>" class="template-customizer-theme-css"/>
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/css/demo.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/css/style.css');?>" />
 
 		<!-- Vendors CSS -->
 		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css');?>" />
@@ -52,6 +71,11 @@
 		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/select2/select2.css');?>" />
 		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/bootstrap-select/bootstrap-select.css');?>" />
 		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/quill/editor.css');?>" />
+
+		<!-- Custom CSS -->
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/css/demo.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/css/custom.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/css/style.css');?>" />
 
 		<!-- Page CSS -->
 		<!-- Page -->
@@ -115,5 +139,11 @@
 			};
 		</script>
 		<?php endif; ?>
+
+		<?php if(ENVIRONMENT === 'production'): ?>
+		<script>
+			document.oncontextmenu = function(){return false;}
+		</script>
+		<?php endif; ?>
 	</head>
-	<body data-class="<?=isset($class)?$class:''?>" data-method="<?=isset($method)?$method:''?>">
+	<body <?=$bodyAttrs?>>

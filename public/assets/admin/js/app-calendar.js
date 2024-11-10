@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    // Event start (flatpicker)
+    // Event start (flatpickr)
     if (eventStartDate) {
       var start = eventStartDate.flatpickr({
         enableTime: true,
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    // Event end (flatpicker)
+    // Event end (flatpickr)
     if (eventEndDate) {
       var end = eventEndDate.flatpickr({
         enableTime: true,
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    // Inline sidebar calendar (flatpicker)
+    // Inline sidebar calendar (flatpickr)
     if (inlineCalendar) {
       inlineCalInstance = inlineCalendar.flatpickr({
         monthSelectorType: 'static',

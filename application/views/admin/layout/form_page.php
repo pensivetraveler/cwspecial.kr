@@ -4,7 +4,8 @@
         'class' => "add-new-record needs-validation form-type-{$formType}",
         'onsubmit' => 'return false',
     ], [
-        'mode' => $this->router->method,
+        '_mode' => $this->router->method,
+        '_event' => '',
     ]);
 	foreach ($formData as $item):
 		if($item['category'] === 'group'):
@@ -23,12 +24,12 @@
 			);
 		else:
 ?>
-<div class="row mb-4 form-validation-row">
+<div class="row mb-4 form-validation-unit">
 	<?=form_label(lang($item['label']), $item['id'], ['class' => 'col-sm-2 col-form-label'])?>
 	<div class="col-sm-10">
 		<div class="input-group input-group-merge">
-			<?=get_admin_form_ico($item)?>
             <?php
+				echo get_admin_form_ico($item);
                 switch ($item['type']) {
                     case 'password' :
                         echo form_password(
@@ -41,7 +42,8 @@
 						);
                         break;
 					case 'checkbox' :
-						echo get_admin_form_checkbox($item, $formType);
+					case 'radio' :
+						echo get_admin_form_choice($item, $formType);
 						break;
                     case 'select' :
                         echo form_dropdown(
@@ -69,7 +71,7 @@
 						echo form_upload([
 							'name' => $item['field'],
 							'id' => $item['id'],
-						], '', $item['attributes']);
+						], $item['attributes']);
 						break;
                     default :
                         echo form_input(
@@ -93,13 +95,14 @@
 								'class' => 'btn btn-outline-primary waves-effect btn-dup-check',
 							], lang('Check'), [
 								'onclick' => "checkDuplicate(this)",
+								'disabled' => 'disabled',
 							]);
 							break;
 					}
 				}
 			?>
 		</div>
-		<?=get_admin_form_text($item['form_text'])?>
+		<?=get_admin_form_text($item)?>
 		<?=get_admin_form_list_item($item, $formType)?>
 	</div>
 </div>
@@ -111,6 +114,7 @@
 	<div class="col-sm-12 text-end">
 		<button type="button" class="btn btn-outline-dark waves-effect" onclick="<?=WEB_HISTORY_BACK?>">List</button>
 		<button type="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
+		<button type="button" class="btn btn-outline-danger btn-delete-event btn-delete d-none">Delete</button>
 	</div>
 </div>
 <?=form_close();?>

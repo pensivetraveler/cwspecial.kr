@@ -9,8 +9,6 @@ class Students extends Common
 		parent::__construct();
 
 		$this->titleList[] = 'Users Management';
-		$this->href = base_url('/admin/' . $this->router->class);
-		$this->viewPath = 'admin/' . $this->router->class;
 		$this->addJsVars([
 			'API_URI' => '/adm/students',
 		]);

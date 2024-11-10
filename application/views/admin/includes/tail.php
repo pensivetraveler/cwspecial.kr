@@ -35,7 +35,7 @@
 		<script>
 			$(function() {
 				if(
-					<?=$this->config->item('phptojs.namespace')?>.HOOK_PHPTOJS_VAR_DIALOG !== null
+						<?=$this->config->item('phptojs.namespace')?>.HOOK_PHPTOJS_VAR_DIALOG !== null
 					&&
 					Object.keys(<?=$this->config->item('phptojs.namespace')?>.HOOK_PHPTOJS_VAR_DIALOG).length > 0
 				) {
@@ -61,16 +61,16 @@
 		<?php endif; ?>
 		<div
 			style="
-					display: none;
-					position: absolute;
-					top: 0;
-					left: 0;
-					/*width: 100vw;*/
-					/*height: 100vh;*/
-					width: 400px;
-					height: 800px;
-					border: 5px solid red;
-				"
+							display: none;
+							position: absolute;
+							top: 0;
+							left: 0;
+							/*width: 100vw;*/
+							/*height: 100vh;*/
+							width: 400px;
+							height: 800px;
+							border: 5px solid red;
+						"
 		></div>
 	</body>
 </html>

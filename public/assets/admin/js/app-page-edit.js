@@ -6,12 +6,16 @@ $(function () {
     const formRecord = document.getElementById('formRecord');
     if(formRecord === null) throw new Error(`formRecord is not exist`);
 
-    fetchFrmValues(formRecord, common.KEY);
-    readyFrmInputs(formRecord, 'edit', common.FORM_DATA);
-    applyFrmValues(formRecord, record, common.FORM_DATA);
-    refreshPlugins();
+	preparePlugins(formRecord);
+	resetFrmInputs(formRecord, common.FORM_DATA);
+	readyFrmInputs(formRecord, 'edit', common.FORM_DATA);
+	fetchFrmValues(formRecord, common.KEY);
+	applyFrmValues(formRecord, record, common.FORM_DATA);
+	refreshPlugins();
 
-    for(const rule of Object.keys(customValidatorsPreset.validators)) FormValidation.validators[rule] = customValidatorsPreset.validators[rule];
+	for(const rule of Object.keys(customValidatorsPreset.validators))
+		FormValidation.validators[rule] = customValidatorsPreset.validators[rule];
+
     // Form validation for Add new record
     fv = FormValidation.formValidation(
         formRecord,
@@ -23,7 +27,12 @@ $(function () {
                     // Use this for enabling/changing valid/invalid class
                     // eleInvalidClass: '',
                     eleValidClass: '',
-                    rowSelector: '.form-validation-row'
+					rowSelector: function(field, ele) {
+						switch (field) {
+							default:
+								return '.form-validation-unit';
+						}
+					},
                 }),
                 submitButton: new FormValidation.plugins.SubmitButton(),
                 // submit button의 type을 submit으로 원할 경우
@@ -50,13 +59,15 @@ $(function () {
         var element = event.elements[0];  // The field element
         element.addEventListener('change', function() {
             // Revalidate field when flatpickr
-            // if(element.classList.contains('.form-input_date-flatpickr')) fv.revalidateField(field);
+            if(element.classList.contains('.form-input_date-flatpickr')) fv.revalidateField(field);
             // Revalidate field whenever input changes
             // e.fv.revalidateField(field);
         });
     }).on('core.form.validating', function(event) {
         // 유효성 검사 시작 전
         console.log('%c The form validation has started.', 'color: green')
+		const form = event.formValidation.form;
+		if(form['_event'] !== undefined) form['_event'].value = 'submit';
     }).on('core.validator.validating', function(event) {
         // 특정 요소에 대한 유효성 검사 시작 전
         console.log('%c Validator for the field ' + event.field + ' is validating.', 'color: skyblue');
@@ -73,21 +84,25 @@ $(function () {
             console.log('Invalid validator:', event.validator);
             console.log('Invalid field:', event.field);
             console.log('Error message:', event.result.message);
+			console.log('Result Object:',event.result)
             console.log('------------------------------------------------------------');
         }
     }).on('core.form.valid', function(event) {
         // 유효성 검사 완료 후
+		updateFormLifeCycle('checkFrmValues', formRecord);
+
         // Send the form data to back-end
         // You need to grab the form data and create an Ajax request to send them
-        submitAjax(formRecord, {
+        submitAjax('#formRecord', {
             success: function(response) {
                 showAlert({
                     type: 'success',
                     title: 'Complete',
-                    text: 'Your Data Is Updated',
+					text: formRecord['_mode'].value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
                     callback: redirect,
                     params: common.LIST_VIEW_URI,
                 });
+				updateFormLifeCycle('transFrmValues', formRecord);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.warn(jqXHR.responseJSON)

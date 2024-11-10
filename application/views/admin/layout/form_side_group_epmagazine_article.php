@@ -22,7 +22,7 @@
 				$article_cd['attributes'],
 		);
 		?>
-		<div class="col-sm-12 form-validation-row mb-4">
+		<div class="col-sm-12 form-validation-unit mb-4">
 			<div class="input-group input-group-merge">
 				<?=get_admin_form_ico($subject)?>
 				<div class="form-floating form-floating-outline">
@@ -35,9 +35,9 @@
 					<?=form_label(lang($subject['label']), $subject['id'])?>
 				</div>
 			</div>
-			<?=get_admin_form_text($subject['form_text'])?>
+			<?=get_admin_form_text($subject)?>
 		</div>
-		<div class="col-sm-12 form-validation-row">
+		<div class="col-sm-12 form-validation-unit">
 			<div class="input-group input-group-merge">
 				<?=get_admin_form_ico($uploads)?>
 				<div class="form-floating form-floating-outline">
@@ -47,14 +47,13 @@
 									'name' => $uploads['name'],
 									'id' => $uploads['id'],
 							],
-							'',
 							$uploads['attributes'],
 					);
 					echo form_label(lang($uploads['label']), $uploads['id']);
 					?>
 				</div>
 			</div>
-			<?=get_admin_form_text($uploads['form_text'])?>
+			<?=get_admin_form_text($uploads)?>
 			<?=get_admin_form_list_item($uploads, 'side')?>
 		</div>
 	</div>

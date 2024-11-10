@@ -34,7 +34,7 @@
                 <hr class="" />
                 <div class="row">
                     <div class="col-sm-10">
-                        <div class="form-validation-row mb-3">
+                        <div class="form-validation-unit mb-3">
                             <div class="input-group input-group-merge">
                                 <div class="form-floating form-floating-outline">
                                     <?php
@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-validation-row">
+                        <div class="form-validation-unit">
                             <div class="input-group input-group-merge">
                                 <div class="form-floating form-floating-outline">
                                     <?php
@@ -60,7 +60,6 @@
                                                 'name' => $uploads['field'],
                                                 'id' => $uploads['id'],
                                             ],
-                                            '',
                                             $uploads['attributes'],
                                         );
                                         echo form_label(lang($uploads['label']), $uploads['id']);

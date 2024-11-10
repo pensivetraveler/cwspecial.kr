@@ -27,7 +27,7 @@ class MY_Hooks
         $dotenv = new Symfony\Component\Dotenv\Dotenv();
         $dotenv->usePutenv();
 		if(getenv('CI_ENV') && file_exists(FCPATH.'.env.'.getenv('CI_ENV')))
-        	$dotenv->load(FCPATH.'.env.'.getenv('CI_ENV'));
+			$dotenv->load(FCPATH.'.env.'.getenv('CI_ENV'));
     }
 
     public function SystemOfInspection()
@@ -48,7 +48,7 @@ class MY_Hooks
     {
         $CI =& get_instance();
 
-		//Check if lib is loaded or not, and if not loaded, then load it here
+        //Check if lib is loaded or not, and if not loaded, then load it here
         if(!isset($CI->session)){
             $CI->load->library('session');
         }
@@ -56,17 +56,57 @@ class MY_Hooks
             $CI->load->library('PHPtoJS', $CI->config->item('phptojs.namespace')?['namespace' => $CI->config->item('phptojs.namespace')]:[]);
         }
 
-        if (
-            isset($CI->noLoginAllow)
-            && (is_array($CI->noLoginAllow) === false
-                || in_array($CI->router->method, $CI->noLoginAllow) === false)
-        ) {
-            // 로그인을 했는지 판단을 하는 로직을 넣으면 되겠죠.
-            if (1) {
-                // redirect url도 알아서...
-//                redirect('/account/signin?next=' . urlencode($CI->uri->ruri_string()));
-            }
-        }
+		// autologin
+		if($CI->config->item('autologin_config_loaded')){
+			$aulCookie = $CI->config->item('autologin_cookie_name');
+			$aulTable = $CI->config->item('autologin_table');
+			$aulColumns = $CI->config->item('autologin_columns');
+			$aulLifetime = $CI->config->item('autologin_cookie_lifetime') ?: 86400 * 30;
+			$userTable = $CI->config->item('user_table');
+			$userLimit = $CI->config->item('user_limit_conditions');
+
+			if (get_cookie($aulCookie) && ! $CI->session->userdata(USER_ID_COLUMN_NAME)) {
+				$autoLogin = $CI->db
+					->order_by($aulColumns['date'], 'desc')
+					->where([$aulColumns['key'] => get_cookie($aulCookie)])->get($aulTable)->result_array();
+				if(count($autoLogin)) {
+					$autoLogin = $autoLogin[0];
+
+					if ( ! element(USER_ID_COLUMN_NAME, $autoLogin)) {
+						delete_cookie($aulCookie);
+					}else{
+						$valid = true;
+						if ( ! element($aulColumns['date'], $autoLogin) OR (strtotime(element($aulColumns['date'], $autoLogin)) < ctimestamp() - $aulLifetime)) {
+							$valid = false;
+						} elseif ($CI->input->ip_address() !== element($aulColumns['ip'], $autoLogin)) {
+							$valid = false;
+						} else {
+							$userData = $CI->db
+								->select([USER_ID_COLUMN_NAME, ...array_keys($userLimit)])
+								->where([USER_ID_COLUMN_NAME => element(USER_ID_COLUMN_NAME, $autoLogin)])
+								->get($userTable)->result_array();
+
+							if(count($userData)) {
+								$userData = $userData[0];
+								if(element(USER_ID_COLUMN_NAME, $userData)) {
+									foreach ($userData as $key => $val) {
+										if($key === USER_ID_COLUMN_NAME) continue;
+										if($val === $userLimit[$key]) $valid = false;
+									}
+								}
+							}
+						}
+
+						if(!$valid) {
+							$CI->db->delete($aulTable, [$aulColumns['id'] => element($aulColumns['id'], $autoLogin)]);
+							delete_cookie($aulCookie);
+						}else{
+							$CI->session->set_userdata(USER_ID_COLUMN_NAME, element(USER_ID_COLUMN_NAME, $autoLogin));
+						}
+					}
+				}
+			}
+		}
     }
 
     public function setPHPVars()

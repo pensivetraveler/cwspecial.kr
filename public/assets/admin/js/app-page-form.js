@@ -24,10 +24,9 @@ function updateFormLifeCycle(state, form = null, detail = {}) {
             formSelector: form.getAttribute('id'),
         }, detail);
     }
-
     target.dispatchEvent(
         new CustomEvent(state, {
-            bubbles : true,
+            bubbles : false,
             cancelable : true,
             composed : false,
             detail : detail,
@@ -35,34 +34,23 @@ function updateFormLifeCycle(state, form = null, detail = {}) {
     );
 }
 
-function preparePlugins() {
+function preparePlugins(form) {
+	console.log(1)
     // select picker
-    if ($('.selectpicker').length) {
-        $('.selectpicker').selectpicker();
-        handleBootstrapSelectEvents();
+    if ($(form).find('.selectpicker').length) {
+		$(form).find('.selectpicker').selectpicker();
+		$(form).find('.form-floating:has(.selectpicker)').each(function () {
+			$(this).addClass('form-floating-bootstrap-select');
+		});
     }
 
-    $('body').on('refreshed.bs.select', '.selectpicker', function (e, clickedIndex, isSelected, previousValue) {
-        const value = $(this).val();
-        let obj = [];
-        for(const option of [].slice.call(this.options)) {
-            if(!option.classList.contains('bs-title-option')) {
-                obj.push({
-                    value : option.value,
-                    text : option.text,
-                })
-            }
-        }
-        $(this).selectpicker('destroy').addClass('selectpicker').selectpicker('val', value);
-    });
-
     // select2
-    if ($('.select2').length) {
-        $('.select2').each(function () {
+    if ($(form).find('.select2').length) {
+        $(form).find('.select2').each(function () {
             var $this = $(this);
             $this.prepend('<option value="" disabled selected></option>');
             select2Focus($this);
-            $this.wrap('<div class="position-relative"></div>').select2({
+            $this.wrap('<div class="position-relative w-100"></div>').select2({
                 allowClear: true,
                 placeholder: $this.attr('placeholder'),
                 dropdownParent: $this.parent()
@@ -71,89 +59,18 @@ function preparePlugins() {
     }
 
     // FlatPickr Initialization & Validation
-    document.querySelectorAll('.form-input_date-flatpickr').forEach(function(input) {
-        input.flatpickr({
-            enableTime: false,
-            // See https://flatpickr.js.org/formatting/
-            dateFormat: 'Y-m-d',
-            // After selecting a date, we need to revalid”ate the field
-            onChange: function (data, value, full) {
-                $(full.input).trigger('change'); // 'change' 이벤트 강제로 발생
-            }
-        });
-    });
+	$(form).find('.flatpickr').each(function() {
+		setFlatpickr(this);
+	})
 
     // Cleave Initialization & Validation
-    document.querySelectorAll('.form-input_tel-cleave-hp').forEach(function(input) {
-        new Cleave(input, {
-            phone: true,
-            delimiter: '-',
-            phoneRegionCode: 'KR'
-        });
-    });
-
-    document.querySelectorAll('.form-input_date-cleave-fulldate').forEach(function(input) {
-        new Cleave(input, {
-            date: true,
-            delimiter: '-',
-            datePattern: ['Y', 'm', 'd']
-        });
-    });
-
-    document.querySelectorAll('.form-input_date-cleave-year').forEach(function(input) {
-        new Cleave(input, {
-            date: true,
-            datePattern: ['Y']
-        });
-    });
-
-    document.querySelectorAll('.form-input_date-cleave-month').forEach(function(input) {
-        new Cleave(input, {
-            date: true,
-            datePattern: ['m']
-        });
-    });
-
-    document.querySelectorAll('.form-input_date-cleave-date').forEach(function(input) {
-        new Cleave(input, {
-            date: true,
-            datePattern: ['d']
-        });
-    });
-
-    document.querySelectorAll('.form-input_text-cleave-version').forEach(function(input) {
-        new Cleave(input, {
-            delimiter: '.',
-            blocks: [1, 1, 1],
-            uppercase: false,
-            numericOnly: true
-        });
-    });
-
-    document.querySelectorAll('.form-input_time-cleave-time').forEach(function(input) {
-        new Cleave(input, {
-            time: true,
-            timePattern: ['h', 'm']
-        });
-    });
-
-    document.querySelectorAll('.form-input_time-cleave-hour').forEach(function(input) {
-        new Cleave(input, {
-            time: true,
-            timePattern: ['h']
-        });
-    });
-
-    document.querySelectorAll('.form-input_time-cleave-minute').forEach(function(input) {
-        new Cleave(input, {
-            time: true,
-            timePattern: ['m']
-        });
-    });
+	$(form).find('.cleave').each(function() {
+		setCleave(this);
+	})
 
     // Bootstrap Max Length
-    if ($('.form-maxlength').length) {
-        $('.form-maxlength').each(function () {
+    if ($(form).find('.form-maxlength').length) {
+		$(form).find('.form-maxlength').each(function () {
             $(this).maxlength({
                 warningClass: 'label label-success bg-success text-white',
                 limitReachedClass: 'label label-danger',
@@ -167,14 +84,14 @@ function preparePlugins() {
     }
 
     // textarea-autosize
-    if($('.form-input_textarea-autosize').length) {
-        $('.textarea-autosize').each(function() {
+    if($(form).find('.form-input_textarea-autosize').length) {
+		$(form).find('.textarea-autosize').each(function() {
             autosize(this);
         })
     }
 
-    if ($('.select2-repeater').length) {
-        $('.select2-repeater').each(function () {
+    if ($(form).find('.select2-repeater').length) {
+        $(form).find('.select2-repeater').each(function () {
             var $this = $(this);
             $this.prepend('<option value="" disabled selected></option>');
             select2Focus($this);
@@ -187,8 +104,8 @@ function preparePlugins() {
     }
 
     // form-repeater-jquery
-    if($('[data-repeater-type="jquery"]').length) {
-        $('[data-repeater-type="jquery"]').each(function() {
+    if($(form).find('[data-repeater-type="jquery"]').length) {
+        $(form).find('[data-repeater-type="jquery"]').each(function() {
             var formType = $(this).data('form-type');
             var groupName = $(this).data('group-name');
             var repeater = common.FORM_REPEATER[groupName] = $(this).repeater({
@@ -209,7 +126,6 @@ function preparePlugins() {
                         // list-item-wrap
                         if($(item).data('with-list')) {
                             withList = true;
-                            console.log(id+'-list')
                             $(wrap).find(`#${item.id}-list`).attr('id', id+'-list');
                         }
 
@@ -219,23 +135,16 @@ function preparePlugins() {
                     $(this).attr('data-row-index', row);
                     $(this).closest('[data-repeater-type]').attr('data-repeater-count', row)
 
-                    // select2-repeater
-                    if($(this).find('.select2-repeater').length > 0){
-                        if($('.select2-repeater').length > 0){
-                            $('.select2-container').remove();
-                            $('.select2-repeater.form-select').select2({
-                                placeholder: 'Placeholder text'
-                            });
-                            $('.select2-container').css('width', '100%');
-                            var $this = $(this);
-                            select2Focus($this);
-                            $('.position-relative .select2-repeater').each(function () {
-                                $(this).select2({
-                                    dropdownParent: $(this).closest('.position-relative')
-                                });
-                            });
-                        }
-                    }
+					window.dispatchEvent(
+						new CustomEvent('addRepeaterItem', {
+							bubbles : false,
+							cancelable : true,
+							composed : false,
+							detail : {
+								node : wrap
+							},
+						}),
+					);
 
                     // list-item-wrap
                     if(withList) $(this).find('.form-list-item-wrap').addClass('d-none').empty();
@@ -246,7 +155,6 @@ function preparePlugins() {
                     $(this).slideDown();
                 },
                 hide: function (deleteElement) {
-                    console.log('hi1')
                     const repeater = this;
                     const form = repeater.closest('form');
                     const identifier = form[common.IDENTIFIER].value;
@@ -328,7 +236,15 @@ function preparePlugins() {
         })
     }
 
-    updateFormLifeCycle('preparePlugins')
+	// [data-show-if-target]
+	if($('[data-show-if-field]').length > 0) {
+		$('[data-show-if-field]').each((k, v) => {
+			const target = $(v).attr('data-show-if-field');
+			if(target) $(v).closest('form').find(`.form-validation-unit:has([name="${target}"])`).addClass('d-none');
+		});
+	}
+
+    updateFormLifeCycle('preparePlugins', form)
 }
 
 /**
@@ -338,10 +254,14 @@ function preparePlugins() {
  * @param fields
  */
 function resetFrmInputs(form, fields = []) {
-    form.querySelectorAll('input, textarea, select').forEach(function(node) {
-        if(!Boolean(node.getAttribute('data-reset-value'))) {
-            return;
-        }
+	record = null;
+	Object.keys(common.FORM_LIFECYCLE).forEach((v, k) => {
+		if(!k) return;
+		common.FORM_LIFECYCLE[v] = false;
+	});
+
+	form.querySelectorAll('input, textarea, select').forEach(function(node) {
+		if(!isAttributeValueTrue(node, 'data-reset-value')) return;
 
         const value = fields.reduce((acc, curr) => {
             if(curr.field === node.name) acc = curr.default;
@@ -376,15 +296,12 @@ function resetFrmInputs(form, fields = []) {
                 break;
         }
 
-        if(node.type !== 'hidden' && !(Boolean(node.getAttribute('data-detect-changed')))) {
+        if(node.type !== 'hidden' && !isAttributeValueTrue(node, 'data-detect-changed')){
             node.setAttribute('data-input-changed', 'false');
         }
 
         if(node.hasAttribute('data-original-value')){
             node.removeAttribute('data-original-value');
-            if(btn = document.querySelector(`[data-id="${node.name}"].btn-dup-check`)){
-                btn.removeAttribute('disabled');
-            }
         }
     });
 
@@ -413,18 +330,24 @@ function resetFrmInputs(form, fields = []) {
  * @param fields
  */
 function readyFrmInputs(form, mode, fields = []) {
-    resetFrmInputs(form, fields);
-
     form.querySelectorAll('[data-view-mod]').forEach((node) => {
         const modList = node.getAttribute('data-view-mod').split('|');
         if(modList.includes(mode)){
-            node.closest('.form-validation-row').classList.remove('d-none');
+            node.closest('.form-validation-unit').classList.remove('d-none');
         }else{
-            node.closest('.form-validation-row').classList.add('d-none');
+            node.closest('.form-validation-unit').classList.add('d-none');
         }
     });
 
-    if(form.mode !== undefined) form.mode.value = mode;
+	form.querySelectorAll('[data-editable="0"]').forEach((node) => {
+		if(mode === 'edit') {
+			node.setAttribute('readonly', 'readonly');
+		}else{
+			node.removeAttribute('readonly');
+		}
+	});
+
+    if(form['_mode'] !== undefined) form['_mode'].value = mode;
 
     // Event trigger
     updateFormLifeCycle('readyFrmInputs', form, {
@@ -439,17 +362,21 @@ function readyFrmInputs(form, mode, fields = []) {
  * @param key
  * @returns {*}
  */
-function fetchFrmValues(form = null, key = '') {
+function fetchFrmValues(form = null, key = '', params = {}) {
     let data;
 
     executeAjax({
         async: false,
         url : common.API_URI + '/' + key + '?' + new URLSearchParams(common.API_PARAMS).toString(),
+		data: {
+			_mode : 'form',
+			...params,
+		},
         headers: {
             'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
         },
         success: function(response, textStatus, jqXHR) {
-            data = response.data[0];
+            data = isObject(response.data)?response.data:response.data[0];
             if(form) {
                 record = data;
 
@@ -499,7 +426,6 @@ function applyFrmValues(form, data, fields = []) {
         }
     };
 
-
     /**
      * classify cloneFields into groups
      */
@@ -534,7 +460,9 @@ function applyFrmValues(form, data, fields = []) {
     Object.keys(groups).forEach((groupName, i) => {
         const dto = groups[groupName];
 
+		// group_repeater row 생성
         if(groupAttrs[groupName].group_repeater) {
+			// group_repeater type jquery
             if(groupAttrs[groupName].repeater_type === 'jquery' && $('[data-repeater-type="jquery"]').length) {
                 const repeater = document.querySelector(`[data-repeater-type="jquery"][data-group-name="${groupName}"]`);
                 const rowCount = parseInt(repeater.getAttribute('data-repeater-count'));
@@ -550,9 +478,9 @@ function applyFrmValues(form, data, fields = []) {
                         applyFrmValuesByCategory(category, groupAttrs[groupName], fieldName, cloneFields, form, data);
                     });
                 }else{
-                    if(!data.hasOwnProperty(groupName)) return;
-
                     if(groupAttrs[groupName].envelope_name) {
+						if(!data.hasOwnProperty(groupName)) return;
+
                         let frmData = data[groupName];
                         if(groupAttrs[groupName].group_repeater) {
                             // 데이터 개수에 따라, field의 id, name 을 data index 의 값으로 대체해야 함.
@@ -621,7 +549,7 @@ function applyFrmValuesByCategory(category, groupAttr, fieldName, fields, form, 
     switch (category) {
         case 'inputs' :
             switch (field.subtype) {
-                default:
+				default:
                     if(form[name] && data[fieldName]) form[name].value = data[fieldName];
             }
             break;
@@ -655,6 +583,7 @@ function applyFrmValuesByCategory(category, groupAttr, fieldName, fields, form, 
                 default:
                     if(!data[fieldName]) return;
                     form.querySelectorAll(`[name="${name}"]`).forEach((input) => {
+						console.log(input)
                         if(input.value == data[fieldName]) input.checked = true;
                     });
             }
@@ -704,14 +633,31 @@ function applyFrmValuesByCategory(category, groupAttr, fieldName, fields, form, 
             break;
     }
 
+	if(field.form_attributes.with_btn) {
+		if(field.form_attributes.btn_type === 'dup_check') {
+			form[name].setAttribute('data-original-value', data[fieldName]);
+		}
+	}
+
     if(field.form_attributes.with_list) {
         setFormListItem(`#${id}-list`, data, field);
+    }
+
+    if(field.form_attributes.show_if_field) {
+		const target = field.form_attributes.show_if_field;
+		if(data[fieldName] == field.form_attributes.show_if_value) {
+			form[target].closest('.form-validation-unit').classList.remove('d-none');
+		}else{
+			form[target].closest('.form-validation-unit').classList.add('d-none');
+		}
     }
 }
 
 function refreshPlugins() {
     // Select Picker
-    if($('.selectpicker').length) $('.selectpicker').selectpicker('refresh');
+	if($('.selectpicker').length) {
+		$('.selectpicker').selectpicker('refresh');
+	}
 
     // Select2
     if($('.select2').length) $('.select2').trigger('change');
@@ -764,12 +710,15 @@ function checkDuplicate(button) {
         if(!form.hasOwnProperty(fieldName)) throw new Error(`checkDuplicate : fieldName is not valid !`);
 
         const input = form[fieldName];
+		const hidden = form.querySelector(`[name="${input.name}_unique"]`);
         const value = input.value;
         const originalValue = input.getAttribute('data-original-value');
 
         // 같은 값인 경우 중복 체크 하지 않음.
         if(originalValue && originalValue === value) return;
 
+		// checked val 임시 처리
+		if(form['_event'] !== undefined) form['_event'].value = 'dup_check';
         fv.revalidateField(input.name).then((status) => {
             if(status === 'Valid') {
                 executeAjax({
@@ -781,12 +730,15 @@ function checkDuplicate(button) {
                         field: fieldName,
                         value: input.value,
                     },
-                    after: {
-                        callback: showAlert,
-                        params: {
-                            type: 'success',
-                        },
-                    },
+					success: function(response, textStatus, jqXHR) {
+						console.log(response)
+						hidden.value = 1;
+						button.setAttribute('disabled', 'disabled');
+						showAlert({
+							type: 'success',
+							text: response.msg,
+						});
+					},
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.warn(jqXHR.responseJSON)
                         showAlert({
@@ -795,7 +747,9 @@ function checkDuplicate(button) {
                         });
                     }
                 });
-            }
+            }else{
+				hidden.value = '';
+			}
         });
     } catch (error) {
         customErrorHandler(error);
@@ -863,100 +817,14 @@ function deleteRepeater(repeater, deleteElement) {
     });
 }
 
-function initializeForm() {
-    record = null;
-    Object.keys(common.FORM_LIFECYCLE).forEach((v, k) => {
-        if(!k) return;
-        common.FORM_LIFECYCLE[v] = false;
-    });
-}
+// function initializeForm() {
+//     record = null;
+//     Object.keys(common.FORM_LIFECYCLE).forEach((v, k) => {
+//         if(!k) return;
+//         common.FORM_LIFECYCLE[v] = false;
+//     });
+// }
 
-$(function() {
-    preparePlugins();
-
-    // input event
-    $('[data-dup-check]').on('input', function(e) {
-        const btn = document.querySelector(`[data-id="${this.name}"].btn-dup-check`);
-        if(btn && this.getAttribute('data-original-value')) {
-            if(this.value === this.getAttribute('data-original-value')){
-                btn.setAttribute('disabled', 'disabled');
-            }else{
-                btn.removeAttribute('disabled');
-            }
-        }
-    });
-
-    // $('body').on('input', 'input, textarea', function(e) {
-    //     if($(this).attr('max')) {
-    //         const max = parseInt(this.getAttribute('max'));
-    //         if(max > 0 && this.value.length > max) {
-    //             this.value = this.value.substring(0, max);
-    //             $(this).siblings('.form-text').text(`${max}글자 이하 입력해주세요.`).removeClass('d-none').focus();
-    //         }else{
-    //             $(this).siblings('.form-text').addClass('d-none');
-    //         }
-    //     }
-    //
-    //     if($(this).data('add-hypen')) {
-    //         if(this.value.length >= 9) this.value = this.value.replace(/[^0-9]/g, "").replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
-    //     }
-    //
-    //     if($(this).data('text-type')) {
-    //         const type = $(this).data('text-type').split('|');
-    //         var regex;
-    //         if(type.includes('eng') && type.includes('num')) {
-    //             regex = /[^0-9a-zA-Z]/g;
-    //         } else if (type.includes('eng')) {
-    //             regex = /[^a-zA-Z]/g;
-    //         } else if (type.includes('num')) {
-    //             regex = /[^0-9]/g;
-    //         }
-    //         this.value = this.value.replace(regex, "");
-    //     }
-    // });
-
-    // $('body').on('change', 'input, textarea, select', function(e) {
-    //     if($(this).attr('minlength')) {
-    //         const minlength = parseInt(this.getAttribute('minlength'));
-    //         if(minlength > 0 && this.value.length < minlength) {
-    //             $(this).siblings('.form-text').text(`${minlength}글자 이상 입력해주세요.`).removeClass('d-none').focus();
-    //         }else{
-    //             $(this).siblings('.form-text').addClass('d-none');
-    //         }
-    //     }
-    //
-    //     if($(this).data('dup-check')){
-    //         let params;
-    //         try {
-    //             params = JSON.parse($(this).data('dup-check'))
-    //         } catch (e) {
-    //             params = JSON.parse($(this).data('dup-check').replace(/'/g, '"'));
-    //         }
-    //
-    //         const value = $(this).val();
-    //         const formText = $(this).siblings('.form-text');
-    //         $.ajax({
-    //             url: `${common.API_URI}/auth/dupCheck`,
-    //             data: {key: params.key, value: value},
-    //             headers: {
-    //                 'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
-    //             },
-    //             method: 'get',
-    //             dataType: 'json',
-    //             success: function(json) {
-    //                 console.log(json)
-    //                 if(json.code === 2000) {
-    //                     formText.addClass('d-none');
-    //                 }else{
-    //                     formText.text(json.msg).removeClass('d-none');
-    //                 }
-    //             },
-    //             error: function(jqXHR, textStatus, errorThrown) {
-    //                 let msg = jqXHR.responseJSON.msg;
-    //                 if(jqXHR.responseJSON.code === 4090 && param.title) msg = msg.replace('데이터가', Josa.r(param.title, '이/가'));
-    //                 formText.text(msg).removeClass('d-none').focus();
-    //             }
-    //         });
-    //     }
-    // });
-})
+// $(function() {
+//     preparePlugins();
+// })

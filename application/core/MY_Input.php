@@ -62,7 +62,7 @@ class MY_Input extends CI_Input
 //     * @param $httponly
 //     * @return void
 //     */
-//    public function set_cookie($name = '', $value = '', $expire = '', $domain = '', $path = '/', $prefix = '', $secure = false, $httponly = false, $samesite = NULL)
+//    public function set_cookie($name = '', $value = '', $expire = '', $domain = '', $path = '/', $prefix = '', $secure = false, $httponly = false)
 //    {
 //        if (PHP_VERSION_ID < 70300) {
 //            // PHP 7.3 이전 버전에서는 헤더에 직접 SameSite 속성을 추가
@@ -264,6 +264,22 @@ class MY_Input extends CI_Input
     // --------------------------------------------------------------------
 
     /**
+     * Fetch an item from GET data with fallback to POST
+     *
+     * @param string $index Index for item to be fetched from $_GET or $_POST
+     * @param bool $xss_clean Whether to apply XSS filtering
+     * @return    mixed
+     */
+    public function post_put($index, $xss_clean = NULL, $default_value = NULL)
+    {
+        return isset($_POST[$index])
+            ? $this->post($index, $xss_clean, $default_value)
+            : $this->put($index, $xss_clean, $default_value);
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
      * Fetch an item from the COOKIE array
      *
      * @param mixed $index Index for item to be fetched from $_COOKIE
@@ -288,4 +304,15 @@ class MY_Input extends CI_Input
     {
         return $this->_fetch_from_array($_SERVER, $index, $xss_clean, $default_value);
     }
+
+	public function request()
+	{
+		return array_merge(
+			$this->get(null, true),
+			$this->post(null, true),
+			$this->put(null, true),
+			$this->patch(null, true),
+			$this->delete(null, true),
+		);
+	}
 }

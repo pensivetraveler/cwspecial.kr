@@ -1,4 +1,4 @@
-<div class="col-sm-12 form-validation-row">
+<div class="col-sm-12 form-validation-unit">
 	<div class="input-group input-group-merge">
 		<?=get_admin_form_ico($item)?>
 		<div class="form-floating form-floating-outline">
@@ -12,7 +12,7 @@
 			<?=form_label(lang($item['label']), $item['id'])?>
 		</div>
 	</div>
-	<?=get_admin_form_text($item['form_text'])?>
+	<?=get_admin_form_text($item)?>
 	<div class="input-group input-group-merge mt-3">
 		<div class="form-floating form-floating-outline">
 			<ul class="list-unstyled m-0 p-2 bg-lighter rounded-3 d-none" id="<?=$item['id']?>-list">

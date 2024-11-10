@@ -48,7 +48,10 @@ function getJoinOption($isChild, $obj)
 function getWhereList($where, $tablename, $columnList)
 {
     $keys_with_prefix = array_map(function ($key) use ($tablename, $columnList) {
-        return strpos($key, '.') === false && !empty($columnList) && in_array($key, $columnList) ? $tablename.".".$key : $key;
+        return
+			!str_contains($key, '.') && !empty($columnList) && in_array($key, $columnList)
+				? $tablename.".".$key
+				: $key;
     }, array_keys($where));
     return array_combine($keys_with_prefix, $where);
 }

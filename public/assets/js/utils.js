@@ -384,6 +384,12 @@ function isValidSelector(selector) {
     }
 }
 
+function isAttributeValueTrue(node, attr) {
+	let val = node.getAttribute(attr);
+	if(isNumeric(val)) val = parseInt(val);
+	return Boolean(val);
+}
+
 function arrayToBrackets(arr) {
     let result = arr[0];
     for (let i = 1; i < arr.length; i++) {
@@ -453,7 +459,7 @@ async function getExtensionsForMimeType(mimeType) {
         eventListeners.push({target: this, type: type, listener: listener, options: options});
         origAddEventListener.call(this, type, listener, {
             ...options,
-            passive: ['touchstart', 'touchend', 'touchmove', 'scroll', 'mousedown', 'mousemove', 'mouseup', 'pointerdown', 'pointermove', 'pointerup'].includes(type)?true:false,
+            // passive: ['touchstart', 'touchend', 'touchmove', 'scroll', 'mousedown', 'mousemove', 'mouseup', 'pointerdown', 'pointermove', 'pointerup'].includes(type)?true:false,
         });
     };
 

@@ -1,5 +1,5 @@
 <?php extract($item['data']); ?>
-<div class="col-sm-12 form-validation-row">
+<div class="col-sm-12 form-validation-unit">
 	<div class="input-group flex-nowrap">
 		<?=get_admin_form_ico($password)?>
 		<div class="input-group input-group-merge form-password-toggle">
@@ -17,9 +17,9 @@
 			</span>
 		</div>
 	</div>
-	<?=get_admin_form_text($password['form_text'])?>
+	<?=get_admin_form_text($password)?>
 </div>
-<div class="col-sm-12 form-validation-row">
+<div class="col-sm-12 form-validation-unit">
 	<div class="input-group flex-nowrap">
 		<?=get_admin_form_ico($password_confirm)?>
 		<div class="input-group input-group-merge form-password-toggle">
@@ -37,5 +37,5 @@
 			</span>
 		</div>
 	</div>
-	<?=get_admin_form_text($password_confirm['form_text'])?>
+	<?=get_admin_form_text($password_confirm)?>
 </div>

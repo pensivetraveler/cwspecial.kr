@@ -14,12 +14,20 @@ class MY_Controller_API extends RestController
     protected array $strList;
     protected array $intList;
     protected array $fileList;
-    protected string $validateConfig;
-    protected array $validateMessages;
-    protected array $validateCallback;
-    protected bool $indexAPI;
 
-    public function __construct()
+	protected bool $setConfig = true;
+	protected array $listConfig;
+    protected array $formConfig;
+	protected string $listConfigName;
+	protected string $formConfigName;
+
+    protected array $validateMessages;
+	protected array $validateCallback;
+	protected array $exceptValidateKeys;
+	protected array $transTargetKeys;
+	protected bool $indexAPI;
+
+	public function __construct()
     {
         parent::__construct('extra/rest_config');
 
@@ -29,10 +37,15 @@ class MY_Controller_API extends RestController
         $this->lang->load('status_code');
 
         $this->identifier = '';
-        $this->validateConfig = 'form_'.strtolower($this->router->class);
+
+		$this->listConfigName = 'list_'.strtolower($this->router->class).'_config';
+		$this->formConfigName = 'form_'.strtolower($this->router->class).'_config';
+
         $this->validateMessages = [];
         $this->validateCallback = [];
-        $this->indexAPI = true;
+		$this->exceptValidateKeys = ['_mode', '_event', '_', 'select', 'format', 'draw', 'pageNo', 'limit', 'searchWord', 'searchCategory', 'filters'];
+		$this->transTargetKeys = [];
+		$this->indexAPI = true;
     }
 
     public function index_get($key = 0)
@@ -88,13 +101,44 @@ class MY_Controller_API extends RestController
     {
         $data = [];
         foreach ($this->input->get() as $key=>$val) {
-            if(in_array($key, ['_', 'select', 'format', 'draw', 'pageNo', 'limit', 'searchWord', 'searchCategory'])) continue;
-            if($val) $data['where'][$key] = $this->input->get($key);
+            if(in_array($key, $this->exceptValidateKeys)) continue;
+			if(!$val) continue;
+			$data['where'][$key] = $this->input->get($key);
         }
+
+		if($this->input->get('filters')) {
+			$filters = $this->input->get('filters');
+			foreach ($filters as $type => $filter) {
+				switch ($type) {
+					case 'where' :
+						foreach ($filter as $key=>$val) {
+							if(!$val) continue;
+							$data['filter']['where'][$key] = $val;
+						}
+						break;
+					case 'like' :
+						if($filter['field'] && $filter['value']) {
+							$data['filter']['like'] = [
+								'field' => $filter['field'],
+								'value' => $filter['value'],
+							];
+						}
+						break;
+					case 'date' :
+						foreach ($filter as $key=>$val) {
+							if(!$val) continue;
+							$data['filter']['date'][$key] = $val;
+						}
+						break;
+				}
+			}
+		}else{
+			$data['filter'] = [];
+		}
 
         if($this->input->get('format') === 'datatable') {
             if($this->input->get('searchWord') && $this->input->get('searchCategory')) {
-                $data['like']['searchCategory'] = $this->input->get('searchWord');
+                $data['filter']['like'][$this->input->get('searchCategory')] = $this->input->get('searchWord');
             }
         }
 
@@ -117,6 +161,7 @@ class MY_Controller_API extends RestController
             $data['like'] ?? [],
             $data['limit'] ?? [],
             $data['order_by'] ?? [],
+            $data['filter'] ?? [],
         );
 
         $this->response([
@@ -165,6 +210,18 @@ class MY_Controller_API extends RestController
 
     protected function viewAfter($data)
     {
+		if($this->input->get('_mode') && $this->input->get('_mode') !== 'form' && $this->listConfig) {
+			foreach ($this->transTargetKeys as $key) {
+				if(!property_exists($data, $key)) continue;
+				if($idx = array_search($key, array_column($this->listConfig, 'field'))){
+					$item = $this->listConfig[$idx];
+					if(empty($item['option_attributes'])) continue;
+					$options = $this->getOptions($key, $item['option_attributes']);
+					$data->{$key} = $options[$data->{$key}];
+				}
+			}
+		}
+
         if(count($this->fileList) > 0) {
             foreach ($this->fileList as $key) {
                 if($data->{$key}){
@@ -249,17 +306,35 @@ class MY_Controller_API extends RestController
     /* --------------------------------------------------------------- */
     protected function addData($dto, $bool)
     {
-        $key = $this->Model->addData($dto, $bool);
+		$dto = $this->beforeAddData($dto);
+
+        $dto[$this->identifier] = $this->Model->addData($dto, $bool);
+
+		$dto = $this->afterAddData($dto);
 
         $this->response([
             'code' => DATA_CREATED,
-            'data' => [$this->identifier => $key],
+            'data' => [$this->identifier => $dto[$this->identifier]],
         ], RestController::HTTP_CREATED);
     }
 
+	protected function beforeAddData($dto)
+	{
+		return $dto;
+	}
+
+	protected function afterAddData($dto)
+	{
+		return $dto;
+	}
+
     protected function modData($key, $dto, $bool)
     {
+		$dto = $this->beforeModData($dto);
+
         $this->Model->modData($dto, [$this->identifier => $key], $bool);
+
+		$dto = $this->afterModData($dto);
 
         $this->response([
             'code' => DATA_EDITED,
@@ -267,18 +342,42 @@ class MY_Controller_API extends RestController
         ]);
     }
 
+	protected function beforeModData($dto)
+	{
+		return $dto;
+	}
+
+	protected function afterModData($dto)
+	{
+		return $dto;
+	}
+
     protected function delData($key, $bool)
     {
+		$this->beforeDelData($key);
+
         $this->Model->delData([$this->identifier => $key], $bool);
 
-        $this->response([
+		$this->afterDelData($key);
+
+		$this->response([
             'code' => DATA_DELETED,
         ]);
     }
 
+	protected function beforeDelData($key)
+	{
+
+	}
+
+	protected function afterDelData($key)
+	{
+
+	}
+
     /* --------------------------------------------------------------- */
 
-    public function response($data = null, $http_code = null)
+	public function response($data = null, $http_code = null)
     {
         if(is_empty($data, 'code') && $http_code === null)
             show_error('response : Insufficient response data provided');
@@ -333,59 +432,72 @@ class MY_Controller_API extends RestController
         ], RestController::HTTP_BAD_REQUEST);
     }
 
-    protected function validate($data = [], $model = null)
+    protected function validate($data = [], $model = null, $validate = true, $configName = '')
     {
-        $this->validateFormRules();
+		if($validate) $this->validateFormRules($configName);
 
-        if(!$model) $model = $this->Model;
-        return $this->validateManually(
-            $data,
-            $model,
-            $this->validateMessages,
-            $this->validateCallback,
-        );
+		if($this->input->method('post')) {
+			if(!$model) $model = $this->Model;
+			return $this->validateManually(
+				$data,
+				$model,
+				$this->validateMessages,
+				$this->validateCallback,
+			);
+		}
     }
 
-    protected function getValidateFormRulesConfig()
+    protected function validateFormRules($configName = '')
     {
-        return $this->config->item($this->validateConfig);
-    }
-
-    protected function validateFormRules()
-    {
-        $method = __METHOD__;
-
-        $config = $this->getValidateFormRulesConfig();
-        if(is_empty($config)) {
-            $this->response([
-                'data' => $this->input->post(),
-                'errors' => [
-                    [
-                        'location' => $method,
-                        'param' => '',
-                        'value' => '',
-                        'type' => '',
-                        'msg' => "Validation Rules Config Is Empty",
-                    ]
-                ],
-            ], RestController::HTTP_BAD_REQUEST);
-        }
-
+		$method = __METHOD__;
         $errors = [];
-        $this->form_validation->set_rules($config);
-        if($this->form_validation->run() === false) {
-            $errors = array_reduce(validation_errors_array(), function ($carry, $item) use ($method) {
-                $carry[] = [
-                    'location' => $method,
-                    'param' => $item['field'],
-                    'value' => $item['value'],
-                    'type' => $item['rule'],
-                    'msg' => $item['message'],
-                ];
-                return $carry;
-            }, []);
-        }
+		$config = $configName?$this->config->get($configName):$this->formConfig;
 
+		// base rule validation
+		$config = array_map(function ($item) {
+			if(is_empty($item, 'group')) $item['group'] = 'base';
+			return $item;
+		}, $config);
+		$groups = array_flip(array_unique(array_column($config, 'group')));
+		foreach ($groups as $group=>$idx) {
+			if($group !== 'base') $groups[$group] = array_merge($this->config->get('admin_form_base_group_attributes'), $config[$idx]['group_attributes']);
+		}
+		foreach ($groups as $group => $attr) {
+			$groupConfig = array_filter($config, function($item) use ($group) {
+				return $item['group'] === $group;
+			});
+
+			if($group === 'base') {
+				if($this->form_validation->run($groupConfig) === false) {
+					$errors = array_merge(
+						$errors,
+						$this->setValidateFormErrors(validation_errors_array(), $method),
+					);
+				}
+			}else{
+				if($attr['group_repeater']) {
+					foreach ($this->input->post_put($group) as $i=>$item) {
+						$this->form_validation->set_data($item);
+						if($this->form_validation->run($groupConfig) === false) {
+							$errors = array_merge(
+								$errors,
+								$this->setValidateFormErrors(validation_errors_array(), $method, $group, $attr, $i),
+							);
+						}
+					}
+				}else{
+					$this->form_validation->set_data($this->input->post_put($group));
+					if($this->form_validation->run($groupConfig) === false) {
+						$errors = array_merge(
+							$errors,
+							$this->setValidateFormErrors(validation_errors_array(), $method, $group, $attr),
+						);
+					}
+				}
+			}
+		}
+
+		// file rule validation
         foreach ($config as $item) {
             // Check if 'rules' exists in the array item
             if (isset($item['rules'])) {
@@ -416,6 +528,29 @@ class MY_Controller_API extends RestController
             ], RestController::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
+
+	protected function setValidateFormErrors($errors, $method, $group = 'base', $attr = [], $i = 0)
+	{
+		return array_reduce($errors, function ($carry, $item) use ($method, $group, $attr, $i) {
+			$param = $item['field'];
+			if(!empty($attr)) {
+				if($attr['envelope_name']) {
+					$param = $group.($attr['group_repeater']?"[$i]":'')."[$param]";
+				}else{
+					$param = $param.($attr['group_repeater']?"[$i]":'');
+				}
+			}
+
+			$carry[] = [
+				'location' => $method,
+				'param' => $param,
+				'value' => $item['value'],
+				'type' => $item['rule'],
+				'msg' => $item['message'],
+			];
+			return $carry;
+		}, []);
+	}
 
     protected function validateJson($required = [], $optional = [], $strList = [], $intList = [], $msgList = [], $callbacks = [])
     {
@@ -530,6 +665,11 @@ class MY_Controller_API extends RestController
         return $data;
     }
 
+    protected function auth()
+    {
+        $this->validateToken();
+    }
+
     protected function validateToken()
     {
         $headers = $this->input->request_headers();
@@ -629,15 +769,58 @@ class MY_Controller_API extends RestController
         $this->identifier = $model->identifier;
         $this->fileList = $model->fileList;
 
-        if(count([...$model->primaryKeyList, ...$model->notNullList, ...$model->nullList]) !== count([...$model->strList, ...$model->intList, ...$model->fileList])){
-            $this->response([
-                'code' => MODEL_DATA_NOT_COINCIDENCE,
-                'errors' => [
-                    'location' => 'model',
-                    'type' => 'model error',
-                ]
-            ], RestController::HTTP_INTERNAL_SERVER_ERROR);
-        }
+		if(!$model->validateTableColumns()) {
+			$this->response([
+				'code' => MODEL_DATA_NOT_COINCIDENCE,
+				'errors' => [
+					'location' => 'model',
+					'type' => 'model error',
+				]
+			], RestController::HTTP_INTERNAL_SERVER_ERROR);
+		}
+
+		if($this->setConfig) {
+			$this->listConfig = $this->config->get($this->listConfigName, [], false);
+			$this->formConfig = $this->config->get($this->formConfigName, [], false);
+
+			if(is_empty($this->formConfig)) {
+//				$this->response([
+//					'data' => $this->input->request(),
+//					'errors' => [
+//						[
+//							'location' => __METHOD__,
+//							'param' => '',
+//							'value' => '',
+//							'type' => '',
+//							'msg' => "Validation Rules Config Is Empty",
+//						]
+//					],
+//				], RestController::HTTP_BAD_REQUEST);
+			}
+
+			if(is_empty($this->listConfig)) {
+				$this->listConfig = array_map(
+					function($item) {
+						$attributes = $item['list_attributes'] ?? [];
+						$label = is_empty($attributes, 'label')?$item['label']:$attributes['label'];
+						if(sscanf($label, 'lang:%s', $line) === 1) $label = $line;
+						if($this->lang->line_exists($label.'_list')) $label = $label.'_list';
+						return array_merge(
+							$this->config->get('admin_form_base_list_attributes', []),
+							$attributes,
+							[
+								'field' => $item['field'],
+								'label' => $label,
+								'option_attributes' => $item['option_attributes'] ?? []
+							]
+						);
+					},
+					array_filter($this->formConfig, function ($item) {
+						return array_key_exists('list', $item) && $item['list'];
+					})
+				);
+			}
+		}
     }
 
     protected function checkIdentifierExist($key, $model = null)

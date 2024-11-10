@@ -6,10 +6,14 @@ $(function () {
     const formRecord = document.getElementById('formRecord');
     if(formRecord === null) throw new Error(`formRecord is not exist`);
 
+	preparePlugins(formRecord);
+	resetFrmInputs(formRecord, common.FORM_DATA);
     readyFrmInputs(formRecord, 'add', common.FORM_DATA);
     refreshPlugins();
 
-    for(const rule of Object.keys(customValidatorsPreset.validators)) FormValidation.validators[rule] = customValidatorsPreset.validators[rule];
+	for(const rule of Object.keys(customValidatorsPreset.validators))
+		FormValidation.validators[rule] = customValidatorsPreset.validators[rule];
+
     // Form validation for Add new record
     fv = FormValidation.formValidation(
         formRecord,
@@ -21,7 +25,12 @@ $(function () {
                     // Use this for enabling/changing valid/invalid class
                     // eleInvalidClass: '',
                     eleValidClass: '',
-                    rowSelector: '.form-validation-row'
+					rowSelector: function(field, ele) {
+						switch (field) {
+							default:
+								return '.form-validation-unit';
+						}
+					},
                 }),
                 submitButton: new FormValidation.plugins.SubmitButton(),
                 // submit button의 type을 submit으로 원할 경우
@@ -52,48 +61,53 @@ $(function () {
             // Revalidate field whenever input changes
             // e.fv.revalidateField(field);
         });
-    }).on('core.form.validating', function(event) {
+    }).on('core.form.validating', function(event, b, c) {
         // 유효성 검사 시작 전
         console.log('%c The form validation has started.', 'color: green')
+		const form = event.formValidation.form;
+		if(form['_event'] !== undefined) form['_event'].value = 'submit';
     }).on('core.validator.validating', function(event) {
         // 특정 요소에 대한 유효성 검사 시작 전
-        console.log('%c Validator for the field ' + event.field + ' is validating.', 'color: skyblue');
+        console.log('%c Validator for the field ' + event.field + ' is validating. (' + event.validator + ')', 'color: skyblue');
         if(event.element.hasAttribute('data-textarea-id')) {
             if(textareaId = event.element.getAttribute('data-textarea-id'))
                 event.element.value = editors[`${textareaId}`].root.innerHTML;
         }
     }).on('core.validator.validated', function(event) {
         // 특정 요소에 대한 유효성 검사 시작 후
-        console.log('%c Validator for the field ' + event.field + ' is validated.', 'color: skyblue');
-        if(!event.result.valid) {
-            console.log('------------------------------------------------------------');
-            console.log('%c Validator for the field ' + event.field + ' is invalid.', 'color: red');
-            console.log('Invalid validator:', event.validator);
-            console.log('Invalid field:', event.field);
-            console.log('Error message:', event.result.message);
-            console.log('------------------------------------------------------------');
-        }
+		console.log('%c Validator for the field ' + event.field + ' is validated.', 'color: skyblue');
+		if(!event.result.valid) {
+			console.log('------------------------------------------------------------');
+			console.log('%c Validator for the field ' + event.field + ' is invalid.', 'color: red');
+			console.log('Invalid validator:', event.validator);
+			console.log('Invalid field:', event.field);
+			console.log('Error message:', event.result.message);
+			console.log('Result Object:', event.result)
+			console.log('------------------------------------------------------------');
+		}
     }).on('core.form.valid', function(event) {
-        // 유효성 검사 완료 후
+		// 유효성 검사 완료 후
+		updateFormLifeCycle('checkFrmValues', formRecord);
+
         // Send the form data to back-end
         // You need to grab the form data and create an Ajax request to send them
-        submitAjax(formRecord, {
+        submitAjax('#formRecord', {
             success: function(response) {
                 showAlert({
                     type: 'success',
                     title: 'Complete',
-                    text: 'Registered Successfully',
+					text: formRecord['_mode'].value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
                     callback: redirect,
                     params: common.LIST_VIEW_URI,
                 });
+				updateFormLifeCycle('transFrmValues', formRecord);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.warn(jqXHR.responseJSON)
                 if(jqXHR.status === 422) {
                     jqXHR.responseJSON.errors.forEach(error => {
                         if(fv.fields.hasOwnProperty(error.param)) {
-                            fv.updateFieldStatus(error.param, 'Invalid', 'notEmpty');
-                            fv.updateMessage(error.name, 'notEmpty', error.message);
+							fv.updateFieldStatus(error.param, 'Invalid', customValidatorsPreset.inflector(error.type));
                         }
                     });
                 }else{
