@@ -5,27 +5,28 @@ require_once APPPATH . "libraries/RestController.php"; // ⭐ 추가
 
 class MY_Controller_API extends RestController
 {
-    protected string $table;
-    protected string $identifier;
-    protected array $primaryKeyList;
-    protected array $uniqueKeyList;
-    protected array $notNullList;
-    protected array $nullList;
-    protected array $strList;
-    protected array $intList;
-    protected array $fileList;
+	protected string $table = '';
+	protected string $identifier = '';
+	protected array $primaryKeyList = [];
+	protected array $uniqueKeyList = [];
+	protected array $notNullList = [];
+	protected array $nullList = [];
+	protected array $strList = [];
+	protected array $intList = [];
+	protected array $fileList = [];
+	protected array $defaultList = [];
 
 	protected bool $setConfig = true;
-	protected array $listConfig;
-    protected array $formConfig;
-	protected string $listConfigName;
-	protected string $formConfigName;
+	protected array $listConfig = [];
+	protected array $formConfig = [];
+	protected string $listConfigName = '';
+	protected string $formConfigName = '';
 
-    protected array $validateMessages;
-	protected array $validateCallback;
-	protected array $exceptValidateKeys;
-	protected array $transTargetKeys;
-	protected bool $indexAPI;
+	protected array $validateMessages = [];
+	protected array $validateCallback = [];
+	protected array $exceptValidateKeys = [];
+	protected array $transTargetKeys = [];
+	protected bool $indexAPI = false;
 
 	public function __construct()
     {
@@ -239,13 +240,17 @@ class MY_Controller_API extends RestController
         return $data;
     }
 
-    protected function beforePost($key)
+    protected function beforePost($key, $model = null)
     {
         if($key) $this->checkIdentifierExist($key);
 
-        $dto = $this->validate($this->input->post());
+		$dto = $this->input->post();
+		foreach ($this->defaultList as $field=>$default) {
+			$dto[$field] = $default;
+		}
+        $dto = $this->validate($dto, $model);
 
-        $this->checkUniqueExist($dto);
+        $this->checkUniqueExist($dto, $model, is_empty($key));
 
         if(count($this->fileList) > 0) {
             $dto = $this->uploadFileInList($dto);
@@ -672,20 +677,21 @@ class MY_Controller_API extends RestController
 
     protected function validateToken()
     {
-        $headers = $this->input->request_headers();
-        if (isset($headers['Authorization'])) {
+		$headers = array_change_key_case($this->input->request_headers(), CASE_LOWER);
+
+        if (isset($headers['authorization'])) {
             $decodedToken = $this->authorization_token->validateToken();
             if($decodedToken['status'] === FALSE){
                 switch ($decodedToken['message']) {
                     case 'Token Time Expire.':
                         $this->response([
                             'code' => TOKEN_EXPIRED,
-                            'data' => ['token' => $headers['Authorization']],
+                            'data' => ['token' => $headers['authorization']],
                         ], RestController::HTTP_UNAUTHORIZED);
                     default:
                         $this->response([
                             'code' => WRONG_TOKEN,
-                            'data' => ['token' => $headers['Authorization']],
+                            'data' => ['token' => $headers['authorization']],
                         ], RestController::HTTP_UNAUTHORIZED);
                 }
             }else{
@@ -769,56 +775,69 @@ class MY_Controller_API extends RestController
         $this->identifier = $model->identifier;
         $this->fileList = $model->fileList;
 
+		// model check
 		if(!$model->validateTableColumns()) {
 			$this->response([
 				'code' => MODEL_DATA_NOT_COINCIDENCE,
 				'errors' => [
 					'location' => 'model',
 					'type' => 'model error',
+					'value' => [
+						'columnList' => $model->getColumnList(),
+						'strList' => $model->strList,
+						'intList' => $model->intList,
+						'fileList' => $model->fileList,
+					]
 				]
 			], RestController::HTTP_INTERNAL_SERVER_ERROR);
 		}
+
+		if(!in_array($this->input->method(), ['get', 'post'])) return;
 
 		if($this->setConfig) {
 			$this->listConfig = $this->config->get($this->listConfigName, [], false);
 			$this->formConfig = $this->config->get($this->formConfigName, [], false);
 
-			if(is_empty($this->formConfig)) {
-//				$this->response([
-//					'data' => $this->input->request(),
-//					'errors' => [
-//						[
-//							'location' => __METHOD__,
-//							'param' => '',
-//							'value' => '',
-//							'type' => '',
-//							'msg' => "Validation Rules Config Is Empty",
-//						]
-//					],
-//				], RestController::HTTP_BAD_REQUEST);
+			if($this->input->method === 'get') {
+				if(is_empty($this->listConfig)) {
+					$this->listConfig = array_map(
+						function($item) {
+							$attributes = $item['list_attributes'] ?? [];
+							$label = is_empty($attributes, 'label')?$item['label']:$attributes['label'];
+							if(sscanf($label, 'lang:%s', $line) === 1) $label = $line;
+							if($this->lang->line_exists($label.'_list')) $label = $label.'_list';
+							return array_merge(
+								$this->config->get('admin_form_base_list_attributes', []),
+								$attributes,
+								[
+									'field' => $item['field'],
+									'label' => $label,
+									'option_attributes' => $item['option_attributes'] ?? []
+								]
+							);
+						},
+						array_filter($this->formConfig, function ($item) {
+							return array_key_exists('list', $item) && $item['list'];
+						})
+					);
+				}
 			}
 
-			if(is_empty($this->listConfig)) {
-				$this->listConfig = array_map(
-					function($item) {
-						$attributes = $item['list_attributes'] ?? [];
-						$label = is_empty($attributes, 'label')?$item['label']:$attributes['label'];
-						if(sscanf($label, 'lang:%s', $line) === 1) $label = $line;
-						if($this->lang->line_exists($label.'_list')) $label = $label.'_list';
-						return array_merge(
-							$this->config->get('admin_form_base_list_attributes', []),
-							$attributes,
+			if($this->input->method === 'post') {
+				if(is_empty($this->formConfig)) {
+					$this->response([
+						'data' => $this->input->request(),
+						'errors' => [
 							[
-								'field' => $item['field'],
-								'label' => $label,
-								'option_attributes' => $item['option_attributes'] ?? []
+								'location' => __METHOD__,
+								'param' => '',
+								'value' => '',
+								'type' => '',
+								'msg' => "Validation Rules Config For $this->formConfigName Is Empty",
 							]
-						);
-					},
-					array_filter($this->formConfig, function ($item) {
-						return array_key_exists('list', $item) && $item['list'];
-					})
-				);
+						],
+					], RestController::HTTP_BAD_REQUEST);
+				}
 			}
 		}
     }
@@ -829,27 +848,47 @@ class MY_Controller_API extends RestController
         $this->checkCnt([$model->identifier => $key], $model);
     }
 
-    protected function checkUniqueExist($dto, $model = null)
+    protected function checkUniqueExist($dto, $model = null, $add = true)
     {
         if(!$model) $model = $this->Model;
         if(count($model->uniqueKeyList) > 0){
             foreach ($model->uniqueKeyList as $key) {
-                if($this->checkDuplicate([$key => $dto[$key]], $model)){
-                    $lang = $model?lang($model->table.'.'.$key):$key;
-                    $this->response([
-                        'code' => DATA_ALREADY_EXIST,
-                        'msg' => $this->josa->__conv("동일 $lang{이} 이미 존재합니다."),
-                    ], RestController::HTTP_CONFLICT);
-                    break;
-                }
+				if($this->checkDuplicate([$key => $dto[$key]], $model, !$add?$dto:[])){
+					$lang = $model?lang($model->table.'.'.$key):$key;
+					$this->response([
+						'code' => DATA_ALREADY_EXIST,
+						'msg' => $this->josa->__conv("동일 $lang{이} 이미 존재합니다."),
+					], RestController::HTTP_CONFLICT);
+					break;
+				}
             }
         }
     }
 
-    protected function checkDuplicate($dto, $model = null)
+    protected function checkDuplicate($unique, $model = null, $dto = [])
     {
-        if(!$model) $model = $this->Model;
-        return $model->checkDuplicate($dto) > 0;
+		foreach ($unique as $key=>$val) {
+			$isIncludeDeleted = false;
+			if(array_search($key, array_column($this->formConfig, 'field')) !== false) {
+				$idx = array_search($key, array_column($this->formConfig, 'field'));
+				if(!is_empty($this->formConfig[$idx]['form_attributes'], 'check_delete')) {
+					$isIncludeDeleted = $this->formConfig[$idx]['form_attributes']['check_delete'];
+				}
+			}
+
+			if(is_null($model)) {
+				if(property_exists($this, 'Model_Parent') && in_array($key, $this->Model_Parent->uniqueKeyList)) {
+					$model = $this->Model_Parent;
+				}else if(property_exists($this, 'Model_Child') && in_array($key, $this->Model_Child->uniqueKeyList)) {
+					$model = $this->Model_Child;
+				}else if(property_exists($this, 'Model')){
+					$model = $this->Model;
+				}
+			}
+
+			$whereNot = is_empty($dto)?[]:[$model->identifier => $dto[$model->identifier]];
+			$model->checkDuplicate($unique, $whereNot, $isIncludeDeleted);
+		}
     }
 
     protected function checkCnt($dto, $model = null)

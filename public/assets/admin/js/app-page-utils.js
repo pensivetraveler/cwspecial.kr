@@ -162,6 +162,7 @@ function swalKeydownHandler(event) {
 }
 
 function showSwalAlert(obj) {
+	console.log(obj)
     Swal.fire({
         title: obj.title,
         text: obj.text,
@@ -186,13 +187,16 @@ function showSwalAlert(obj) {
             document.removeEventListener('keydown', swalKeydownHandler);
         },
     }).then(function (result) {
-        obj.callback;
         if(obj.callback !== undefined) {
-            if(obj.hasOwnProperty('params') && obj.params !== null){
-                callUserFunc(obj.callback, obj.params);
-            }else{
-                obj.callback();
-            }
+			if(typeof obj.callback === 'string' && obj.callback.toLowerCase() === 'reload') {
+				location.reload();
+			}else{
+				if(obj.hasOwnProperty('params') && obj.params !== null){
+					callUserFunc(obj.callback, obj.params);
+				}else{
+					obj.callback();
+				}
+			}
         }else{
             // if(obj.type === 'error') location.reload();
         }
@@ -379,7 +383,19 @@ function getFormData(form = null) {
         if(!node.name) return;
 		if(checkInputSubmittable(node, form)){
 			if(node.type === 'file') {
-				formData.append(node.name, node.files[0]);
+				let fileCnt = node.files.length;
+				if(fileCnt > 0) {
+					if(fileCnt === 0) {
+						formData.append(node.name, node.files[0]);
+					}else{
+						if(node.hasAttribute('max') && !isNaN(node.getAttribute('max'))) {
+							fileCnt = parseInt(node.hasAttribute('max'));
+						}
+						for(let i = 0; i < fileCnt; i++) {
+							formData.append(node.name+'[]', node.files[i]);
+						}
+					}
+				}
 			}else{
 				formData.append(node.name, node.value);
 			}
@@ -458,7 +474,7 @@ function reformatFormData(form, data, regexp = {}, side = false) {
 
         if(curr.type === 'file') {
             item.validators.file = {
-                maxFiles : 1,
+                maxFiles : curr.attributes.max??null,
                 type : curr.attributes.accept,
                 message : '유효한 파일을 업로드해주세요.',
             };
@@ -471,9 +487,9 @@ function reformatFormData(form, data, regexp = {}, side = false) {
 
             if (!rule || ![...Object.keys(customValidatorsPreset.rules), ...Object.keys(regexp)].includes(rule)) {
                 console.warn(`reformatFormData : Rule '${rule || raw}' of '${curr.field}' doesn't have any matched validator.`);
-				item.validators['baseValidator'] = {
-					message: `The field id not valid (${camelize(rule)})`,
-				}
+				// item.validators['baseValidator'] = {
+				// 	message: `The field id not valid (${camelize(rule)})`,
+				// }
                 return;
             }else{
                 if (validatorName = customValidatorsPreset.inflector(rule)) {
@@ -566,14 +582,14 @@ function setFormListItemFile(field, item, identifier = '') {
                     <i class="drag-handle cursor-move ri-menu-line align-text-bottom me-2"></i>
                     <span class="not-draggable">${item.orig_name}</span>
                 </div>
-                <div>
-                    <button class="btn btn-primary waves-effect p-1" type="button" onclick="downloadFile(this)">
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-primary waves-effect p-1" type="button" onclick="downloadFile(${fileId})">
                         <i class="ri-file-download-line ri-16px align-middle"></i>
                     </button>
         `;
         if(field.form_attributes.list_delete.length > 0){
             output += `
-                    <button class="btn btn-danger waves-effect p-1" type="button" onclick="deleteFile(this, '${field.form_attributes.list_delete}')">
+                    <button class="btn btn-danger waves-effect p-1 ms-1" type="button" onclick="deleteFile(this, '${field.form_attributes.list_delete}')">
                         <i class="ri-close-line ri-16px align-middle"></i>
                     </button>
             `;

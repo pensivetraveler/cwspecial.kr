@@ -108,7 +108,7 @@ class listRender {
 
 		// class
 		if (column.classes.length)
-			for (const className of classed) wrap.classList.add(className);
+			for (const className of column.classes) wrap.classList.add(className);
 
 		// inner
 		let inner;
@@ -664,7 +664,7 @@ $(function () {
         }).then(function (result) {
             if (result.isConfirmed) {
                 executeAjax({
-                    url: common.API_URI + '/' + id,
+                    url: common.API_URI + '/' + id + (Object.keys(common.API_PARAMS).length > 0 ? '?' + new URLSearchParams(common.API_PARAMS).toString() : ''),
                     method: 'delete',
                     after : {
                         callback: showAlert,
@@ -747,7 +747,7 @@ $(function () {
                         rowSelector: function(field, ele) {
                             switch (field) {
                                 default:
-                                    return '.form-validation-unit';
+									return '.form-validation-unit';
                             }
                         },
                     }),
@@ -789,9 +789,12 @@ $(function () {
             // 특정 요소에 대한 유효성 검사 시작 전
             console.log('%c Validator for the field ' + event.field + ' is validating.', 'color: skyblue');
             if(event.element.hasAttribute('data-textarea-id')) {
-                if(textareaId = event.element.getAttribute('data-textarea-id'))
-                    event.element.value = editors[`${textareaId}`].root.innerHTML;
+				if(event.element.getAttribute('data-textarea-id')) {
+					const textareaId = event.element.getAttribute('data-textarea-id');
+					event.element.value = editors[`${textareaId}`].root.innerHTML;
+				}
             }
+			console.log(event.element.value)
         }).on('core.validator.validated', function(event) {
             // 특정 요소에 대한 유효성 검사 시작 후
             console.log('%c Validator for the field ' + event.field + ' is validated.', 'color: skyblue');
@@ -804,6 +807,7 @@ $(function () {
 				console.log('Result Object:',event.result)
                 console.log('------------------------------------------------------------');
             }
+			console.log(event.element.value)
         }).on('core.form.valid', function(event) {
             // 유효성 검사 완료 후
             updateFormLifeCycle('checkFrmValues', formRecord);
@@ -915,7 +919,7 @@ function renderColumn(data, type, full, meta, column) {
 function renderColumnHTML(data, full, column, wrap, inner) {
     // attrs
     let value;
-    if(data === undefined) {
+    if(data === null || data === undefined) {
         value = '';
     }else{
         value = typeof data === 'object'?JSON.stringify(data):data;
@@ -933,7 +937,8 @@ function renderColumnHTML(data, full, column, wrap, inner) {
     if(Object.keys(column.onclick).length) {
         wrap.classList.add('cursor-pointer');
         attrs.onclick = getColumnOnclick(data, full, column);
-        if(column.onclick.kind === 'bs') {
+		if(value === '') inner = '';
+        if(column.onclick.kind === 'bs' && value !== '') {
             if(Object.keys(column.onclick.attrs).length) {
                 Object.entries(column.onclick.attrs).map(([key, value]) => attrs[`data-bs-${key}`] = value )
             }

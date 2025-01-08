@@ -3,192 +3,193 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Model_Common extends MY_Model
 {
-    function __construct()
-    {
-        parent::__construct();
-    }
+	function __construct()
+	{
+		parent::__construct();
+	}
 
-    function getList($select = [], $where = [], $like = [], $limit = [], $orderBy = [], $filter = [])
-    {
+	function getList($select = [], $where = [], $like = [], $limit = [], $orderBy = [], $filter = [])
+	{
 		$this->setFilter($filter);
 		$this->orderBy($orderBy);
-        $this->where($this->table, $where, $like);
-        if(empty($select)) $this->db->select($this->getSelectList());
-        if($this->isDelYn) $this->db->where($this->table.".".DEL_YN_COLUMN_NAME, 'N');
-        if($this->isUseYn && !array_key_exists(USE_YN_COLUMN_NAME, $where)) $this->db->where($this->table.".".USE_YN_COLUMN_NAME, 'Y');
+		$this->where($this->table, $where, $like);
+		if(empty($select)) $this->db->select($this->getSelectList());
+		if($this->isDelYn) $this->db->where($this->table.".".DEL_YN_COLUMN_NAME, 'N');
+		if($this->isUseYn && !array_key_exists(USE_YN_COLUMN_NAME, $where)) $this->db->where($this->table.".".USE_YN_COLUMN_NAME, 'Y');
 
-        return parent::getListPDO($this->table, $select);
-    }
+		return parent::getListPDO($this->table, $select);
+	}
 
-    function getData($select = [], $where = [])
-    {
+	function getData($select = [], $where = [])
+	{
 		$this->where($this->table, $where, []);
-        if(empty($select)) $this->db->select($this->getSelectList());
-        if($this->isDelYn) $this->db->where($this->table.".".DEL_YN_COLUMN_NAME, 'N');
-        if($this->isUseYn && !array_key_exists(USE_YN_COLUMN_NAME, $where)) $this->db->where($this->table.".".USE_YN_COLUMN_NAME, 'Y');
+		if(empty($select)) $this->db->select($this->getSelectList());
+		if($this->isDelYn) $this->db->where($this->table.".".DEL_YN_COLUMN_NAME, 'N');
+		if($this->isUseYn && !array_key_exists(USE_YN_COLUMN_NAME, $where)) $this->db->where($this->table.".".USE_YN_COLUMN_NAME, 'Y');
 
-        return parent::getDataPDO($this->table, $select);
-    }
+		return parent::getDataPDO($this->table, $select);
+	}
 
-    function getCnt($where = [], $like = [], $filter = [])
-    {
+	function getCnt($where = [], $like = [], $filter = [])
+	{
 		$this->setFilter($filter);
-        $this->where($this->table, $where, $like);
-        if($this->isDelYn) $this->db->where($this->table.".".DEL_YN_COLUMN_NAME, 'N');
-        if($this->isUseYn && !array_key_exists(USE_YN_COLUMN_NAME, $where)) $this->db->where($this->table.".".USE_YN_COLUMN_NAME, 'Y');
+		$this->where($this->table, $where, $like);
+		if($this->isDelYn) $this->db->where($this->table.".".DEL_YN_COLUMN_NAME, 'N');
+		if($this->isUseYn && !array_key_exists(USE_YN_COLUMN_NAME, $where)) $this->db->where($this->table.".".USE_YN_COLUMN_NAME, 'Y');
 
-        return parent::getCntPDO($this->table);
-    }
+		return parent::getCntPDO($this->table);
+	}
 
-    function addList($set)
-    {
-        $set = $this->getValidSetList($set);
+	function addList($set)
+	{
+		$set = $this->getValidSetList($set);
 
-        return parent::addListPDO($this->table, $set);
-    }
+		return parent::addListPDO($this->table, $set);
+	}
 
-    function addData($set, $bool = false)
-    {
+	function addData($set, $bool = false)
+	{
 		$this->setCreatedId($set);
-        if(!$this->isAutoincrement) $bool = false;
+		if(!$this->isAutoincrement) $bool = false;
 
-        $set = $this->getValidSetData($set);
+		$set = $this->getValidSetData($set);
 
-        return parent::addDataPDO($this->table, $set, $bool);
-    }
+		return parent::addDataPDO($this->table, $set, $bool);
+	}
 
-    function modData($set, $where, $bool = false)
-    {
-        if($this->isUpdatedDt) {
-            $this->db->set(UPDATED_DT_COLUMN_NAME, 'now()', false);
+	function modData($set, $where, $bool = false)
+	{
+		if($this->isUpdatedDt) {
+			$this->db->set(UPDATED_DT_COLUMN_NAME, 'now()', false);
 			$this->setUpdatedId($set);
-        }
-        if(!$this->isAutoincrement) $bool = false;
+		}
+		if(!$this->isAutoincrement) $bool = false;
 
-        $set = $this->getValidSetData($set);
+		$set = $this->getValidSetData($set);
 
-        return parent::modDataPDO($this->table, $set, $where, $bool);
-    }
+		return parent::modDataPDO($this->table, $set, $where, $bool);
+	}
 
-    function modNumb($field, $count, $where, $bool = false)
-    {
-        if ($count > 0) {
-            $this->db->set($field, $field . '+' . $count, false);
-        } else {
-            $this->db->set($field, $field . $count, false);
-        }
+	function modNumb($field, $count, $where, $bool = false)
+	{
+		if ($count > 0) {
+			$this->db->set($field, $field . '+' . $count, false);
+		} else {
+			$this->db->set($field, $field . $count, false);
+		}
 
-        return $this->modDataPDO($this->table, [], $where, $bool);
-    }
+		return $this->modDataPDO($this->table, [], $where, $bool);
+	}
 
-    function delData($where, $bool = false, $isSoftDelete = true, $set = [])
-    {
-        if($this->isDelYn) {
-            if($isSoftDelete) {
-                $this->db->set(DEL_YN_COLUMN_NAME, 'Y')->set(UPDATED_DT_COLUMN_NAME, 'now()', false);
+	function delData($where, $bool = false, $isSoftDelete = true, $set = [])
+	{
+		if($this->isDelYn) {
+			if($isSoftDelete) {
+				$this->db->set(DEL_YN_COLUMN_NAME, 'Y')->set(UPDATED_DT_COLUMN_NAME, 'now()', false);
 				$this->setUpdatedId($set);
-                return parent::modDataPDO($this->table, [], $where, $bool);
-            }else{
-                return parent::delDataPDO($this->table, $where, $bool);
-            }
-        }else{
-            return parent::delDataPDO($this->table, $where, $bool);
-        }
-    }
+				return parent::modDataPDO($this->table, [], $where, $bool);
+			}else{
+				return parent::delDataPDO($this->table, $where, $bool);
+			}
+		}else{
+			return parent::delDataPDO($this->table, $where, $bool);
+		}
+	}
 
-    function checkDuplicate($where, $isIncludeDeleted = true)
-    {
-        if(empty($where)) throw new Exception("checkDuplicate : where parameter empty");
+	function checkDuplicate($where, $whereNot = [], $isIncludeDeleted = true)
+	{
+		if(empty($where)) throw new Exception("checkDuplicate : where parameter empty");
 
-        if(count($this->uniqueKeyList) > 0) {
-            $this->where($this->table, $where);
-            if($this->isDelYn && $isIncludeDeleted === false) $this->db->where($this->table.".".DEL_YN_COLUMN_NAME, 'N');
-            if($this->isUseYn && $isIncludeDeleted === false) $this->db->where($this->table.".".USE_YN_COLUMN_NAME, 'N');
-            return parent::getCntPDO($this->table);
-        }else{
-            return false;
-        }
-    }
+		if(count($this->uniqueKeyList) > 0) {
+			$this->where($this->table, $where);
+			if($this->isDelYn && $isIncludeDeleted === false) $this->db->where($this->table.".".DEL_YN_COLUMN_NAME, 'N');
+			if($this->isUseYn && $isIncludeDeleted === false) $this->db->where($this->table.".".USE_YN_COLUMN_NAME, 'N');
+			foreach ($whereNot as $key=>$val) $this->db->where_not_in($key, [$val]);
+			return parent::getCntPDO($this->table);
+		}else{
+			return false;
+		}
+	}
 
-    function reorder($where, $sortField, $sortItem = null, $newIndex = 0)
-    {
-        $columnList = $this->getColumnList();
-        if(!in_array($sortField, $columnList)) return false;
-        if(!$this->identifier && !count($this->primaryKeyList)) return false;
+	function reorder($where, $sortField, $sortItem = null, $newIndex = 0)
+	{
+		$columnList = $this->getColumnList();
+		if(!in_array($sortField, $columnList)) return false;
+		if(!$this->identifier && !count($this->primaryKeyList)) return false;
 
-        if($sortItem) {
-            foreach ($sortItem as $key=>$val) $this->db->where("$key <> $val");
+		if($sortItem) {
+			foreach ($sortItem as $key=>$val) $this->db->where("$key <> $val");
 
-            $list = $this->getList([], $where, [], [], [$sortField => 'ASC']);
-            $idx = 1;
-            $matched = false;
-            foreach ($list as $item) {
-                if((int)$item->{$sortField} >= (int)$newIndex && !$matched) {
-                    $matched = true;
-                    $idx++;
-                }
+			$list = $this->getList([], $where, [], [], [$sortField => 'ASC']);
+			$idx = 1;
+			$matched = false;
+			foreach ($list as $item) {
+				if((int)$item->{$sortField} >= (int)$newIndex && !$matched) {
+					$matched = true;
+					$idx++;
+				}
 
-                $itemWhere = [];
-                if($this->identifier) {
-                    $itemWhere = [$this->identifier => $item->{$this->identifier}];
-                }else{
-                    foreach ($this->primaryKeyList as $key) $itemWhere[$key] = $item->{$key};
-                }
+				$itemWhere = [];
+				if($this->identifier) {
+					$itemWhere = [$this->identifier => $item->{$this->identifier}];
+				}else{
+					foreach ($this->primaryKeyList as $key) $itemWhere[$key] = $item->{$key};
+				}
 
-                $this->modData([$sortField => $idx], $itemWhere);
-                $idx++;
-            }
+				$this->modData([$sortField => $idx], $itemWhere);
+				$idx++;
+			}
 
-            $this->modData([$sortField => $newIndex], $sortItem);
-        }else{
-            $list = $this->getList([], $where, [], [], [$sortField => 'ASC']);
-            foreach ($list as $i=>$item) {
-                $itemWhere = [];
-                if($this->identifier) {
-                    $itemWhere = [$this->identifier => $item->{$this->identifier}];
-                }else{
-                    foreach ($this->primaryKeyList as $key) $itemWhere[$key] = $item->{$key};
-                }
+			$this->modData([$sortField => $newIndex], $sortItem);
+		}else{
+			$list = $this->getList([], $where, [], [], [$sortField => 'ASC']);
+			foreach ($list as $i=>$item) {
+				$itemWhere = [];
+				if($this->identifier) {
+					$itemWhere = [$this->identifier => $item->{$this->identifier}];
+				}else{
+					foreach ($this->primaryKeyList as $key) $itemWhere[$key] = $item->{$key};
+				}
 
-                $this->modData([$sortField => $i+1], $itemWhere);
-            }
-        }
-    }
+				$this->modData([$sortField => $i+1], $itemWhere);
+			}
+		}
+	}
 
-    protected function getSelectList(): array
-    {
-        $columnList = $this->getColumnList();
-        if($this->isDelYn) $columnList[] = DEL_YN_COLUMN_NAME;
-        if($this->isUseYn) $columnList[] = USE_YN_COLUMN_NAME;
-        if($this->isCreatedDt) {
-            $columnList[] = CREATED_DT_COLUMN_NAME;
-            if($this->isCreatedId) $columnList[] = CREATED_ID_COLUMN_NAME;
-        }
-        if($this->isUpdatedDt) {
-            $columnList[] = UPDATED_DT_COLUMN_NAME;
-            if($this->isCreatedId) $columnList[] = UPDATED_ID_COLUMN_NAME;
-        }
-        foreach ($columnList as $idx=>$column) $columnList[$idx] = "$this->table.$column";
-        return $columnList;
-    }
+	protected function getSelectList(): array
+	{
+		$columnList = $this->getColumnList();
+		if($this->isDelYn) $columnList[] = DEL_YN_COLUMN_NAME;
+		if($this->isUseYn) $columnList[] = USE_YN_COLUMN_NAME;
+		if($this->isCreatedDt) {
+			$columnList[] = CREATED_DT_COLUMN_NAME;
+			if($this->isCreatedId) $columnList[] = CREATED_ID_COLUMN_NAME;
+		}
+		if($this->isUpdatedDt) {
+			$columnList[] = UPDATED_DT_COLUMN_NAME;
+			if($this->isCreatedId) $columnList[] = UPDATED_ID_COLUMN_NAME;
+		}
+		foreach ($columnList as $idx=>$column) $columnList[$idx] = "$this->table.$column";
+		return $columnList;
+	}
 
-    protected function getValidSetList($set): array
-    {
-        return array_map(function($item) {
-            if(!is_array($item)) $item = (array)$item;
+	protected function getValidSetList($set): array
+	{
+		return array_map(function($item) {
+			if(!is_array($item)) $item = (array)$item;
 			return $this->getValidSetData($item);
-        }, $set);
-    }
+		}, $set);
+	}
 
-    protected function getValidSetData($set): array
-    {
-        $columnList = $this->getColumnList();
-        return array_filter($set, function($key) use ($columnList) {
-            return in_array($key, $columnList);
-        }, ARRAY_FILTER_USE_KEY);
-    }
+	protected function getValidSetData($set): array
+	{
+		$columnList = $this->getColumnList();
+		return array_filter($set, function($key) use ($columnList) {
+			return in_array($key, $columnList);
+		}, ARRAY_FILTER_USE_KEY);
+	}
 
-	protected function getColumnList(): array
+	public function getColumnList(): array
 	{
 		return array_values(array_unique(
 			array_filter(

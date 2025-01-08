@@ -2,16 +2,17 @@
 
 require_once __DIR__ . '/Common.php';
 
-class Students extends Common
+class Administrators extends Common
 {
 	public function __construct()
 	{
 		parent::__construct();
 
-		$this->titleList[] = 'Students Management';
+		$this->titleList[] = 'Administrators Management';
 		$this->addJsVars([
-			'API_URI' => '/api/students',
+			'API_URI' => '/api/administrators',
 			'API_PARAMS' => [
+				'user_cd' => 'USR001',
 			]
 		]);
 	}

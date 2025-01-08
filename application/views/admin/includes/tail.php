@@ -60,7 +60,7 @@
 		</script>
 		<?php endif; ?>
 		<div
-			style="
+				style="
 							display: none;
 							position: absolute;
 							top: 0;

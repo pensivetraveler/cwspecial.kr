@@ -31,20 +31,38 @@ function is_file_posted($field)
         return false;
     }
 
-    // Check if the file is actually uploaded
-    if ($_file['error'] === UPLOAD_ERR_NO_FILE) {
-        return false; // No file was uploaded
-    }
+	if(gettype($_file['name']) === 'array') {
+		foreach ($_file['error'] as $error) {
+			if ($error === UPLOAD_ERR_NO_FILE) {
+				return false; // No file was uploaded
+			}
 
-    // Check for other upload errors
-    if ($_file['error'] !== UPLOAD_ERR_OK) {
-        return false; // There was an error during file upload
-    }
+			if ($error !== UPLOAD_ERR_OK) {
+				return false; // There was an error during file upload
+			}
+		}
 
-    // Check if the file is empty
-    if ($_file['size'] === 0) {
-        return false; // File is empty
-    }
+		foreach ($_file['size'] as $size) {
+			if ($size === 0) {
+				return false; // File is empty
+			}
+		}
+	}else{
+		// Check if the file is actually uploaded
+		if ($_file['error'] === UPLOAD_ERR_NO_FILE) {
+			return false; // No file was uploaded
+		}
+
+		// Check for other upload errors
+		if ($_file['error'] !== UPLOAD_ERR_OK) {
+			return false; // There was an error during file upload
+		}
+
+		// Check if the file is empty
+		if ($_file['size'] === 0) {
+			return false; // File is empty
+		}
+	}
 
     return true;
 }

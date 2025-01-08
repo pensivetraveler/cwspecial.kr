@@ -203,7 +203,7 @@ class MY_Form_validation extends CI_Form_validation
     public function required_mod($value, $params)
     {
         $modes = explode('|', $params);
-        if( in_array($this->CI->input->get_post('mode'), $modes) ) {
+        if( in_array($this->CI->input->get_post('_mode'), $modes) ) {
             return is_array($value) ? (bool) count($value) : (trim($value) !== '');
         }else{
             return true;
@@ -214,7 +214,7 @@ class MY_Form_validation extends CI_Form_validation
     {
         list($table, $field, $identifier) = explode(".", $params);
 
-        if($this->CI->input->get_post('mode') === 'add') {
+        if($this->CI->input->get_post('_mode') === 'add') {
             return !is_empty($value);
         }else{
             $query = $this->CI->db
@@ -224,17 +224,25 @@ class MY_Form_validation extends CI_Form_validation
         }
     }
 
-    public function required_if_empty_file($value, $params)
+    public function required_if_empty_file($value, $params, $data = null)
     {
+		$CI =& get_instance();
         $exploded = explode('|', $params);
         $name = $exploded[0];
         list($table, $field, $identifier) = explode(".", $exploded[1]);
 
-        if($this->CI->input->get_post('mode') === 'add') {
+        if($this->CI->input->get_post('_mode') === 'add') {
             return is_file_posted($name);
         }else{
+			if(empty($this->_field_data)) {
+				$field_data = $data ?? $CI->input->post();
+				$id = $field_data[$identifier];
+			}else{
+				$field_data =$this->_field_data;
+				$id = $field_data[$identifier]['postdata'];
+			}
             $query = $this->CI->db
-                ->where($identifier, $this->_field_data[$identifier]['postdata'])
+                ->where($identifier, $id)
                 ->get($table)->row();
             return !(is_empty($query->{$field}) && !is_file_posted($field));
         }
@@ -259,6 +267,7 @@ class MY_Form_validation extends CI_Form_validation
 
     public function valid_youtube($value, $params)
     {
+		if(!$value) return true;
         $this->set_message('required_mod', $this->CI->lang->line("form_validation_valid_youtube"));
         $this->CI->load->library('youtube');
         $this->CI->youtube->set($value);
@@ -272,7 +281,7 @@ class MY_Form_validation extends CI_Form_validation
         $name = $value;
         list($table, $field, $identifier) = explode(".", $exploded[1]);
 
-        if($this->CI->input->get_post('mode') === 'add') {
+        if($this->CI->input->get_post('_mode') === 'add') {
             return is_file_posted($name);
         }else{
             $query = $this->CI->db

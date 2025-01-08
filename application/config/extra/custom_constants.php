@@ -3,14 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
-| NAME
-|--------------------------------------------------------------------------
-*/
-const APP_NAME_EN = 'PlayTalkTalk';
-const APP_NAME_KR = '플레이톡톡';
-
-/*
-|--------------------------------------------------------------------------
 | PATH
 |--------------------------------------------------------------------------
 */
@@ -33,6 +25,7 @@ const UPLOAD_LINK = '/public/uploads/';
 | EXTRA DB CONFIG
 |--------------------------------------------------------------------------
 */
+const USER_ID_COLUMN_NAME = 'user_id';
 const CREATED_DT_COLUMN_NAME = 'created_dt';
 const CREATED_ID_COLUMN_NAME = 'created_id';
 const UPDATED_DT_COLUMN_NAME = 'updated_dt';
@@ -69,7 +62,7 @@ if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVE
 |--------------------------------------------------------------------------
 */
 const API_CALL_PATH = [
-    'api', 'adm'
+    'api',
 ];
 
 const PRESET_API_NOT_EXIST = [

@@ -81,6 +81,8 @@ if ( ! function_exists('get_group_field_id'))
 {
     function get_group_field_id($group_attr, $group_name, $field_name, $index = 0): string
     {
+		$CI =& get_instance();
+
         $list = [];
         if ($group_attr['envelope_name']) {
             $list[] = $group_name;
@@ -90,7 +92,9 @@ if ( ! function_exists('get_group_field_id'))
             $list[] = $field_name;
             if ($group_attr['group_repeater']) $list[] = $index;
         }
-        return array_to_hyphens($list);
+
+		$prefix = $CI->sideForm?$CI->config->item('form_side_prefix'):$CI->config->item('form_page_prefix');
+        return $prefix.array_to_hyphens($list);
     }
 }
 

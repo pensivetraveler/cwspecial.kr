@@ -41,3 +41,29 @@ $config['kakao_login'] = array();
 $config['kakao_login']['callback_url'] = 'kakao/callback';
 $config['kakao_login']['cliend_id'] = '';
 $config['kakao_login']['secret'] = '';
+
+/*
+|--------------------------------------------------------------------------
+| CUSTOM OPTIONS
+|--------------------------------------------------------------------------
+*/
+$config['options'] = [
+	'default' => [
+		1 => 'Option 1',
+		2 => 'Option 2',
+	],
+	'yn' => [
+		0 => 'Y',
+		1 => 'N',
+	],
+	'gender' => [
+		'M' => '남',
+		'F' => '여',
+	],
+	'grade' => [
+		1 => '1학년',
+		2 => '2학년',
+		3 => '3학년',
+		4 => '4학년',
+	],
+];

@@ -264,14 +264,19 @@ class MY_Controller_ADM extends MY_Controller_WEB
         $data['headerData'] = $this->headerData;
 		$data['includes'] = $this->pageConfig['properties']['includes'];
 
-        if(!file_exists(ADMIN_ASSET_JS_PATH.'view/'.strtolower($this->router->class).'.js')){
-            $file = fopen(ADMIN_ASSET_JS_PATH.'view/'.strtolower($this->router->class).'.js',"w");
-            if(!$file) trigger_error("viewApp : Unable to open file!", E_USER_ERROR);
-            fclose($file);
-        }
+		foreach (['_preset', '_onload'] as $filename) {
+			if(!file_exists(ADMIN_ASSET_JS_PATH.'view/'.strtolower($this->router->class).$filename.'.js')){
+				$file = fopen(ADMIN_ASSET_JS_PATH.'view/'.strtolower($this->router->class).$filename.'.js',"w");
+				if(!$file) trigger_error("viewApp : Unable to open file!", E_USER_ERROR);
+				fclose($file);
+			}
+		}
 
+		$this->addJS['head'][] = [
+			base_url('public/assets/admin/js/view/'.strtolower($this->router->class).'_preset.js'),
+		];
         $this->addJS['tail'][] = [
-            base_url('public/assets/admin/js/view/'.strtolower($this->router->class).'.js'),
+            base_url('public/assets/admin/js/view/'.strtolower($this->router->class).'_onload.js'),
         ];
 
         parent::viewApp($data);
@@ -465,7 +470,6 @@ class MY_Controller_ADM extends MY_Controller_WEB
                 $item['group_attributes'] = $attr;
 
                 $item['id'] = get_group_field_id($item['group_attributes'], $item['group'], $item['field']);
-                $item['id'] = ($this->sideForm?$this->config->item('form_side_prefix'):$this->config->item('form_page_prefix')).$item['id'];
                 $item['name'] = get_group_field_name($item['group_attributes'], $item['group'], $item['field']);
 
                 $item['form_attributes'] = array_merge(

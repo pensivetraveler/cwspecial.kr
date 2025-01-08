@@ -1,13 +1,10 @@
 <ul class="menu-inner py-1">
 	<?php
-		foreach ($this->config->get('admin_nav_side', $this->config->get('admin_nav_side_sample', [])) as $menuName=>$menu):
+		foreach ($this->config->get('admin_nav_side', $this->config->get('admin_nav_side_sample', []), false) as $menuName=>$menu):
 			$menu = array_merge(
 					$this->config->get('admin_nav_side_base', []),
 					$menu
 			);
-
-			if($headerData['user_cd'] === 'USR002' && $menu['authCheck'])
-				if(!in_array($menu['code'], array_column($this->navAuth, 'menu_code'))) continue;
 
 			if(is_admin_active_page($menu)) $menu['className'][] = 'active';
 			$subMenuExist = count($menu['subMenu']) > 0;
@@ -19,7 +16,6 @@
 		<a href="<?=$href?>" class="menu-link <?=$subMenuExist?'menu-toggle waves-effect':''?>">
 			<?php if($menu['icon']): ?><i class="menu-icon tf-icons <?=$menu['icon']?>"></i><?php endif; ?>
 			<div data-i18n="<?=lang('nav.'.$menu['title'])?>"><?=lang('nav.'.$menu['title'])?></div>
-			<!--div data-i18n="<?//=lang($menu['title'])?>"><?//=$menu['title']?></div-->
 		</a>
 		<?php if($subMenuExist): ?>
 		<ul class="menu-sub">

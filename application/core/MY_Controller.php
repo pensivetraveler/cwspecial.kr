@@ -110,11 +110,11 @@ class MY_Controller extends CI_Controller
 
 				for ($i = 0; $i < count($file_names); $i++) {
 					$_FILES[$name] = [
-						'name' => $_files['name'][$i],
-						'type' => $_files['type'][$i],
-						'tmp_name' => $_files['tmp_name'][$i],
-						'error' => $_files['error'][$i],
-						'size' => $_files['size'][$i],
+						'name' => $_files[$name]['name'][$i],
+						'type' => $_files[$name]['type'][$i],
+						'tmp_name' => $_files[$name]['tmp_name'][$i],
+						'error' => $_files[$name]['error'][$i],
+						'size' => $_files[$name]['size'][$i],
 					];
 
 					try {
@@ -299,8 +299,10 @@ class MY_Controller extends CI_Controller
 		$render = $attr['render'] ?? [];
 
 		$options = [];
-		if(in_array($type, ['yn', 'field', 'static'])){
+		if(in_array($type, ['yn', 'field', 'static', 'none'])){
 			switch ($type) {
+				case 'none' :
+					return $options;
 				case 'yn' :
 					$options = form_options_by_field('yn');
 					break;
@@ -361,6 +363,10 @@ class MY_Controller extends CI_Controller
 			$id = $item[$render['id']] ?? '';
 			$text = $item[$render['text']] ?? '';
 			$carry[$id] = $text;
+			if(!is_empty($render, 'add')) {
+				$add = $item[$render['add']] ?? '';
+				if($add) $carry[$id] .= " ($add)";
+			}
 			return $carry;
 		}, []);
 	}

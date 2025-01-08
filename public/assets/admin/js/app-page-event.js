@@ -130,7 +130,7 @@ $(function() {
 		// flatpickr
 		if($(node).find('.flatpickr').length > 0){
 			$(node).find('.flatpickr').each((k, node) => {
-				setFlatpicker(node);
+				setFlatpickr(node);
 			});
 		}
 	});

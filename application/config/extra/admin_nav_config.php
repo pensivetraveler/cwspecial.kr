@@ -3,10 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['admin_nav_config_loaded'] = true;
 
-$config['admin_menu_top'] = [
+$config['admin_nav_top'] = [
 ];
 
-$config['admin_menu_side'] = [
+$config['admin_nav_side'] = [
     'Dashboard' => [
         'icon' => 'ri-home-smile-line',
         'title' => 'Home',
@@ -19,6 +19,16 @@ $config['admin_menu_side'] = [
         'className' => [],
         'subMenu' => [],
     ],
+	'Administrators' => [
+		'icon' => 'ri-team-line',
+		'title' => 'Administrators Management',
+		'route' => '/admin/administrators',
+		'params' => [
+			'layout' => 'side-menu',
+		],
+		'className' => [],
+		'subMenu' => [],
+	],
 	'Students' => [
 		'icon' => 'ri-team-line',
 		'title' => 'Students Management',
@@ -29,10 +39,10 @@ $config['admin_menu_side'] = [
 		'className' => [],
 		'subMenu' => [],
 	],
-    'Articles' => [
+    'Works' => [
         'icon' => 'ri-team-line',
-        'title' => 'Articles Management',
-        'route' => '/admin/articles',
+        'title' => 'Works Management',
+        'route' => '/admin/works',
         'params' => [
             'layout' => 'side-menu',
         ],
@@ -52,21 +62,21 @@ $config['admin_menu_side'] = [
 	'Inquiries' => [
 		'icon' => 'ri-speak-line',
 		'title' => 'Inquiries Management',
-		'route' => '/admin/notices',
+		'route' => '/admin/inquiries',
 		'params' => [
 			'layout' => 'side-menu',
 		],
 		'className' => [],
 		'subMenu' => [],
 	],
-    'MyInfo' => [
-        'icon' => 'ri-user-line',
-        'title' => 'MyInfo Management',
-        'route' => '/admin/MyInfo',
-        'params' => [
-            'layout' => 'side-menu',
-        ],
-        'className' => [],
-        'subMenu' => [],
-    ],
+//    'MyInfo' => [
+//        'icon' => 'ri-user-line',
+//        'title' => 'MyInfo Management',
+//        'route' => '/admin/MyInfo',
+//        'params' => [
+//            'layout' => 'side-menu',
+//        ],
+//        'className' => [],
+//        'subMenu' => [],
+//    ],
 ];

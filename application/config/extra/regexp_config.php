@@ -1,7 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
-
-$config['regexp_config_loaded'] = true;
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['regexp'] = [
     'numeric' => [

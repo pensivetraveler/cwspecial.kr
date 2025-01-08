@@ -238,7 +238,7 @@ class MY_Input extends CI_Input
      * @param bool $xss_clean Whether to apply XSS filtering
      * @return    mixed
      */
-    public function post_get($index, $xss_clean = NULL, $default_value = NULL)
+    public function post_get($index = NULL, $xss_clean = NULL, $default_value = NULL)
     {
         return isset($_POST[$index])
             ? $this->post($index, $xss_clean, $default_value)
@@ -254,7 +254,7 @@ class MY_Input extends CI_Input
      * @param bool $xss_clean Whether to apply XSS filtering
      * @return    mixed
      */
-    public function get_post($index, $xss_clean = NULL, $default_value = NULL)
+    public function get_post($index = NULL, $xss_clean = NULL, $default_value = NULL)
     {
         return isset($_GET[$index])
             ? $this->get($index, $xss_clean, $default_value)
@@ -270,7 +270,7 @@ class MY_Input extends CI_Input
      * @param bool $xss_clean Whether to apply XSS filtering
      * @return    mixed
      */
-    public function post_put($index, $xss_clean = NULL, $default_value = NULL)
+    public function post_put($index = NULL, $xss_clean = NULL, $default_value = NULL)
     {
         return isset($_POST[$index])
             ? $this->post($index, $xss_clean, $default_value)

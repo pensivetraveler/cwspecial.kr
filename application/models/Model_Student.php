@@ -12,7 +12,7 @@ class Model_Student extends Model_Common
 	public array   $notNullList = ['code','grade',];
 	public array   $nullList = ['disabilities_yn','aac_yn'];
 	public array   $strList = ['code','disabilities_yn','aac_yn'];
-	public array   $intList = ['grade',];
+	public array   $intList = ['grade','student_id','user_id',];
 	public array   $fileList = [];
 
 	public bool    $isAutoincrement = true;
@@ -20,5 +20,29 @@ class Model_Student extends Model_Common
 	function __construct()
 	{
 		parent::__construct();
+	}
+
+	function getList($select = [], $where = [], $like = [], $limit = [], $orderBy = [], $filter = [])
+	{
+		$this->db
+			->select('user.*')
+			->join('user', 'user.user_id=student.user_id', 'left');
+		return parent::getList($select, $where, $like, $limit, $orderBy, $filter);
+	}
+
+	function getData($select = [], $where = [])
+	{
+		$this->db
+			->select('user.*')
+			->join('user', 'user.user_id=student.user_id', 'left');
+		return parent::getData($select, $where);
+	}
+
+	function getCnt($where = [], $like = [], $filter = [])
+	{
+		$this->db
+			->select('user.*')
+			->join('user', 'user.user_id=student.user_id', 'left');
+		return parent::getCnt($where, $like, $filter);
 	}
 }

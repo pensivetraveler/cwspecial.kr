@@ -25,12 +25,12 @@ class Model_Sys_Code extends Model_Common
 		parent::__construct();
 	}
 
-	function getList($select = [], $where = [], $like = [], $limit = [], $orderBy = [])
+	function getList($select = [], $where = [], $like = [], $limit = [], $orderBy = [], $filter = [])
 	{
 		if(count($orderBy) === 0) {
 			$orderBy = ['cd_srt' => 'ASC'];
 		}
 
-		return parent::getList($select, $where, $like, $limit, $orderBy);
+		return parent::getList($select, $where, $like, $limit, $orderBy, $filter);
 	}
 }

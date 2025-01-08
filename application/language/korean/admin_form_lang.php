@@ -10,6 +10,10 @@ $lang['common'] = [
     'recent_dt_list' => '일자',
 ];
 
+$lang['auth'] = [
+	'autologin' => '자동 로그인',
+];
+
 $lang['user'] = [
     'id' => '아이디',
     'name' => '이름',
@@ -23,6 +27,7 @@ $lang['user'] = [
     'memo' => '메모',
     'password' => '비밀번호',
     'password_confirm' => '비밀번호 확인',
+	'withdraw_dt' => '탈퇴일자',
 ];
 
 $lang['admin'] = [
@@ -34,19 +39,8 @@ $lang['managers'] = [
 ];
 
 $lang['student'] = [
-    'class_per_week' => '수업횟수',
-    'class_time' => '수업시간',
-    'class_hour' => '시간',
-    'class_minute' => '분',
-    'class_meridian' => 'AM/PM',
-    'class_dow' => '요일',
-    'class_type' => '수업형태',
-    'referral_type' => '알게된 경로',
-    'referral_type_etc' => '알게된 경로 기타',
-    'register_dt' => '입회일자',
-    'enroll_status' => '수강상태',
-    'enroll_status_str' => '수강상태',
-    'withdraw_dt' => '탈퇴일자',
+	'code' => '학번',
+	'grade' => '학년',
 ];
 
 $lang['enroll'] = [

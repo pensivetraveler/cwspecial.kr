@@ -228,8 +228,13 @@ function get_admin_form_attributes($item, $form_type): array
     $ci =& get_instance();
 
     // initiate
+	if(!is_empty($item['attributes'], 'placeholder')){
+		$placeholder = strpos($item['attributes']['placeholder'], 'filter.') !== false?$item['attributes']['placeholder']:'placeholder.'.$item['attributes']['placeholder'];
+	}else{
+		$placeholder = $item['label'];
+	}
     $attributes = [
-        'placeholder' => $ci->lang->line($item['attributes']['placeholder'] ?? $item['label']),
+        'placeholder' => $ci->lang->line($placeholder),
         'aria-label' => $ci->lang->line($item['label']),
         'aria-describedby' => $item['field'].'-ico',
     ];
@@ -334,6 +339,7 @@ function get_admin_form_attributes($item, $form_type): array
         switch ($item['subtype']) {
 			case 'flatpickr' :
 				$classList[] = 'flatpickr flatpickr-time';
+				break;
             case 'cleave-time' :
 				$classList[] = 'cleave cleave-time';
                 $attributes['placeholder'] = 'hh:mm';

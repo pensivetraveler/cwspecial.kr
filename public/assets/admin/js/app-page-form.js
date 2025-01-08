@@ -35,7 +35,6 @@ function updateFormLifeCycle(state, form = null, detail = {}) {
 }
 
 function preparePlugins(form) {
-	console.log(1)
     // select picker
     if ($(form).find('.selectpicker').length) {
 		$(form).find('.selectpicker').selectpicker();
@@ -50,23 +49,20 @@ function preparePlugins(form) {
             var $this = $(this);
             $this.prepend('<option value="" disabled selected></option>');
             select2Focus($this);
-            $this.wrap('<div class="position-relative w-100"></div>').select2({
-                allowClear: true,
-                placeholder: $this.attr('placeholder'),
-                dropdownParent: $this.parent()
-            });
+
+			const option = {
+				allowClear: true,
+				placeholder: $this.attr('placeholder'),
+				dropdownParent: $this.parent()
+			}
+
+			if(appPlugins.hasOwnProperty('select2') && appPlugins.select2.hasOwnProperty(this.name)) {
+				Object.assign(option, appPlugins.select2[this.name]);
+			}
+
+            $this.wrap('<div class="position-relative w-100"></div>').select2(option);
         });
     }
-
-    // FlatPickr Initialization & Validation
-	$(form).find('.flatpickr').each(function() {
-		setFlatpickr(this);
-	})
-
-    // Cleave Initialization & Validation
-	$(form).find('.cleave').each(function() {
-		setCleave(this);
-	})
 
     // Bootstrap Max Length
     if ($(form).find('.form-maxlength').length) {
@@ -94,7 +90,6 @@ function preparePlugins(form) {
         $(form).find('.select2-repeater').each(function () {
             var $this = $(this);
             $this.prepend('<option value="" disabled selected></option>');
-            select2Focus($this);
             $this.wrap('<div class="position-relative"></div>').select2({
                 allowClear: true,
                 dropdownParent: $this.parent(),
@@ -244,7 +239,17 @@ function preparePlugins(form) {
 		});
 	}
 
-    updateFormLifeCycle('preparePlugins', form)
+	// FlatPickr Initialization & Validation
+	$(form).find('.flatpickr').each(function() {
+		setFlatpickr(this);
+	})
+
+	// Cleave Initialization & Validation
+	$(form).find('.cleave').each(function() {
+		setCleave(this);
+	})
+
+	updateFormLifeCycle('preparePlugins', form)
 }
 
 /**
@@ -471,40 +476,44 @@ function applyFrmValues(form, data, fields = []) {
             }
         }
 
-        Object.keys(dto).map((category) => {
-            if(dto[category].length > 0) {
-                if(groupName === 'basic') {
-                    dto[category].forEach((fieldName) => {
-                        applyFrmValuesByCategory(category, groupAttrs[groupName], fieldName, cloneFields, form, data);
-                    });
-                }else{
-                    if(groupAttrs[groupName].envelope_name) {
-						if(!data.hasOwnProperty(groupName)) return;
+		if(typeof window[`applyFrmValues${pascalize(groupName)}`] === 'function') {
+			window[`applyFrmValues${pascalize(groupName)}`](form, data[groupName], groupAttrs[groupName], cloneFields, dto);
+		}else{
+			Object.keys(dto).map((category) => {
+				if(dto[category].length > 0) {
+					if(groupName === 'basic') {
+						dto[category].forEach((fieldName) => {
+							applyFrmValuesByCategory(category, groupAttrs[groupName], fieldName, cloneFields, form, data);
+						});
+					}else{
+						if(groupAttrs[groupName].envelope_name) {
+							if(!data.hasOwnProperty(groupName)) return;
 
-                        let frmData = data[groupName];
-                        if(groupAttrs[groupName].group_repeater) {
-                            // 데이터 개수에 따라, field의 id, name 을 data index 의 값으로 대체해야 함.
-                            for(let dataIndex = 0; dataIndex < data[groupName].length; dataIndex++) {
-                                Object.keys(data[groupName][dataIndex]).map((fieldName) => {
-                                    if(!dto[category].includes(fieldName)) return;
-                                    if(common.IDENTIFIER) frmData[dataIndex][common.IDENTIFIER] = data[common.IDENTIFIER];
-                                    applyFrmValuesByCategory(category, groupAttrs[groupName], fieldName, cloneFields, form, frmData[dataIndex], dataIndex);
-                                });
-                            }
-                        }else{
-                            if(common.IDENTIFIER) frmData[common.IDENTIFIER] = data[common.IDENTIFIER];
-                            dto[category].forEach((fieldName) => {
-                                applyFrmValuesByCategory(category, groupAttrs[groupName], fieldName, cloneFields, form, frmData);
-                            });
-                        }
-                    }else{
-                        dto[category].forEach((fieldName) => {
-                            applyFrmValuesByCategory(category, groupAttrs[groupName], fieldName, cloneFields, form, data);
-                        });
-                    }
-                }
-            }
-        });
+							let frmData = data[groupName];
+							if(groupAttrs[groupName].group_repeater) {
+								// 데이터 개수에 따라, field의 id, name 을 data index 의 값으로 대체해야 함.
+								for(let dataIndex = 0; dataIndex < frmData.length; dataIndex++) {
+									Object.keys(frmData[dataIndex]).map((fieldName) => {
+										if(!dto[category].includes(fieldName)) return;
+										if(common.IDENTIFIER) frmData[dataIndex][common.IDENTIFIER] = data[common.IDENTIFIER];
+										applyFrmValuesByCategory(category, groupAttrs[groupName], fieldName, cloneFields, form, frmData[dataIndex], dataIndex);
+									});
+								}
+							}else{
+								if(common.IDENTIFIER) frmData[common.IDENTIFIER] = data[common.IDENTIFIER];
+								dto[category].forEach((fieldName) => {
+									applyFrmValuesByCategory(category, groupAttrs[groupName], fieldName, cloneFields, form, frmData);
+								});
+							}
+						}else{
+							dto[category].forEach((fieldName) => {
+								applyFrmValuesByCategory(category, groupAttrs[groupName], fieldName, cloneFields, form, data);
+							});
+						}
+					}
+				}
+			});
+		}
     });
 }
 
@@ -550,13 +559,16 @@ function applyFrmValuesByCategory(category, groupAttr, fieldName, fields, form, 
         case 'inputs' :
             switch (field.subtype) {
 				default:
-                    if(form[name] && data[fieldName]) form[name].value = data[fieldName];
+					if(form[name] && data[fieldName] && data[fieldName] !== '0000-00-00') form[name].value = data[fieldName];
             }
             break;
         case 'selects' :
             switch (field.subtype) {
                 default:
-                    if(form[name] && data[fieldName]) form[name].value = data[fieldName];
+                    if(form[name] && data[fieldName]) {
+						form[name].value = data[fieldName];
+						$(form[name]).val(data[fieldName]).trigger('change');
+					}
             }
             break;
         case 'checkboxes' :
@@ -614,7 +626,7 @@ function applyFrmValuesByCategory(category, groupAttr, fieldName, fields, form, 
         case 'customs' :
             switch (field.subtype) {
                 case 'youtube' :
-                    // setFormListItem(`#${id}-list`, data[fieldName], field);
+                    setFormListItem(`#${id}-list`, data, field);
                     break;
                 case 'quill' :
                     document.getElementById(`${id}-quill`).innerHTML = data[fieldName];
@@ -697,6 +709,9 @@ function refreshPlugins() {
         })
     }
 
+	$('.form-list-item-wrap').each(function() {
+		if(!this.children.length) this.classList.add('d-none');
+	});
 
     updateFormLifeCycle('refreshPlugins');
 }
@@ -762,7 +777,7 @@ function downloadFile(fileId) {
 }
 
 function deleteFile(btn, type = '') {
-    const form = repeater.closest('form');
+    const form = btn.closest('form');
     const identifier = form[common.IDENTIFIER].value;
 
     const listWrap = btn.closest('ul');

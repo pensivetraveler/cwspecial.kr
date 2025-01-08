@@ -86,7 +86,8 @@
 							$item['attributes']
 						);
 				}
-				echo form_label(lang($item['label']), $item['id']);
+				if(!(($item['type']==='checkbox'||$item['type']==='radio')&&$item['subtype']==='single'))
+					echo form_label(lang($item['label']), $item['id']);
 			?>
 		</div>
 		<?php
@@ -112,6 +113,6 @@
 	<button type="submit" class="btn btn-primary data-submit me-sm-4 me-1">Submit</button>
 	<button type="reset" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="offcanvas">Cancel</button>
 	<button type="button" class="btn btn-outline-danger btn-delete d-none">Delete</button>
-	<button type="button" class="btn btn-outline-danger" onclick="sampling()">Sampling</button>
+	<!--<button type="button" class="btn btn-outline-danger" onclick="sampling()">Sampling</button>-->
 </div>
 <?=form_close()?>

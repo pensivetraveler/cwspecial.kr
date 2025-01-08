@@ -2,75 +2,54 @@
 
 $config['admin_page_config_loaded'] = true;
 
-$config['admin_page_base_config'] = [
-	'category' => 'page',
-	'type' => 'view',
-	'subType' => 'base',
-	'properties' => [
-		'baseMethod' => 'view',
-		'allows' => [],
-		'noIndex' => false,
-		'formExist' => false,
-		'listExist' => false,
-		'includes' => [
-			'head' => true,
-			'header' => true,
-			'modalPrepend' => true,
-			'modalAppend' => true,
-			'footer' => true,
-			'tail' => true,
-		],
-	],
-	'formProperties' => [
-		'formExist' => false,
-		'formConfig' => '',
-	],
-	'listProperties' => [
-		'listExist' => false,
-		'listConfig' => '',
-	],
-	'tabProperties' => [
-		'tabGroup' => '',
-	],
-];
-
-$config['admin_modal_base_config'] = [
-	'category' => 'modal',
-	'type' => 'view',
-	'subType' => 'base',
-	'properties' => [
-		'baseMethod' => 'view',
-		'allows' => [],
-		'formExist' => false,
-		'listExist' => false,
-		'includes' => [
-			'head' => false,
-			'header' => false,
-			'modalPrepend' => false,
-			'modalAppend' => false,
-			'footer' => false,
-			'tail' => false,
-		],
-	],
-	'formProperties' => [
-		'formExist' => false,
-		'listExist' => true,
-		'formConfig' => '',
-		'formType' => '',
-	],
-	'listProperties' => [
-		'listConfig' => '',
-	],
-	'tabProperties' => [
-		'tabGroup' => '',
-	],
-];
-
 $config['admin_page_config'] = [
+	'auth' => [
+		'category' => 'auth',
+		'type' => 'view',
+		'properties' => [
+			'baseMethod' => 'view',
+			'includes' => [
+				'head' => true,
+				'header' => false,
+				'modalPrepend' => false,
+				'modalAppend' => false,
+				'footer' => false,
+				'tail' => true,
+			],
+		],
+	],
 	'dashboard' => [
 		'category' => 'page',
 		'type' => 'view',
 		'subType' => 'dashboard',
+		'properties' => [
+			'baseMethod' => 'view',
+			'allows' => ['view'],
+			'formExist' => true,
+		],
+		'formProperties' => [
+			'formConfig' => '',
+			'formType' => '',
+		],
+	],
+	'administrators' => [
+		'category' => 'page',
+		'type' => 'list',
+		'subType' => 'base',
+		'properties' => [
+			'baseMethod' => 'list',
+			'allows' => ['list','add','edit'],
+			'formExist' => true,
+			'listExist' => true,
+		],
+		'formProperties' => [
+			'formConfig' => 'administrators',
+			'formType' => 'side',
+		],
+		'listProperties' => [
+			'listConfig' => 'administrators',
+			'plugin' => 'datatable',
+		],
 	],
 	'students' => [
 		'category' => 'page',
@@ -78,7 +57,7 @@ $config['admin_page_config'] = [
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
-			'allows' => ['list'],
+			'allows' => ['list','add','edit'],
 			'formExist' => true,
 			'listExist' => true,
 		],
@@ -88,7 +67,7 @@ $config['admin_page_config'] = [
 		],
 		'listProperties' => [
 			'listConfig' => 'students',
-			'listPlugin' => 'datatable',
+			'plugin' => 'datatable',
 		],
 	],
 	'works' => [
@@ -107,7 +86,7 @@ $config['admin_page_config'] = [
 		],
 		'listProperties' => [
 			'listConfig' => 'works',
-			'listPlugin' => 'datatable',
+			'plugin' => 'datatable',
 		],
 	],
 	'notices' => [
@@ -122,11 +101,11 @@ $config['admin_page_config'] = [
 		],
 		'formProperties' => [
 			'formConfig' => 'notices',
-			'formType' => 'page',
+			'formType' => 'side',
 		],
 		'listProperties' => [
 			'listConfig' => 'notices',
-			'listPlugin' => 'datatable',
+			'plugin' => 'datatable',
 		],
 	],
 	'inquiries' => [
@@ -141,16 +120,16 @@ $config['admin_page_config'] = [
 		],
 		'formProperties' => [
 			'formConfig' => 'inquiries',
-			'formType' => 'page',
+			'formType' => 'side',
 		],
 		'listProperties' => [
 			'listConfig' => 'inquiries',
-			'listPlugin' => 'datatable',
+			'plugin' => 'datatable',
 		],
 	],
 	'myinfo' => [
 		'category' => 'page',
-		'type' => 'edit',
+		'type' => 'view',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'edit',
@@ -163,6 +142,8 @@ $config['admin_page_config'] = [
 			'formType' => 'page',
 		],
 		'listProperties' => [
+			'listConfig' => '',
+			'plugin' => '',
 		],
 	],
 ];

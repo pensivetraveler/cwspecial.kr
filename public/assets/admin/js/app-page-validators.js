@@ -214,7 +214,7 @@ const customValidatorsPreset = {
             return {
                 validate: function(input) {
 					let valid = false;
-					const node = input.element;
+					const node = document.getElementById(input.element.id);
 					const form = node.closest('form');
 					const list = document.getElementById(input.options.listId);
 

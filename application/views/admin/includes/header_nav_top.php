@@ -85,8 +85,8 @@
 					<li>
 						<a class="dropdown-item" href="pages-account-settings-account.html">
 							<div class="d-flex justify-content-between">
-								<span class="fw-medium d-block small"><?=$headerData['name']?></span>
-								<small class="text-muted"><?=$headerData['id']?></small>
+								<span class="fw-medium d-block small">Name</span>
+								<small class="text-muted">ID</small>
 							</div>
 						</a>
 					</li>
