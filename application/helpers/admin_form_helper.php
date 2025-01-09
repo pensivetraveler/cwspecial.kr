@@ -1,43 +1,43 @@
 <?php
 function get_admin_form_textarea($item, $formType = '')
 {
-    if($item['sub_type'] === 'quill') {
-        if($formType === 'side') {
-            return form_textarea(
-                [
-                    'name' => $item['field'],
-                    'id' => $item['id'],
-                    'rows' => $item['attributes']['rows']
-                ],
-                set_admin_form_value($item['field'], $item['default'], null),
-                $item['attributes']
-            );
-        }else{
-            $output = form_input(
-                [
-                    'type' => 'hidden',
-                    'name' => $item['field'],
-                    'id'   => $item['id'],
-                ],
-                set_admin_form_value($item['field'], $item['default'], null),
-                [
-                    'data-textarea-id' => "{$item['id']}-quill",
-                ]
-		    );
-            $output .= convert_selector_to_html("div#{$item['id']}-quill.textarea-quill.ms-0", true, set_admin_form_value($item['field'], $item['default'], null));
-            return $output;
-        }
-    }else{
-        return form_textarea(
-            [
-                'name' => $item['field'],
-                'id' => $item['id'],
-                'rows' => $item['attributes']['rows']
-            ],
-            set_admin_form_value($item['field'], $item['default'], null),
-            $item['attributes']
-        );
-    }
+	if($item['sub_type'] === 'quill') {
+		if($formType === 'side') {
+			return form_textarea(
+				[
+					'name' => $item['field'],
+					'id' => $item['id'],
+					'rows' => $item['attributes']['rows']
+				],
+				set_admin_form_value($item['field'], $item['default'], null),
+				$item['attributes']
+			);
+		}else{
+			$output = form_input(
+				[
+					'type' => 'hidden',
+					'name' => $item['field'],
+					'id'   => $item['id'],
+				],
+				set_admin_form_value($item['field'], $item['default'], null),
+				[
+					'data-textarea-id' => "{$item['id']}-quill",
+				]
+			);
+			$output .= convert_selector_to_html("div#{$item['id']}-quill.textarea-quill.ms-0", true, set_admin_form_value($item['field'], $item['default'], null));
+			return $output;
+		}
+	}else{
+		return form_textarea(
+			[
+				'name' => $item['field'],
+				'id' => $item['id'],
+				'rows' => $item['attributes']['rows']
+			],
+			set_admin_form_value($item['field'], $item['default'], null),
+			$item['attributes']
+		);
+	}
 }
 
 function get_admin_form_choice($item, $formType = '')
@@ -69,7 +69,7 @@ function get_admin_form_choice($item, $formType = '')
 			]);
 		}else{
 			$wrapClassList = array_merge($wrapClassList, [
-				'option-stack-horizon', 'align-items-center', 'justify-content-start'
+				'option-stack-horizon', 'justify-content-start'
 			]);
 		}
 
@@ -130,20 +130,20 @@ function get_admin_form_radio($item, $value, $text)
 
 function get_admin_form_text($data, $add_class = array(), $attributes = array()): string
 {
-    $text = $data['form_text'];
+	$text = $data['form_text'];
 
-    $default['class'] = [
-        'form-text'
-    ];
+	$default['class'] = [
+		'form-text'
+	];
 
-    if(!$text){
-        $line = '';
-        $default['class'][] = 'd-none';
-    }else{
-        $line = get_instance()->lang->line($text);
-        $icon = $text['icon'] ?? '';
-        if($icon) $line = get_icon($icon, false, $text['icon_size'] ?? '', '.ms-1.align-middle').convert_selector_to_html('span.mx-1.align-middle', true, $line);
-    }
+	if(!$text){
+		$line = '';
+		$default['class'][] = 'd-none';
+	}else{
+		$line = get_instance()->lang->line($text);
+		$icon = $text['icon'] ?? '';
+		if($icon) $line = get_icon($icon, false, $text['icon_size'] ?? '', '.ms-1.align-middle').convert_selector_to_html('span.mx-1.align-middle', true, $line);
+	}
 
 	if(isset($data['form_attributes'])){
 		if(!is_empty($data['form_attributes'], 'sample_file')) {
@@ -151,226 +151,226 @@ function get_admin_form_text($data, $add_class = array(), $attributes = array())
 		}
 	}
 
-    if(is_string($add_class)){
-        $default['class'][] = $add_class;
-    }else{
-        $default['class'] = array_merge($default['class'], $add_class);
-    }
+	if(is_string($add_class)){
+		$default['class'][] = $add_class;
+	}else{
+		$default['class'] = array_merge($default['class'], $add_class);
+	}
 
-    $default['class'] = implode(' ', $default['class']);
+	$default['class'] = implode(' ', $default['class']);
 
-    return '<div '._parse_form_attributes($attributes, $default).'>'.$line.'</div>';
+	return '<div '._parse_form_attributes($attributes, $default).'>'.$line.'</div>';
 }
 
 function get_admin_form_list_item($item, $formType, $below = true, $disk = false, $label = false): string
 {
-    if($item['form_attributes']['with_list']) {
-        $classList = ['form-list-item-wrap', 'mb-0', 'p-2', 'bg-lighter', 'rounded-3', 'w-px-400', 'mw-100'];
+	if($item['form_attributes']['with_list']) {
+		$classList = ['form-list-item-wrap', 'mb-0', 'p-2', 'bg-lighter', 'rounded-3', 'w-px-400', 'mw-100'];
 		$classList[] = $disk?'list-styled':'list-unstyled';
-        if($item['subtype'] === 'readonly') {
-            $classList[] = 'form-list-item-wrap_readonly';
-        }elseif($item['form_attributes']['list_sorter']) {
-            $classList = array_merge($classList, ['list-group', 'list-group-flush', 'form-list-item-wrap_sorter']);
-        }
-        $classList = implode('.', $classList);
-        $inner = convert_selector_to_html("ul#{$item['id']}-list.$classList");
-        if($item['subtype'] === 'readonly') {
-            $inner .= form_label(lang([
-                'line' => 'Uploads List',
-                'replace' => lang($item['label']),
-            ]), $item['id'].'-list');
-        }
-        if($formType === 'side') {
-            $inner = convert_selector_to_html('div.form-floating.form-floating-outline', true, $inner);
-        }
+		if($item['subtype'] === 'readonly') {
+			$classList[] = 'form-list-item-wrap_readonly';
+		}elseif($item['form_attributes']['list_sorter']) {
+			$classList = array_merge($classList, ['list-group', 'list-group-flush', 'form-list-item-wrap_sorter']);
+		}
+		$classList = implode('.', $classList);
+		$inner = convert_selector_to_html("ul#{$item['id']}-list.$classList");
+		if($item['subtype'] === 'readonly') {
+			$inner .= form_label(lang([
+				'line' => 'Uploads List',
+				'replace' => lang($item['label']),
+			]), $item['id'].'-list');
+		}
+		if($formType === 'side') {
+			$inner = convert_selector_to_html('div.form-floating.form-floating-outline', true, $inner);
+		}
 		if($label) $inner .= form_label(lang($item['label'].'-list'), $item['id'].'-list');
-        return convert_selector_to_html('div.input-group.input-group-merge'.($below?'.mt-2':'.mb-2'), true, $inner);
-    }else{
-        return '';
-    }
+		return convert_selector_to_html('div.input-group.input-group-merge'.($below?'.mt-2':'.mb-2'), true, $inner);
+	}else{
+		return '';
+	}
 }
 
 function get_admin_form_ico($item, $size = 18): string
 {
 //    if(is_empty($item, 'icon')) return '';
-    if($item['icon'] === 'none') return '';
-    if(strpos($item['icon'], 'svg:') !== false) {
-        $classname = str_replace('svg:', '', $item['icon']);
-        $svg = true;
-    }else{
-        $classname = get_admin_form_ico_classname($item);
-        $svg = false;
-    }
+	if($item['icon'] === 'none') return '';
+	if(strpos($item['icon'], 'svg:') !== false) {
+		$classname = str_replace('svg:', '', $item['icon']);
+		$svg = true;
+	}else{
+		$classname = get_admin_form_ico_classname($item);
+		$svg = false;
+	}
 
-    if($classname) {
-        $inner = get_icon($classname, $svg, $size);
-        return convert_selector_to_html("span#{$item['field']}-ico.input-group-text.text-primary.border-end-0", true, $inner);
-    }else{
-        return '';
-    }
+	if($classname) {
+		$inner = get_icon($classname, $svg, $size);
+		return convert_selector_to_html("span#{$item['field']}-ico.input-group-text.text-primary.border-end-0", true, $inner);
+	}else{
+		return '';
+	}
 }
 
 function get_admin_form_ico_classname($item): ?string
 {
-    if($item['icon'] !== null) return $item['icon'];
-    if($item['type'] === 'select') return '';
+	if($item['icon'] !== null) return $item['icon'];
+	if($item['type'] === 'select') return '';
 
-    $rules = preg_split('/\|(?![^\[]*\])/', $item['rules']);
-    if(in_array('integer', $rules)) return 'ri-number-2';
-    if(in_array('numeric', $rules)) return 'ri-number-2';
-    if(in_array('readonly', $rules)) return '';
+	$rules = preg_split('/\|(?![^\[]*\])/', $item['rules']);
+	if(in_array('integer', $rules)) return 'ri-number-2';
+	if(in_array('numeric', $rules)) return 'ri-number-2';
+	if(in_array('readonly', $rules)) return '';
 
-    return get_icon_classname_by_type($item['type']);
+	return get_icon_classname_by_type($item['type']);
 }
 
 function get_admin_form_attributes($item, $form_type): array
 {
-    $ci =& get_instance();
+	$ci =& get_instance();
 
-    // initiate
+	// initiate
 	if(!is_empty($item['attributes'], 'placeholder')){
 		$placeholder = strpos($item['attributes']['placeholder'], 'filter.') !== false?$item['attributes']['placeholder']:'placeholder.'.$item['attributes']['placeholder'];
 	}else{
 		$placeholder = $item['label'];
 	}
-    $attributes = [
-        'placeholder' => $ci->lang->line($placeholder),
-        'aria-label' => $ci->lang->line($item['label']),
-        'aria-describedby' => $item['field'].'-ico',
-    ];
-    $classList = ['form-control', 'dt-'.$item['field'], 'form-input_'.$item['category']];
+	$attributes = [
+		'placeholder' => $ci->lang->line($placeholder),
+		'aria-label' => $ci->lang->line($item['label']),
+		'aria-describedby' => $item['field'].'-ico',
+	];
+	$classList = ['form-control', 'dt-'.$item['field'], 'form-input_'.$item['category']];
 
-    // form_attributes
-    if($item['form_attributes']['with_btn']) $classList[] = 'form-input_with-button';
+	// form_attributes
+	if($item['form_attributes']['with_btn']) $classList[] = 'form-input_with-button';
 
 	foreach ($item['form_attributes'] as $key=>$val) {
 		if($val === false) $val = 0;
 		$key = 'data-'.str_replace('_', '-', $key);
-        if(is_array($val)) $val = json_encode($val, JSON_UNESCAPED_UNICODE);
-        $val = str_replace('"', '\'', $val);
-        $item['attributes'][$key] = $val;
-    }
+		if(is_array($val)) $val = json_encode($val, JSON_UNESCAPED_UNICODE);
+		$val = str_replace('"', '\'', $val);
+		$item['attributes'][$key] = $val;
+	}
 
-    // type & subtype
-    $classList[] = 'form-input_'.$item['type'].'-'.$item['subtype'];
+	// type & subtype
+	$classList[] = 'form-input_'.$item['type'].'-'.$item['subtype'];
 
-    // add attr by subtype and type
-    if($item['type'] === 'text') {
-        switch ($item['subtype']) {
-            case 'readonly' :
-                $attributes['readonly'] = 'readonly';
-                break;
-        }
-    }
+	// add attr by subtype and type
+	if($item['type'] === 'text') {
+		switch ($item['subtype']) {
+			case 'readonly' :
+				$attributes['readonly'] = 'readonly';
+				break;
+		}
+	}
 
-    if($item['type'] === 'select') {
+	if($item['type'] === 'select') {
 		$classList[] = 'form-select';
-        switch ($item['subtype']) {
-            case 'selectpicker' :
-                $classList = array_diff(array_merge($classList, [
+		switch ($item['subtype']) {
+			case 'selectpicker' :
+				$classList = array_diff(array_merge($classList, [
 					'w-100', 'selectpicker',
-                ]), ['form-control']);
-                break;
-            case 'select2' :
-                $classList = array_diff(array_merge($classList, [
-                    'select2',
-                ]), ['form-control']);
-                break;
-            case 'select2-repeater' :
-                $classList = array_diff(array_merge($classList, [
-                    'select2-repeater',
-                ]), ['form-control']);
-                break;
-        }
-    }
+				]), ['form-control']);
+				break;
+			case 'select2' :
+				$classList = array_diff(array_merge($classList, [
+					'select2',
+				]), ['form-control']);
+				break;
+			case 'select2-repeater' :
+				$classList = array_diff(array_merge($classList, [
+					'select2-repeater',
+				]), ['form-control']);
+				break;
+		}
+	}
 
-    if($item['type'] === 'textarea') {
-        switch ($item['subtype']) {
-            case 'autosize' :
-                $classList[] = 'textarea-autosize';
-                $attributes['rows'] = 2;
-                break;
-            default :
-                $classList[] = 'h-px-100';
-                $attributes['rows'] = $form_type === 'page'?5:3;
-                break;
-        }
-    }
+	if($item['type'] === 'textarea') {
+		switch ($item['subtype']) {
+			case 'autosize' :
+				$classList[] = 'textarea-autosize';
+				$attributes['rows'] = 2;
+				break;
+			default :
+				$classList[] = 'h-px-100';
+				$attributes['rows'] = $form_type === 'page'?5:3;
+				break;
+		}
+	}
 
-    if($item['type'] === 'tel') {
-        switch ($item['subtype']) {
-            case 'cleave-hp' :
+	if($item['type'] === 'tel') {
+		switch ($item['subtype']) {
+			case 'cleave-hp' :
 				$classList[] = 'cleave cleave-hp';
-                $attributes['placeholder'] = '010-1234-5678';
-                break;
+				$attributes['placeholder'] = '010-1234-5678';
+				break;
 			case 'cleave-fulldate' :
 				$classList[] = 'cleave cleave-fulldate';
 				$attributes['placeholder'] = 'YYYY-MM-DD';
 				break;
-            default :
-                break;
-        }
-    }
+			default :
+				break;
+		}
+	}
 
-    if($item['type'] === 'date') {
-        switch ($item['subtype']) {
-            case 'flatpickr' :
+	if($item['type'] === 'date') {
+		switch ($item['subtype']) {
+			case 'flatpickr' :
 				$classList[] = 'flatpickr flatpickr-date';
 				$attributes['placeholder'] = 'YYYY-MM-DD';
 				break;
-            case 'cleave-year' :
+			case 'cleave-year' :
 				$classList[] = 'cleave cleave-year';
-                $attributes['placeholder'] = 'YYYY';
-                break;
-            case 'cleave-month' :
+				$attributes['placeholder'] = 'YYYY';
+				break;
+			case 'cleave-month' :
 				$classList[] = 'cleave cleave-month';
-                $attributes['placeholder'] = 'MM';
-                break;
-            case 'cleave-date' :
+				$attributes['placeholder'] = 'MM';
+				break;
+			case 'cleave-date' :
 				$classList[] = 'cleave cleave-date';
-                $attributes['placeholder'] = 'DD';
-                break;
-            default :
-                break;
-        }
-    }
+				$attributes['placeholder'] = 'DD';
+				break;
+			default :
+				break;
+		}
+	}
 
-    if($item['type'] === 'time') {
-        switch ($item['subtype']) {
+	if($item['type'] === 'time') {
+		switch ($item['subtype']) {
 			case 'flatpickr' :
 				$classList[] = 'flatpickr flatpickr-time';
 				break;
-            case 'cleave-time' :
+			case 'cleave-time' :
 				$classList[] = 'cleave cleave-time';
-                $attributes['placeholder'] = 'hh:mm';
-                break;
-            case 'cleave-hour' :
+				$attributes['placeholder'] = 'hh:mm';
+				break;
+			case 'cleave-hour' :
 				$classList[] = 'cleave cleave-hour';
-                $attributes['placeholder'] = 'hh';
-                break;
-            case 'cleave-minute' :
+				$attributes['placeholder'] = 'hh';
+				break;
+			case 'cleave-minute' :
 				$classList[] = 'cleave cleave-minute';
-                $attributes['placeholder'] = 'mm';
-                break;
-            default :
-                break;
-        }
-    }
+				$attributes['placeholder'] = 'mm';
+				break;
+			default :
+				break;
+		}
+	}
 
-    if($item['type'] === 'file') {
-        switch ($item['subtype']) {
-            case 'basic' :
-            case 'single' :
-            case 'thumbnail' :
-                break;
-            case 'multiple' :
-                $attributes['multiple'] = 'multiple';
-                break;
-            case 'readonly' :
-                $classList[] = 'd-none';
-                break;
-        }
-    }
+	if($item['type'] === 'file') {
+		switch ($item['subtype']) {
+			case 'basic' :
+			case 'single' :
+			case 'thumbnail' :
+				break;
+			case 'multiple' :
+				$attributes['multiple'] = 'multiple';
+				break;
+			case 'readonly' :
+				$classList[] = 'd-none';
+				break;
+		}
+	}
 
 	// group category
 	if($item['category'] === 'group' && $item['group_attributes']['group_repeater']) {
@@ -427,77 +427,77 @@ function get_admin_form_attributes($item, $form_type): array
 		}
 	}
 
-    // class
-    $attributes['class'] = implode(' ', $classList);
+	// class
+	$attributes['class'] = implode(' ', $classList);
 
-    //attributes
-    return array_merge($item['attributes'], $attributes);
+	//attributes
+	return array_merge($item['attributes'], $attributes);
 }
 
 function restructure_admin_form_data($form_data, $form_type = 'page'): array
 {
-    // attributes 처리
-    $form_data = array_map(function($item) use($form_type) {
-        unset($item['list_attributes']);
-        $item['attributes'] = get_admin_form_attributes($item, $form_type);
-        return $item;
-    }, $form_data);
+	// attributes 처리
+	$form_data = array_map(function($item) use($form_type) {
+		unset($item['list_attributes']);
+		$item['attributes'] = get_admin_form_attributes($item, $form_type);
+		return $item;
+	}, $form_data);
 
-    // group 처리
-    $groups = array_unique(array_filter(array_column($form_data, 'group')));
-    if(count($groups) > 0) {
-        $diff = 0;
-        foreach ($groups as $idx => $group_name) {
-            if(!$group_name) continue;
-            $attr = $form_data[$idx]['group_attributes'];
+	// group 처리
+	$groups = array_unique(array_filter(array_column($form_data, 'group')));
+	if(count($groups) > 0) {
+		$diff = 0;
+		foreach ($groups as $idx => $group_name) {
+			if(!$group_name) continue;
+			$attr = $form_data[$idx]['group_attributes'];
 
-            // idx 모두 가져오기
-            $indexes = array_keys(array_filter(array_column($form_data, 'group')), $group_name);
+			// idx 모두 가져오기
+			$indexes = array_keys(array_filter(array_column($form_data, 'group')), $group_name);
 
-            // group이 2개 이상일 때 앞선 배열처리로 인해 list type의 value가 사라지므로,
-            // array_column 시 이미 group 처리된 배열은 제외되서 나타남.
-            // 이를 보정하기 위해 diff 를 각 key 값에 더해줌.
-            $indexes = array_map(function($item) use($diff) {
-                return $item+$diff;
-            }, $indexes);
-            $intersects = array_values(array_intersect_key($form_data, array_flip($indexes)));
+			// group이 2개 이상일 때 앞선 배열처리로 인해 list type의 value가 사라지므로,
+			// array_column 시 이미 group 처리된 배열은 제외되서 나타남.
+			// 이를 보정하기 위해 diff 를 각 key 값에 더해줌.
+			$indexes = array_map(function($item) use($diff) {
+				return $item+$diff;
+			}, $indexes);
+			$intersects = array_values(array_intersect_key($form_data, array_flip($indexes)));
 
-            $data = [];
-            foreach ($intersects as $i=>$item) {
-                if(array_key_exists('group_attributes', $item) && !is_empty($item['group_attributes'], 'key')){
-                    $key = $item['group_attributes']['key'];
-                }else{
-                    $key = $group_name.($i+1);
-                }
-                $data[$key] = $item;
-            }
+			$data = [];
+			foreach ($intersects as $i=>$item) {
+				if(array_key_exists('group_attributes', $item) && !is_empty($item['group_attributes'], 'key')){
+					$key = $item['group_attributes']['key'];
+				}else{
+					$key = $group_name.($i+1);
+				}
+				$data[$key] = $item;
+			}
 
-            $form_data = array_diff_key($form_data, array_flip($indexes));
-            $form_data[$idx] = [
-                'category' => 'group',
-                'group' => $group_name,
-                'label' => $attr['label'],
-                'form_text' => $attr['form_text'],
-                'type' => $attr['type'] ?? 'basic',
-                'attr' => $attr,
-                'data' => $data,
-            ];
-            $form_data[$idx]['view'] = $form_data[$idx]['type'];
-            ksort($form_data);
-            $diff += count($indexes)-1;
-        }
-    }
+			$form_data = array_diff_key($form_data, array_flip($indexes));
+			$form_data[$idx] = [
+				'category' => 'group',
+				'group' => $group_name,
+				'label' => $attr['label'],
+				'form_text' => $attr['form_text'],
+				'type' => $attr['type'] ?? 'basic',
+				'attr' => $attr,
+				'data' => $data,
+			];
+			$form_data[$idx]['view'] = $form_data[$idx]['type'];
+			ksort($form_data);
+			$diff += count($indexes)-1;
+		}
+	}
 
-    return array_values($form_data);
+	return array_values($form_data);
 }
 
 function set_admin_form_value($field, $default = '', $view = null, $html_escape = TRUE)
 {
-    if($view) {
-        return array_key_exists($field, $view)?$view[$field]:'';
-    }else{
-        return set_value($field, $default, $html_escape);
-    }
+	if($view) {
+		return array_key_exists($field, $view)?$view[$field]:'';
+	}else{
+		return set_value($field, $default, $html_escape);
+	}
 }
 
 function get_help_block($data)

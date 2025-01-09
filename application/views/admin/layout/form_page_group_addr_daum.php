@@ -2,7 +2,7 @@
 <div class="row mb-4 form-validation-unit">
 	<?=form_label(lang($item['label']), '', ['class' => 'col-sm-2 col-form-label'])?>
 	<div class="col-sm-10">
-		<div class="input-group input-group-merge mb-2">
+		<div class="input-group input-group-merge mb-4">
 			<span id="<?=$zipcode['field']?>-ico" class="input-group-text"><i class="ri-building-line ri-18px"></i></span>
 			<div class="form-floating form-floating-outline">
 				<?php
@@ -21,7 +21,7 @@
 				'onclick' => "findAddress(document.getElementById('daumAddrWrap_{$zipcode['group']}'))",
 			])?>
 		</div>
-		<div class="input-group input-group-merge mb-2">
+		<div class="input-group input-group-merge mb-4">
 			<div class="form-floating form-floating-outline">
 				<?php
 					echo form_input([
@@ -32,7 +32,7 @@
 				?>
 			</div>
 		</div>
-		<div class="input-group input-group-merge mb-2">
+		<div class="input-group input-group-merge">
 			<div class="form-floating form-floating-outline">
 				<?php
 					echo form_input([
