@@ -418,11 +418,11 @@ function checkInputSubmittable(node, form) {
 			if(node.checked === true) return true;
 		}else if(node.getAttribute('required') === 'required') {
 			return true;
-		}else if(node.hasAttribute('required-mod')) {
-			const requireMod = node.getAttribute('required-mod').split('|');
-			if(requireMod.includes(form['_mode'].value)) return true;
 		}else if(isAttributeValueTrue(node, 'data-input-changed')) {
 			return true;
+		}else if(node.hasAttribute('required-mod')) {
+			const requireMod = node.getAttribute('required-mod').split('|');
+			if (requireMod.includes(form['_mode'].value)) return true;
 		}
 	}
 	return false;
