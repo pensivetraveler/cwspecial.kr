@@ -128,9 +128,10 @@ $config['form_administrators_config'] = [
 		'attributes' => [
 			'autocapitalize' => 'none',
 			'autocomplete' => 'off',
-			'placeholder' => '아이디를 입력하세요',
+			'placeholder' => 'Enter The User ID',
 		],
 		'form_attributes' => [
+			'detect_changed' => true,
 			'editable' => false,
 			'with_btn' => true,
 			'btn_type' => 'dup_check',
@@ -151,7 +152,10 @@ $config['form_administrators_config'] = [
 		'form_text' => '영문, 숫자를 포함한 4글자 이상 15글자 이하로 입력해주세요.',
 		'attributes' => [
 			'autocomplete' => 'new-password',
-			'placeholder' => '&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;',
+			'placeholder' => 'Password Dots',
+		],
+		'form_attributes' => [
+			'detect_changed' => true,
 		],
 		'group' => 'user_password',
 		'group_attributes' => [
@@ -176,7 +180,10 @@ $config['form_administrators_config'] = [
 		'form_text' => '비밀번호를 한 번 더 입력해주세요.',
 		'attributes' => [
 			'autocomplete' => 'new-password',
-			'placeholder' => '&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;',
+			'placeholder' => 'Password Dots',
+		],
+		'form_attributes' => [
+			'detect_changed' => true,
 		],
 		'group' => 'user_password',
 		'group_attributes' => [
@@ -318,7 +325,10 @@ $config['form_students_config'] = [
 		'form_text' => '영문, 숫자를 포함한 4글자 이상 15글자 이하로 입력해주세요.',
 		'attributes' => [
 			'autocomplete' => 'new-password',
-			'placeholder' => '&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;',
+			'placeholder' => 'Password Dots',
+		],
+		'form_attributes' => [
+			'detect_changed' => true,
 		],
 		'group' => 'user_password',
 		'group_attributes' => [
@@ -343,7 +353,10 @@ $config['form_students_config'] = [
 		'form_text' => '비밀번호를 한 번 더 입력해주세요.',
 		'attributes' => [
 			'autocomplete' => 'new-password',
-			'placeholder' => '&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;',
+			'placeholder' => 'Password Dots',
+		],
+		'form_attributes' => [
+			'detect_changed' => true,
 		],
 		'group' => 'user_password',
 		'group_attributes' => [

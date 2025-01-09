@@ -28,7 +28,7 @@ $bodyAttrs = implode(' ', array_map(
 	data-template="vertical-menu-template-starter"
 	data-style="light">
 	<head>
-		<title><?=isset($data['title'])?$data['title']:APP_NAME;?></title>
+		<title><?=isset($data['title'])?$data['title']:APP_NAME_EN;?></title>
 		<meta charset="utf-8">
 		<meta name="author" content="" />
 
