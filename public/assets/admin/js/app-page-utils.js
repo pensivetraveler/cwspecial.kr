@@ -514,7 +514,6 @@ function reformatFormData(form, data, regexp = {}, side = false) {
 								...getOptions(form, item, matches),
 								...(message && { message: message })
 							};
-							console.log(item.validators)
 						}
 					}
 				}else{

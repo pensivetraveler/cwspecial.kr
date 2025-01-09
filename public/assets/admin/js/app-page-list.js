@@ -352,7 +352,6 @@ $(function () {
 
 					req.filters = filters;
 				}
-				console.log(req.filters)
 
 				return req;
 			},
@@ -549,7 +548,7 @@ $(function () {
 			},
 			{
 				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">'+getLocale('Upload Excel', common.LOCALE)+'</span>',
-				className: 'add-new btn btn-primary waves-effect waves-light',
+				className: 'add-new btn btn-primary waves-effect waves-light me-4',
 				action: function () {
 					if(!common.SIDE_FORM && common.ADD_VIEW_URI.length) {
 						location.href = common.ADD_VIEW_URI;
@@ -570,38 +569,38 @@ $(function () {
 				}
 			}
 		],
-		// // For responsive popup
-		// responsive: {
-		//     details: {
-		//         display: $.fn.dataTable.Responsive.display.modal({
-		//             header: function (row) {
-		//                 return 'Details of ' + common.TITLE;
-		//             }
-		//         }),
-		//         type: 'column',
-		//         renderer: function (api, rowIdx, columns) {
-		//             var data = $.map(columns, function (col, i) {
-		//                 return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-		//                     ? '<tr data-dt-row="' +
-		//                     col.rowIndex +
-		//                     '" data-dt-column="' +
-		//                     col.columnIndex +
-		//                     '">' +
-		//                     '<td>' +
-		//                     col.title +
-		//                     ':' +
-		//                     '</td> ' +
-		//                     '<td>' +
-		//                     col.data +
-		//                     '</td>' +
-		//                     '</tr>'
-		//                     : '';
-		//             }).join('');
-		//
-		//             return data ? $('<table class="table"/><tbody />').append(data) : false;
-		//         }
-		//     }
-		// },
+		// For responsive popup
+		responsive: {
+			details: {
+				display: $.fn.dataTable.Responsive.display.modal({
+					header: function (row) {
+						return 'Details of ' + common.TITLE;
+					}
+				}),
+				type: 'column',
+				renderer: function (api, rowIdx, columns) {
+					var data = $.map(columns, function (col, i) {
+						return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
+							? '<tr data-dt-row="' +
+							col.rowIndex +
+							'" data-dt-column="' +
+							col.columnIndex +
+							'">' +
+							'<td>' +
+							col.title +
+							':' +
+							'</td> ' +
+							'<td>' +
+							col.data +
+							'</td>' +
+							'</tr>'
+							: '';
+					}).join('');
+
+					return data ? $('<table class="table"/><tbody />').append(data) : false;
+				}
+			}
+		},
 		preDrawCallback: function(settings) {
 			// console.log('preDrawCallback', settings)
 			// $('<div class="loading">Loading</div>').appendTo('body');
