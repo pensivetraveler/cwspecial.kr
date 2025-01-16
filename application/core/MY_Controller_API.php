@@ -244,11 +244,7 @@ class MY_Controller_API extends RestController
     {
         if($key) $this->checkIdentifierExist($key);
 
-		$dto = $this->input->post();
-		foreach ($this->defaultList as $field=>$default) {
-			$dto[$field] = $default;
-		}
-        $dto = $this->validate($dto, $model);
+        $dto = $this->validate($this->input->post(), $model);
 
         $this->checkUniqueExist($dto, $model, is_empty($key));
 
@@ -443,6 +439,11 @@ class MY_Controller_API extends RestController
 
 		if($this->input->method('post')) {
 			if(!$model) $model = $this->Model;
+
+			foreach ($this->defaultList as $field=>$default) {
+				if(!isset($data[$field])) $data[$field] = $default;
+			}
+
 			return $this->validateManually(
 				$data,
 				$model,
@@ -871,7 +872,7 @@ class MY_Controller_API extends RestController
 			$isIncludeDeleted = false;
 			if(array_search($key, array_column($this->formConfig, 'field')) !== false) {
 				$idx = array_search($key, array_column($this->formConfig, 'field'));
-				if(!is_empty($this->formConfig[$idx]['form_attributes'], 'check_delete')) {
+				if(array_key_exists('form_attributes', $this->formConfig[$idx]) && !is_empty($this->formConfig[$idx]['form_attributes'], 'check_delete')) {
 					$isIncludeDeleted = $this->formConfig[$idx]['form_attributes']['check_delete'];
 				}
 			}

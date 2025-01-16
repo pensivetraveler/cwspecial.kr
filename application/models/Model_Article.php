@@ -9,8 +9,8 @@ class Model_Article extends Model_Common
 	public string  $identifier = 'article_id';
 	public array   $primaryKeyList = ['article_id','board_id'];
 	public array   $uniqueKeyList = [];
-	public array   $notNullList = ['subject','content','del_yn'];
-	public array   $nullList = [];
+	public array   $notNullList = ['article_id','board_id','subject','content','del_yn'];
+	public array   $nullList = ['thumbnail'];
 	public array   $strList = ['subject','content','del_yn'];
 	public array   $intList = ['article_id','board_id'];
 	public array   $fileList = ['thumbnail'];

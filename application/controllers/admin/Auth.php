@@ -21,7 +21,7 @@ class Auth extends Common
 
 		$this->formColumns = $this->setFormColumns('login');
 		$this->addJsVars([
-			'API_URI' => '/adm/auth/login',
+			'API_URI' => '/api/auth/login',
 			'IDENTIFIER' => $this->setIdentifier(),
 			'FORM_DATA' => $this->setFormData(),
 			'FORM_REGEXP' => $this->config->item('regexp'),

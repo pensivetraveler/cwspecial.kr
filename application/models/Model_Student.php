@@ -9,7 +9,7 @@ class Model_Student extends Model_Common
 	public string  $identifier = 'student_id';
 	public array   $primaryKeyList = ['student_id','user_id'];
 	public array   $uniqueKeyList = ['code'];
-	public array   $notNullList = ['code','grade',];
+	public array   $notNullList = ['student_id','code','grade',];
 	public array   $nullList = ['disabilities_yn','aac_yn'];
 	public array   $strList = ['code','disabilities_yn','aac_yn'];
 	public array   $intList = ['grade','student_id','user_id',];

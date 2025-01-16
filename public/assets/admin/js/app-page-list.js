@@ -477,98 +477,7 @@ $(function () {
 			info: '검색결과 총 _TOTAL_ 개 데이터 중 _START_ ~ _END_ 표시'
 		},
 		// Buttons with Dropdown
-		buttons: [
-			{
-				extend: 'collection',
-				className: 'btn btn-outline-secondary dropdown-toggle me-4 waves-effect waves-light',
-				text: `<i class="ri-external-link-line me-sm-1"></i> <span class="d-none d-sm-inline-block">${getLocale('Export', common.LOCALE)}</span>`,
-				buttons: [
-					{
-						extend: 'print',
-						text: `<i class="ri-printer-line me-1" ></i>${getLocale('Print', common.LOCALE)}`,
-						className: 'dropdown-item',
-						exportOptions: {
-							columns: [3, 4, 5, 6, 7],
-							// prevent avatar to be display
-							format: {
-								body: function (inner, coldex, rowdex) {
-									if (inner.length <= 0) return inner;
-									var el = $.parseHTML(inner);
-									var result = '';
-									$.each(el, function (index, item) {
-										if (item.classList !== undefined && item.classList.contains('user-name')) {
-											result = result + item.lastChild.firstChild.textContent;
-										} else if (item.innerText === undefined) {
-											result = result + item.textContent;
-										} else result = result + item.innerText;
-									});
-									return result;
-								}
-							}
-						},
-						customize: function (win) {
-							//customize print view for dark
-							$(win.document.body)
-								.css('color', config.colors.headingColor)
-								.css('border-color', config.colors.borderColor)
-								.css('background-color', config.colors.bodyBg);
-							$(win.document.body)
-								.find('table')
-								.addClass('compact')
-								.css('color', 'inherit')
-								.css('border-color', 'inherit')
-								.css('background-color', 'inherit');
-						}
-					},
-					{
-						extend: 'excel',
-						text: `<i class="ri-file-excel-line me-1"></i>${getLocale('Excel', common.LOCALE)}`,
-						className: 'dropdown-item',
-						exportOptions: {
-							columns: [3, 4, 5, 6, 7],
-							// prevent avatar to be display
-							format: {
-								body: function (inner, coldex, rowdex) {
-									if (inner.length <= 0) return inner;
-									var el = $.parseHTML(inner);
-									var result = '';
-									$.each(el, function (index, item) {
-										if (item.classList !== undefined && item.classList.contains('user-name')) {
-											result = result + item.lastChild.firstChild.textContent;
-										} else if (item.innerText === undefined) {
-											result = result + item.textContent;
-										} else result = result + item.innerText;
-									});
-									return result;
-								}
-							}
-						}
-					},
-				]
-			},
-			{
-				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">'+getLocale('Upload Excel', common.LOCALE)+'</span>',
-				className: 'add-new btn btn-primary waves-effect waves-light me-4',
-				action: function () {
-					if(!common.SIDE_FORM && common.ADD_VIEW_URI.length) {
-						location.href = common.ADD_VIEW_URI;
-					}else{
-						readyFrmInputs(formRecord, 'add', common.FORM_DATA);
-					}
-				}
-			},
-			{
-				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">'+getLocale('Add New Record', common.LOCALE)+'</span>',
-				className: 'add-new btn btn-primary waves-effect waves-light',
-				action: function () {
-					if(!common.SIDE_FORM && common.ADD_VIEW_URI.length) {
-						location.href = common.ADD_VIEW_URI;
-					}else{
-						readyFrmInputs(formRecord, 'add', common.FORM_DATA);
-					}
-				}
-			}
-		],
+		buttons: getListButtons(),
 		// For responsive popup
 		responsive: {
 			details: {
@@ -1035,4 +944,111 @@ function getColumnOnclick(data, full, column) {
 		}
 	}
 	return onClick;
+}
+
+function getListButtons() {
+	const data = [
+		{
+			extend: 'collection',
+			className: 'btn btn-outline-secondary dropdown-toggle me-4 waves-effect waves-light',
+			text: `<i class="ri-external-link-line me-sm-1"></i> <span class="d-none d-sm-inline-block">${getLocale('Export', common.LOCALE)}</span>`,
+			buttons: [
+				{
+					extend: 'print',
+					text: `<i class="ri-printer-line me-1" ></i>${getLocale('Print', common.LOCALE)}`,
+					className: 'dropdown-item',
+					exportOptions: {
+						columns: [3, 4, 5, 6, 7],
+						// prevent avatar to be display
+						format: {
+							body: function (inner, coldex, rowdex) {
+								if (inner.length <= 0) return inner;
+								var el = $.parseHTML(inner);
+								var result = '';
+								$.each(el, function (index, item) {
+									if (item.classList !== undefined && item.classList.contains('user-name')) {
+										result = result + item.lastChild.firstChild.textContent;
+									} else if (item.innerText === undefined) {
+										result = result + item.textContent;
+									} else result = result + item.innerText;
+								});
+								return result;
+							}
+						}
+					},
+					customize: function (win) {
+						//customize print view for dark
+						$(win.document.body)
+							.css('color', config.colors.headingColor)
+							.css('border-color', config.colors.borderColor)
+							.css('background-color', config.colors.bodyBg);
+						$(win.document.body)
+							.find('table')
+							.addClass('compact')
+							.css('color', 'inherit')
+							.css('border-color', 'inherit')
+							.css('background-color', 'inherit');
+					}
+				},
+				{
+					extend: 'excel',
+					text: `<i class="ri-file-excel-line me-1"></i>${getLocale('Excel', common.LOCALE)}`,
+					className: 'dropdown-item',
+					exportOptions: {
+						columns: [3, 4, 5, 6, 7],
+						// prevent avatar to be display
+						format: {
+							body: function (inner, coldex, rowdex) {
+								if (inner.length <= 0) return inner;
+								var el = $.parseHTML(inner);
+								var result = '';
+								$.each(el, function (index, item) {
+									if (item.classList !== undefined && item.classList.contains('user-name')) {
+										result = result + item.lastChild.firstChild.textContent;
+									} else if (item.innerText === undefined) {
+										result = result + item.textContent;
+									} else result = result + item.innerText;
+								});
+								return result;
+							}
+						}
+					}
+				},
+			]
+		},
+	];
+
+	if(common.LIST_BUTTONS.hasOwnProperty('excel') && common.LIST_BUTTONS['excel']) {
+		data.push(
+			{
+				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">' + getLocale('Upload Excel', common.LOCALE) + '</span>',
+				className: 'add-new btn btn-primary waves-effect waves-light me-4',
+				action: function () {
+					if (!common.SIDE_FORM && common.ADD_VIEW_URI.length) {
+						location.href = common.ADD_VIEW_URI;
+					} else {
+						readyFrmInputs(formRecord, 'add', common.FORM_DATA);
+					}
+				}
+			}
+		);
+	}
+
+	if(common.LIST_BUTTONS.hasOwnProperty('add') && common.LIST_BUTTONS['add']) {
+		data.push(
+			{
+				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">'+getLocale('Add New Record', common.LOCALE)+'</span>',
+				className: 'add-new btn btn-primary waves-effect waves-light',
+				action: function () {
+					if(!common.SIDE_FORM && common.ADD_VIEW_URI.length) {
+						location.href = common.ADD_VIEW_URI;
+					}else{
+						readyFrmInputs(formRecord, 'add', common.FORM_DATA);
+					}
+				}
+			}
+		);
+	}
+
+	return data;
 }

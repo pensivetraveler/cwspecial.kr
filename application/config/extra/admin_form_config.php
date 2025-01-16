@@ -74,7 +74,7 @@ $config['form_login_config'] = [
 		'attributes' => [
 			'autocapitalize' => 'none',
 			'autocomplete' => 'off',
-			'placeholder' => '아이디를 입력하세요',
+			'placeholder' => 'Enter The User ID',
 		],
 	],
 	[
@@ -86,7 +86,7 @@ $config['form_login_config'] = [
 		'type' => 'password',
 		'attributes' => [
 			'autocomplete' => 'new-password',
-			'placeholder' => '&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;',
+			'placeholder' => 'Password Dots',
 		],
 	],
 	[
@@ -516,7 +516,7 @@ $config['form_works_config'] = [
 		'errors' => [],
 		'category' => 'basic',
 		'type' => 'hidden',
-		'default' => 9,
+		'default' => 3,
 		'list' => false,
 	],
 	[
@@ -746,7 +746,7 @@ $config['form_inquiries_config'] = [
 		'errors' => [],
 		'category' => 'basic',
 		'type' => 'hidden',
-		'default' => 9,
+		'default' => 2,
 		'list' => false,
 	],
 	[

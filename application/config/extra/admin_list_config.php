@@ -89,10 +89,6 @@ $config['list_notices_config'] = [
 		'field' => 'recent_dt',
 		'label' => 'lang:common.recent_dt',
 	],
-	[
-		'field' => 'view_count',
-		'label' => 'lang:article.view_count',
-	],
 ];
 
 $config['list_inquiries_config'] = [

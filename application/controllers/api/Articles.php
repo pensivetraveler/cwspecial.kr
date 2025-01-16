@@ -10,6 +10,8 @@ class Articles extends Common
 
 		$this->load->model('Model_Article', 'Model');
 
+		$this->setProperties($this->Model);
+
 		$this->defaultList = [
 			'board_id' => 1,
 			'del_yn' => 'N',

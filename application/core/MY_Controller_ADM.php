@@ -320,6 +320,7 @@ class MY_Controller_ADM extends MY_Controller_WEB
 				'LIST_COLUMNS' => $this->setListColumns(),
 				'LIST_PLUGIN' => $this->pageConfig['listProperties']['plugin'],
 				'LIST_FILTERS' => $this->setListFilters(),
+				'LIST_BUTTONS' => $this->pageConfig['listProperties']['buttons']??['add' => true],
 			]);
 		}
 

@@ -60,9 +60,10 @@
 								</span>
 							</div>
 						</div>
+						<!--
 						<div class="col-sm-12 form-validation-unit">
 							<div class="mb-5 d-flex justify-content-between mt-5">
-								<div class="form-check mt-2">
+								<div class="form-check mt-2">q
 									<?php
 										echo form_checkbox([
 											'name' => $formData[2]['field'],
@@ -83,6 +84,7 @@
 								</div>
 							</div>
 						</div>
+						-->
 						<div>
 							<button class="btn btn-primary d-grid w-100" type="submit">로그인</button>
 						</div>
