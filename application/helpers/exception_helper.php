@@ -79,10 +79,15 @@ if ( ! function_exists('get_path'))
 {
     function get_path(): string
     {
-        $whole_uri = _HTTP.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-        $path_info = explode('/', str_replace(function_exists('base_url')?base_url():BASE_URL, '', $whole_uri));
-        $arr = array_values(array_filter($path_info));
-        return count($arr) > 0 ? $arr[0] : '';
+		include APPPATH.'config/extra/custom_routes.php';
+
+		$default_platform = array_key_exists('default_platform', $route)?$route['default_platform']:'';
+		$folder_list = $route['except_folders'];
+
+		$whole_uri = _HTTP.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+		$path_info = explode('/', str_replace(function_exists('base_url')?base_url():BASE_URL, '', $whole_uri));
+		$arr = array_values(array_filter($path_info));
+		return count($arr) > 0 ? in_array($arr[0], $folder_list)?$arr[0]:$default_platform : '';
     }
 }
 
