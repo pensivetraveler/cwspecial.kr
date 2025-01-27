@@ -7,7 +7,7 @@
 				<div class="app-brand justify-content-center mt-5">
 					<a href="/admin" class="app-brand-link gap-2">
 						<span class="app-brand-logo demo">
-							<!--<img src="<?=base_url('/public/assets/admin/img/eduprime_logo.png')?>" alt="">-->
+							<!--<img src="<?=base_url('/public/assets/builder/img/eduprime_logo.png')?>" alt="">-->
 						</span>
 					</a>
 				</div>
@@ -96,7 +96,7 @@
 			<!-- /Login -->
 			<img
 				alt="mask"
-				src="<?=base_url('/public/assets/admin/img/illustrations/auth-basic-login-mask-light.png')?>"
+				src="<?=base_url('/public/assets/builder/img/illustrations/auth-basic-login-mask-light.png')?>"
 				class="authentication-image d-none d-lg-block"
 				data-app-light-img="illustrations/auth-basic-login-mask-light.png"
 				data-app-dark-img="illustrations/auth-basic-login-mask-dark.png" />

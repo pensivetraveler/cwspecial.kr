@@ -1,5 +1,5 @@
 <div class="card">
-	<div class="card-body b" style="background-image: url(<?=base_url('/public/assets/admin/img/pages/header-light.png')?>);background-repeat: no-repeat;background-size: cover;background-position: center">
+	<div class="card-body b" style="background-image: url(<?=base_url('/public/assets/builder/img/pages/header-light.png')?>);background-repeat: no-repeat;background-size: cover;background-position: center">
 		<div class="hero-text-box text-center pt-6 pb-10">
 			<h3 class="text-primary hero-title fs-2 lh-lg">우리의 작업물을 사용할<br>그 누군가를 상상하며</h3>
 			<h2 class="h5 mb-8">창원대학교 특수교육과 AAC 제작팀</h2>

@@ -21,11 +21,11 @@ $bodyAttrs = implode(' ', array_map(
 ?>
 <html
 	lang="ko"
-	class="light-style layout-navbar-fixed layout-menu-fixed layout-compact"
+	class="light-style layout-navbar-fixed layout-wide"
 	dir="ltr"
 	data-theme="theme-default"
-	data-assets-path="/public/assets/admin/"
-	data-template="vertical-menu-template-starter"
+	data-assets-path="/public/assets/builder/"
+	data-template="front-pages"
 	data-style="light">
 	<head>
 		<title><?=isset($data['title'])?$data['title']:APP_NAME_EN;?></title>
@@ -43,65 +43,69 @@ $bodyAttrs = implode(' ', array_map(
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 		<meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
-		<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url('public/assets/admin/img/favicon/favicon.ico');?>">
+		<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url('public/assets/builder/img/favicon/favicon.ico');?>">
 
 		<!-- Fonts -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/css/font.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/base/css/font.css');?>" />
 
 		<!-- Icons. Uncomment required icon fonts -->
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/fonts/remixicon/remixicon.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/fonts/flag-icons.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/fonts/remixicon/remixicon.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/fonts/flag-icons.css');?>" />
 
 		<!-- Menu waves for no-customizer fix -->
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/node-waves/node-waves.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/node-waves/node-waves.css');?>" />
 
 		<!-- Core CSS -->
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/css/rtl/core.css');?>" class="template-customizer-core-css"/>
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/css/rtl/theme-default.css');?>" class="template-customizer-theme-css"/>
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/css/rtl/core.css');?>" class="template-customizer-core-css"/>
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/css/rtl/theme-default.css');?>" class="template-customizer-theme-css"/>
 
 		<!-- Vendors CSS -->
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/typeahead-js/typeahead.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/animate-css/animate.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/sweetalert2/sweetalert2.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/flatpickr/flatpickr.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/select2/select2.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/bootstrap-select/bootstrap-select.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/libs/quill/editor.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/perfect-scrollbar/perfect-scrollbar.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/typeahead-js/typeahead.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/animate-css/animate.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/sweetalert2/sweetalert2.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/flatpickr/flatpickr.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/select2/select2.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/bootstrap-select/bootstrap-select.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/quill/editor.css');?>" />
 
 		<!-- Custom CSS -->
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/css/demo.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/css/custom.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/css/style.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/css/pages/front-page.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/css/demo.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/css/custom.css');?>" />
 
 		<!-- Page CSS -->
 		<!-- Page -->
 		<?php if(isset($addCSS)) add_stylesheet($addCSS); ?>
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/admin/vendor/css/pages/page-misc.css');?>" />
+		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/css/pages/page-misc.css');?>" />
 
 		<!-- Custom -->
-		<script src="<?php echo base_url('public/assets/js/html5.min.js');?>"></script>
-		<script src="<?php echo base_url('public/assets/js/placeholder.min.js');?>"></script>
-		<script src="<?php echo base_url('public/assets/js/utils.js');?>"></script>
-		<script src="<?php echo base_url('public/assets/js/josa.js');?>"></script>
-		<script src="<?php echo base_url('public/assets/js/pattern.js');?>"></script>
-		<script src="<?php echo base_url('public/assets/js/inflector.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/base/js/html5.min.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/base/js/placeholder.min.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/base/js/utils.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/base/js/josa.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/base/js/pattern.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/base/js/inflector.js');?>"></script>
 
 		<!-- Helpers -->
-		<script src="<?php echo base_url('public/assets/admin/vendor/js/helpers.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/builder/vendor/js/helpers.js');?>"></script>
 		<!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
 		<!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
-		<!--script src="<?php echo base_url('public/assets/admin/vendor/js/template-customizer.js');?>"></script -->
+		<!--script src="<?php echo base_url('public/assets/builder/vendor/js/template-customizer.js');?>"></script -->
 		<!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-		<script src="<?php echo base_url('public/assets/admin/js/config.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/builder/js/config.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/builder/js/front-config.js');?>"></script>
+
+		<script src="<?php echo base_url('public/assets/builder/vendor/js/dropdown-hover.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/builder/vendor/js/mega-dropdown.js');?>"></script>
 
 		<?php if(isset($addJS['head'])) add_javascript($addJS['head']); ?>
-		<script src="<?php echo base_url('public/assets/admin/js/app-page-preset.js');?>"></script>
-		<script src="<?php echo base_url('public/assets/admin/js/app-page-utils.js');?>"></script>
-		<script src="<?php echo base_url('public/assets/admin/js/app-page-errors.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/builder/js/app-page-preset.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/builder/js/app-page-utils.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/builder/js/app-page-errors.js');?>"></script>
 
 		<?php if(property_exists($this, 'phptojs')) echo $this->phptojs->getJsVars(); ?>
 

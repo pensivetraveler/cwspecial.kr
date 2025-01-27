@@ -11,19 +11,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<p class="mb-2 mx-2">we couldn't find the page you are looking for</p>
 	<div class="d-flex justify-content-center mt-9">
 		<img
-			src="<?=base_url('public/assets/admin/img/illustrations/misc-error-object.png')?>"
+			src="<?=base_url('public/assets/builder/img/illustrations/misc-error-object.png')?>"
 			alt="misc-error"
 			class="img-fluid misc-object d-none d-lg-inline-block"
 			width="160" />
 		<img
-			src="<?=base_url('public/assets/admin/img/illustrations/misc-bg-light.png')?>"
+			src="<?=base_url('public/assets/builder/img/illustrations/misc-bg-light.png')?>"
 			alt="misc-error"
 			class="misc-bg d-none d-lg-inline-block"
 			data-app-light-img="illustrations/misc-bg-light.png"
 			data-app-dark-img="illustrations/misc-bg-dark.png" />
 		<div class="d-flex flex-column align-items-center">
 			<img
-				src="<?=base_url('public/assets/admin/img/illustrations/misc-error-illustration.png')?>"
+				src="<?=base_url('public/assets/builder/img/illustrations/misc-error-illustration.png')?>"
 				alt="misc-error"
 				class="img-fluid z-1"
 				width="190" />

@@ -78,7 +78,7 @@
 			<li class="nav-item navbar-dropdown dropdown-user dropdown">
 				<a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
 					<div class="avatar avatar-online">
-						<img src="<?php echo base_url('public/assets/admin/img/avatars/1.png');?>" alt class="rounded-circle" />
+						<img src="<?php echo base_url('public/assets/builder/img/avatars/1.png');?>" alt class="rounded-circle" />
 					</div>
 				</a>
 				<ul class="dropdown-menu dropdown-menu-end">

@@ -1,8 +1,8 @@
 <ul class="menu-inner py-1">
 	<?php
-		foreach ($this->config->get('admin_nav_side', $this->config->get('admin_nav_side_sample', []), false) as $menuName=>$menu):
+		foreach ($this->config->get('admin_nav_side', $this->config->get('builder_nav_side_sample', []), false) as $menuName=>$menu):
 			$menu = array_merge(
-					$this->config->get('admin_nav_side_base', []),
+					$this->config->get('builder_nav_side_base', []),
 					$menu
 			);
 

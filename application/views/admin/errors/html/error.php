@@ -11,19 +11,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<p class="mb-2 mx-2">Oops somthing went wrong.</p>
 	<div class="d-flex justify-content-center mt-12">
 		<img
-			src="<?=base_url('public/assets/admin/img/illustrations/misc-error-object.png')?>"
+			src="<?=base_url('public/assets/builder/img/illustrations/misc-error-object.png')?>"
 			alt="misc-server-error"
 			class="img-fluid misc-object d-none d-lg-inline-block"
 			width="160" />
 		<img
-			src="<?=base_url('public/assets/admin/img/illustrations/misc-bg-light.png')?>"
+			src="<?=base_url('public/assets/builder/img/illustrations/misc-bg-light.png')?>"
 			alt="misc-server-error"
 			class="misc-bg d-none d-lg-inline-block z-n1"
 			data-app-light-img="illustrations/misc-bg-light.png"
 			data-app-dark-img="illustrations/misc-bg-dark.png" />
 		<div class="d-flex flex-column align-items-center">
 			<img
-				src="<?=base_url('public/assets/admin/img/illustrations/misc-server-error-illustration.png')?>"
+				src="<?=base_url('public/assets/builder/img/illustrations/misc-server-error-illustration.png')?>"
 				alt="misc-server-error"
 				class="img-fluid z-1"
 				width="230" />
