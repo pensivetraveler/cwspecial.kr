@@ -262,8 +262,8 @@ class listRender {
 		return onClick;
 	}
 }
-const aaa = new listRender();
-const fields = aaa.fields(common.LIST_COLUMNS, common.IDENTIFIER);
+// const aaa = new listRender();
+// const fields = aaa.fields(common.LIST_COLUMNS, common.IDENTIFIER);
 
 
 let fv, offCanvasEl;
