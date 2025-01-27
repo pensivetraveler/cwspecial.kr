@@ -16,7 +16,7 @@ class MY_Controller_WEB extends MY_Controller
     protected array $validateMessages;
     protected array $validateCallback;
 
-    public string $baseViewPath;
+    public string $baseViewPath = '';
     public string $noLoginRedirect;
     public array $data;
     public array $titleList;
@@ -30,9 +30,7 @@ class MY_Controller_WEB extends MY_Controller
         parent::__construct();
 
         $this->load->helper('html');
-
         $this->load->library('pagination');
-        $this->load->helper('html');
 
         $this->form_validation->set_error_delimiters('', '');
 
@@ -40,7 +38,6 @@ class MY_Controller_WEB extends MY_Controller
         $this->validateMessages = [];
         $this->validateCallback = [];
 
-        $this->baseViewPath = 'web/layout/index';
         $this->noLoginRedirect = '';
         $this->data = [];
         $this->titleList = [];
@@ -48,6 +45,9 @@ class MY_Controller_WEB extends MY_Controller
         $this->addJS = ['head' => [], 'tail' => []];
         $this->jsVars = [];
         $this->perPage = 10;
+
+		$this->lang->load('form_validation', $this->config->item('language'));
+		$this->lang->load('custom_form_validation', $this->config->item('language'));
     }
 
     public function index()
@@ -145,6 +145,7 @@ class MY_Controller_WEB extends MY_Controller
         $this->output->set_header('Pragma: no-cache');
         $this->output->set_header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
+		if(!$this->baseViewPath) show_error('Base View Path is not set.');
         if(!$this->config->item('error_occurs')) $this->load->view($this->baseViewPath, $data);
     }
 
