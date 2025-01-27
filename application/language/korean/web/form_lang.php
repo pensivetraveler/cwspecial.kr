@@ -41,6 +41,8 @@ $lang['managers'] = [
 $lang['student'] = [
 	'code' => '학번',
 	'grade' => '학년',
+	'disabilities_yn' => '지체장애학생교육 수강 여부',
+	'aac_yn' => 'AAC 제작 특강 수강 여부',
 ];
 
 $lang['enroll'] = [

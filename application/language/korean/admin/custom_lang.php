@@ -22,3 +22,10 @@ $lang['filter'] = [
 	'search_word' => '검색어',
 	'Enter The Search Word' => '검색어를 입력하세요.',
 ];
+
+$lang['form_text'] = [
+	'Enter The Student Code' => '학번을 입력하세요.',
+	'Please Repeat The Password' => '비밀번호를 한 번 더 입력해주세요.',
+	'Please enter at least 4 characters' => '4글자 이상으로 입력해주세요.',
+	'Please enter 4 to 15 characters, including letters and numbers' => '영문, 숫자를 포함한 4글자 이상 15글자 이하로 입력해주세요.'
+];
