@@ -1,8 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$route['default_controller'] = 'web/common';
-$route['except_folders'] = ['app', 'api', 'adm', 'admin', 'module'];
+$route['default_platform'] = 'web';
+$route['default_controller'] = ($route['default_platform']?$route['default_platform'].'/':'').'common';
+//$route['except_folders'] = ['app', 'api', 'adm', 'admin', 'module'];
+$route['except_folders'] = ['app', 'adm', 'admin', 'module', 'web'];
 
 /*
 |--------------------------------------------------------------------------
@@ -11,7 +13,12 @@ $route['except_folders'] = ['app', 'api', 'adm', 'admin', 'module'];
 | - Home/1 의 경우 Home/index/1 로 매핑.
 |--------------------------------------------------------------------------
 */
+// 구체적인 규칙 먼저
+$route['api/(:any)/(:any)'] = 'api/$1/$2';
+$route['admin/api/(:any)/(:any)'] = 'api/$1/$2';
+// 숫자와 매칭되는 웹 경로
 $route['(?!app|api|adm|admin|module)([^/]+)/(:num)'] = 'web/$1/index/$2';
+// 포괄적인 웹 경로 (마지막에 선언)
 $route['(?!app|api|adm|admin|module).*'] = 'web/$0';
 
 /*

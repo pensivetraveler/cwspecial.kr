@@ -3,65 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['admin_form_config_loaded'] = true;
 
-$config['sample_form_config'] = [
-	[
-		'field' => 'field',
-		'label' => 'lang:field',
-		'form' => true,
-		'rules' => 'trim|required',
-		'errors' => [
-			'required' => 'Enter the field'
-		],
-		'category' => 'basic',
-		'type' => 'text',
-		'subtype' => 'basic',
-		'default' => 'sample',
-		'icon' => 'ri-user-line',
-		'form_text' => '영문, 숫자를 포함한 4글자 이상으로 입력해주세요.',
-		'attributes' => [
-			'autocapitalize' => 'none',
-			'autocomplete' => 'off',
-			'placeholder' => 'Enter The User ID',
-		],
-		'form_attributes' => [
-			'editable' => true,
-			'view_mod' => '',
-			'with_btn' => true,
-			'btn_type' => 'dup_check',
-			'btn_params' => '{"key":"id", "title":"아이디"}',
-			'text_type' => 'eng|num',
-		],
-		'option_attributes' => [
-			'option_type' => 'db',
-			'option_data' => [
-				'table' => 'program',
-				'params' => [],
-			],
-			'render' => [
-				'id' => 'program_id',
-				'text' => 'program_name',
-			],
-		],
-		'group_key' => '',
-		'group_attributes' => [
-			'label' => 'lang:user.password',
-			'form_text' => '',
-			'type' => 'new_password',
-		],
-		'list' => true,
-		'list_attributes' => [
-			'format' => 'img',
-			'icon' => 'ri-file-fill',
-			'render' => [
-				'callback' => 'articleListRender',
-				'params' => [
-					'article_cd' => 'ARC004',
-				]
-			]
-		]
-	],
-];
-
 $config['form_login_config'] = [
 	[
 		'field' => 'id',
@@ -124,7 +65,7 @@ $config['form_administrators_config'] = [
 		'type' => 'text',
 		'subtype' => 'unique',
 		'icon' => 'ri-user-line',
-		'form_text' => '영문, 숫자를 포함한 4글자 이상으로 입력해주세요.',
+		'form_text' => 'Please enter at least 4 characters',
 		'attributes' => [
 			'autocapitalize' => 'none',
 			'autocomplete' => 'off',
@@ -149,7 +90,7 @@ $config['form_administrators_config'] = [
 		'category' => 'group',
 		'type' => 'password',
 		'icon' => 'svg:ri-lock-password-line',
-		'form_text' => '영문, 숫자를 포함한 4글자 이상 15글자 이하로 입력해주세요.',
+		'form_text' => 'Please enter 4 to 15 characters, including letters and numbers',
 		'attributes' => [
 			'autocomplete' => 'new-password',
 			'placeholder' => 'Password Dots',
@@ -177,7 +118,7 @@ $config['form_administrators_config'] = [
 		'type' => 'password',
 		'subtype' => 'password_confirm',
 		'icon' => 'svg:ri-lock-password-fill',
-		'form_text' => '비밀번호를 한 번 더 입력해주세요.',
+		'form_text' => 'Please Repeat The Password',
 		'attributes' => [
 			'autocomplete' => 'new-password',
 			'placeholder' => 'Password Dots',
@@ -298,7 +239,7 @@ $config['form_students_config'] = [
 		'type' => 'text',
 		'subtype' => 'unique',
 		'icon' => 'ri-user-line',
-		'form_text' => '영문, 숫자를 포함한 4글자 이상으로 입력해주세요.',
+		'form_text' => 'Please enter at least 4 characters',
 		'attributes' => [
 			'autocapitalize' => 'none',
 			'autocomplete' => 'off',
@@ -322,7 +263,7 @@ $config['form_students_config'] = [
 		'category' => 'group',
 		'type' => 'password',
 		'icon' => 'svg:ri-lock-password-line',
-		'form_text' => '영문, 숫자를 포함한 4글자 이상 15글자 이하로 입력해주세요.',
+		'form_text' => 'Please enter 4 to 15 characters, including letters and numbers',
 		'attributes' => [
 			'autocomplete' => 'new-password',
 			'placeholder' => 'Password Dots',
@@ -350,7 +291,7 @@ $config['form_students_config'] = [
 		'type' => 'password',
 		'subtype' => 'password_confirm',
 		'icon' => 'svg:ri-lock-password-fill',
-		'form_text' => '비밀번호를 한 번 더 입력해주세요.',
+		'form_text' => 'Please Repeat The Password',
 		'attributes' => [
 			'autocomplete' => 'new-password',
 			'placeholder' => 'Password Dots',
@@ -381,7 +322,7 @@ $config['form_students_config'] = [
 		'subtype' => 'unique',
 		'icon' => 'ri-font-family',
 		'attributes' => [
-			'placeholder' => '이메일을 입력하세요',
+			'placeholder' => 'Enter The User Email',
 		],
 		'form_attributes' => [
 			'editable' => false,
@@ -442,20 +383,48 @@ $config['form_students_config'] = [
 		'list_attributes' => [],
 	],
 	[
-		'field' => 'withdraw_dt',
-		'label' => 'lang:user.withdraw_dt',
+		'field' => 'disabilities_yn',
+		'label' => 'lang:student.disabilities_yn',
 		'form' => true,
 		'rules' => 'trim',
 		'errors' => [],
 		'category' => 'basic',
-		'type' => 'date',
-		'subtype' => 'flatpickr',
-		'icon' => null,
-		'form_text' => '',
-		'attributes' => [],
-		'form_attributes' => [
-			'detect_changed' => false,
+		'type' => 'checkbox',
+		'subtype' => 'single',
+		'option_attributes' => [
+			'option_type' => 'static',
+			'option_data' => [
+				'Y' => 'lang:student.disabilities_yn',
+			],
 		],
+		'form_attributes' => [
+			'detect_changed' => true,
+		],
+		'default' => '',
+		'list' => true,
+		'list_attributes' => [],
+	],
+	[
+		'field' => 'aac_yn',
+		'label' => 'lang:student.aac_yn',
+		'form' => true,
+		'rules' => 'trim',
+		'errors' => [],
+		'category' => 'basic',
+		'type' => 'checkbox',
+		'subtype' => 'single',
+		'option_attributes' => [
+			'option_type' => 'static',
+			'option_data' => [
+				'Y' => 'lang:student.aac_yn',
+			],
+		],
+		'form_attributes' => [
+			'detect_changed' => true,
+		],
+		'default' => '',
+		'list' => true,
+		'list_attributes' => [],
 	],
     [
         'field' => 'approve_yn',
@@ -475,6 +444,22 @@ $config['form_students_config'] = [
         ],
         'list' => true,
     ],
+	[
+		'field' => 'withdraw_dt',
+		'label' => 'lang:user.withdraw_dt',
+		'form' => true,
+		'rules' => 'trim',
+		'errors' => [],
+		'category' => 'basic',
+		'type' => 'date',
+		'subtype' => 'flatpickr',
+		'icon' => null,
+		'form_text' => '',
+		'attributes' => [],
+		'form_attributes' => [
+			'detect_changed' => false,
+		],
+	],
 	[
 		'field' => 'recent_dt',
 		'label' => 'lang:common.recent_dt',

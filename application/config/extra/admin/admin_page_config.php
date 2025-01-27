@@ -2,7 +2,7 @@
 
 $config['admin_page_config_loaded'] = true;
 
-$config['admin_page_config'] = [
+$config['page_config'] = [
 	'auth' => [
 		'category' => 'auth',
 		'type' => 'view',
