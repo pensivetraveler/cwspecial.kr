@@ -54,8 +54,10 @@ function get_admin_form_choice($item, $formType = '')
 
 	if($item['subtype'] === 'single') {
 		$wrapClassList = array_merge($wrapClassList, [
-			'option-stack-vertical', 'align-items-start', 'justify-content-start', 'flex-column', 'pt-4', 'pb-1', 'mb-3'
+			'option-stack-vertical', 'align-items-start', 'justify-content-start', 'flex-column', 'pt-4', 'pb-1'
 		]);
+
+		if($formType !== 'side') $wrapClassList[] = 'mb-3';
 
 		foreach ($item['options'] as $value=>$text) {
 			$id = $item['field'];
@@ -130,6 +132,8 @@ function get_admin_form_radio($item, $value, $text)
 
 function get_admin_form_text($data, $add_class = array(), $attributes = array()): string
 {
+	$ci =& get_instance();
+
 	$text = $data['form_text'];
 
 	$default['class'] = [
@@ -140,7 +144,7 @@ function get_admin_form_text($data, $add_class = array(), $attributes = array())
 		$line = '';
 		$default['class'][] = 'd-none';
 	}else{
-		$line = get_instance()->lang->line($text);
+		$line = $ci->lang->line(is_array($text)?$text:'form_text.'.$text);
 		$icon = $text['icon'] ?? '';
 		if($icon) $line = get_icon($icon, false, $text['icon_size'] ?? '', '.ms-1.align-middle').convert_selector_to_html('span.mx-1.align-middle', true, $line);
 	}
@@ -233,6 +237,7 @@ function get_admin_form_attributes($item, $form_type): array
 	}else{
 		$placeholder = $item['label'];
 	}
+
 	$attributes = [
 		'placeholder' => $ci->lang->line($placeholder),
 		'aria-label' => $ci->lang->line($item['label']),
@@ -508,4 +513,18 @@ function get_help_block($data)
 	), $data);
 
 	return "<{$defaults['tag']} "._attributes_to_string($data['attr']).">".$defaults['text']."</{$defaults['tag']}>";
+}
+
+function trans_formdata_dit_type($form_data)
+{
+	$list = [];
+	foreach ($form_data as $item) {
+		if($item['category'] === 'group') {
+			$list[$item['group']] = $item;
+		}else{
+			if(!$item['field']) continue;
+			$list[$item['field']] = $item;
+		}
+	}
+	return $list;
 }
