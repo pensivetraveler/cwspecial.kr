@@ -10,6 +10,7 @@ class Auth extends Common
 		parent::__construct();
 
 		$this->load->model('Model_User', 'Model');
+		$this->load->model('Model_Student', 'Model_Child');
 
 		$this->setConfig = false;
 
@@ -132,5 +133,32 @@ class Auth extends Common
 				'aul_key' => $cookie_value ?? '',
 			],
 		]);
+	}
+
+	public function signup_post()
+	{
+		$this->validateFormRules('form_signup_config');
+
+		$this->defaultList = [
+			'user_id' => '',
+			'student_id' => '',
+			'approve_yn' => 'N',
+			'withdraw_yn' => 'N',
+			'del_yn' => 'N',
+		];
+
+		$dto = $this->beforePost(0, $this->Model);
+		$dtoChild = $this->beforePost(0, $this->Model_Child);
+		$dtoChild[$this->Model->identifier] = $this->Model->addData($dto, false);
+		$dtoChild[$this->Model_Child->identifier] = $this->Model_Child->addData($dtoChild, false);
+		$dto = array_merge($dto, $dtoChild);
+
+		$this->response([
+			'code' => DATA_CREATED,
+			'data' => [
+				$this->Model_Child->identifier => $dto[$this->Model_Child->identifier],
+				'redirectTo' => '/auth/complete',
+			],
+		], RestController::HTTP_CREATED);
 	}
 }
