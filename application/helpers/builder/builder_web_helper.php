@@ -23,3 +23,48 @@ function get_admin_breadcrumbs($title_list): string
     }
     return $html;
 }
+
+function get_icon($icon_class_name, $svg = false, $size = 18, $classname = ''): string
+{
+	if(!$icon_class_name) return '';
+	if($classname) {
+		if(is_array($classname)) {
+			$classname = implode('.', $classname);
+		}else{
+			$classname = str_replace(' ', '.', $classname);
+		}
+		if($classname && substr($classname, 0, 1) === '.') $classname = substr($classname, 1);
+	}
+	if(!$size) $size = 18;
+	return $svg?file_get_contents(BUILDER_ASSET_SVG_PATH.'icons/'.$icon_class_name.'.svg'):convert_selector_to_html("i.$icon_class_name.$classname.ri-{$size}px");
+}
+
+function get_icon_by_type($type, $svg = false, $size = 18): string
+{
+	$classname = get_icon_classname_by_type($type);
+	return get_icon($classname, $svg, $size);
+}
+
+function get_icon_classname_by_type($type): string
+{
+	switch (strtolower($type)) {
+		case "file" :
+			return 'ri-attachment-line';
+		case "zipcode" :
+			return 'ri-building-line';
+		case "text" :
+			return 'ri-text';
+		case "tel" :
+			return 'ri-phone-fill';
+		case "textarea" :
+			return 'ri-chat-4-line';
+		case "date" :
+			return 'ri-calendar-line';
+		case "time" :
+			return 'ri-time-line';
+		case "pdf" :
+			return 'ri-file-pdf-2-fill';
+		default :
+			return '';
+	}
+}
