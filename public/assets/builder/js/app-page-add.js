@@ -15,12 +15,23 @@ $(function () {
 	for(const rule of Object.keys(customValidatorsPreset.validators))
 		FormValidation.validators[rule] = customValidatorsPreset.validators[rule];
 
+	const dropzoneList = common.FORM_DATA.filter((item) => item.subtype.indexOf('dropzone') !== -1);
+
     // Form validation for Add new record
     fv = FormValidation.formValidation(
         formRecord,
         {
             fields: reformatFormData(formRecord, common.FORM_DATA, common.FORM_REGEXP, false),
             plugins: {
+                message: new FormValidation.plugins.Message({
+                    container: function (field, element) {
+                        // Dropzone 필드 메시지를 특정 컨테이너에 표시
+						if (dropzoneList.find((item) => item.field === field)) {
+                            return document.querySelector(`#${field}-dropzone-container`);
+                        }
+                        return element.closest('.form-validation-unit');
+                    },
+                }),
                 trigger: new FormValidation.plugins.Trigger(),
                 bootstrap5: new FormValidation.plugins.Bootstrap5({
                     // Use this for enabling/changing valid/invalid class
@@ -40,13 +51,17 @@ $(function () {
             },
             init: instance => {
                 instance.on('plugins.message.placed', function (e) {
-                    //* Move the error message out of the `input-group` element
-                    if (e.element.parentElement.classList.contains('input-group')) {
-                        // `e.field`: The field name
-                        // `e.messageElement`: The message element
-                        // `e.element`: The field element
-                        e.element.parentElement.insertAdjacentElement('afterend', e.messageElement);
-                    }
+                    // 중복된 fv-plugins-message-container 제거
+                    const containers = e.element.closest('.form-validation-unit').querySelectorAll('.fv-plugins-message-container');
+                    if (containers.length > 1) containers[1].remove();
+
+					//* Move the error message out of the `input-group` element
+					if (e.element.parentElement.classList.contains('input-group')) {
+						// `e.field`: The field name
+						// `e.messageElement`: The message element
+						// `e.element`: The field element
+						e.element.parentElement.insertAdjacentElement('afterend', e.messageElement);
+					}
                 });
             }
         }
@@ -81,7 +96,7 @@ $(function () {
 	}).on('core.validator.validated', function(event) {
 		// 특정 요소에 대한 유효성 검사 시작 후
 		console.log('%c Validator for the field ' + event.field + ' is validated.', 'color: skyblue');
-		if(!event.result.valid) {
+		// if(!event.result.valid) {
 			console.log('------------------------------------------------------------');
 			console.log('%c Validator for the field ' + event.field + ' is invalid.', 'color: red');
 			console.log('Invalid validator:', event.validator);
@@ -89,7 +104,7 @@ $(function () {
 			console.log('Error message:', event.result.message);
 			console.log('Result Object:',event.result)
 			console.log('------------------------------------------------------------');
-		}
+		// }
     }).on('core.form.valid', function(event) {
 		// 유효성 검사 완료 후
 		updateFormLifeCycle('checkFrmValues', formRecord);
@@ -122,7 +137,7 @@ $(function () {
                     });
                 }
             }
-        });
+        },true);
     }).on('core.form.invalid', function () {
         // if fields are invalid
         console.log('core.form.invalid')
