@@ -143,6 +143,16 @@ const customValidatorsPreset = {
 			},
 			validatorName : 'checkFileCounts',
 		},
+		dropzone_required : {
+			regex : '^dropzone_required$',
+			options : function(form, item, matches) {
+				return {
+					dropzoneId: form.querySelector(item.selector).closest('.dropzone-wrapper').id,
+				};
+			},
+			validatorName : 'dropzoneRequired',
+			message : '최소 1개의 파일을 업로드하세요.'
+		},
 	},
 	validators : {
 		baseValidator : function () {
@@ -298,6 +308,33 @@ const customValidatorsPreset = {
 						list: list,
 						max: max,
 					};
+				}
+			}
+		},
+		dropzoneRequired : function() {
+			return {
+				validate: function(input) {
+					let valid = false;
+					const node = input.element;
+					const form = node.closest('form');
+					let wrapper = null;
+
+					const wrapperId = input.options.dropzoneId;
+					const dropzoneInstances = Dropzone.instances;
+					for(const zone of dropzoneInstances) {
+						if(zone.element.id === wrapperId) {
+							wrapper = zone;
+						}
+					}
+
+					if(wrapper) valid = wrapper.files.length > 0;
+
+					return {
+						node: node,
+						form: form,
+						valid: valid,
+						count: wrapper?wrapper.files.length:0,
+					}
 				}
 			}
 		}
