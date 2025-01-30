@@ -98,7 +98,7 @@ $(function() {
 			success: function(response) {
 				console.log(response)
 				if(response.data.autologin) setCookie('autologin', response.data.autologin, 30);
-				redirect('/admin/dashboard');
+				redirect(common.AFTER_LOGIN_URI);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.warn(jqXHR.responseJSON)
