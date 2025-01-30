@@ -1,17 +1,10 @@
-		<!-- Core JS -->
-		<!-- build:js assets/vendor/js/core.js -->
-		<script src="<?php echo base_url('public/assets/builder/vendor/libs/jquery/jquery.js');?>"></script>
+		<!-- Vendor JS -->
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/popper/popper.js');?>"></script>
-		<script src="<?php echo base_url('public/assets/builder/vendor/js/bootstrap.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/perfect-scrollbar/perfect-scrollbar.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/node-waves/node-waves.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/hammer/hammer.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/i18n/i18n.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/typeahead-js/typeahead.js');?>"></script>
-		<script src="<?php echo base_url('public/assets/builder/vendor/js/menu.js');?>"></script>
-		<!-- endbuild -->
-
-		<!-- Vendor JS -->
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/cleavejs/cleave.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/cleavejs/cleave-phone.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/cleavejs/cleave-phone.kr.js');?>"></script>
@@ -20,8 +13,8 @@
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/select2/select2.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/moment/moment.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/sweetalert2/sweetalert2.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/builder/vendor/js/menu.js');?>"></script>
 
-		<!-- Main JS -->
 		<!-- Main JS -->
 		<script src="<?php echo base_url('public/assets/builder/js/front-main.js');?>"></script>
 

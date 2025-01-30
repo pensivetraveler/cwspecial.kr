@@ -82,13 +82,17 @@ $bodyAttrs = implode(' ', array_map(
 		<?php if(isset($addCSS)) add_stylesheet($addCSS); ?>
 		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/css/pages/page-misc.css');?>" />
 
-		<!-- Custom -->
+		<!-- Base JS -->
 		<script src="<?php echo base_url('public/assets/base/js/html5.min.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/base/js/placeholder.min.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/base/js/utils.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/base/js/josa.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/base/js/pattern.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/base/js/inflector.js');?>"></script>
+
+		<!-- Core JS -->
+		<script src="<?php echo base_url('public/assets/builder/vendor/libs/jquery/jquery.js');?>"></script>
+		<script src="<?php echo base_url('public/assets/builder/vendor/js/bootstrap.js');?>"></script>
 
 		<!-- Helpers -->
 		<script src="<?php echo base_url('public/assets/builder/vendor/js/helpers.js');?>"></script>
@@ -98,10 +102,11 @@ $bodyAttrs = implode(' ', array_map(
 		<!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 		<script src="<?php echo base_url('public/assets/builder/js/config.js');?>"></script>
 
-		<?php if(isset($addJS['head'])) add_javascript($addJS['head']); ?>
+		<!-- Custom JS -->
 		<script src="<?php echo base_url('public/assets/builder/js/app-page-preset.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/js/app-page-utils.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/js/app-page-errors.js');?>"></script>
+		<?php if(isset($addJS['head'])) add_javascript($addJS['head']); ?>
 
 		<?php if(property_exists($this, 'phptojs')) echo $this->phptojs->getJsVars(); ?>
 
