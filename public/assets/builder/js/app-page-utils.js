@@ -288,20 +288,12 @@ function executeAjax(obj = {}, test = false) {
 	}else{
 		options.error = function(jqXHR, textStatus, errorThrown) {
 			console.warn(jqXHR.responseJSON)
-			if(Math.floor(jqXHR.status/500) !== 1) {
-				showAlert({
-					type: 'warning',
-					text: jqXHR.responseJSON.msg,
-				});
-			}else{
-				showAlert({
-					type: 'error',
-					text: jqXHR.responseJSON.msg,
-				});
-			}
+			showAlert({
+				type: 'error',
+				text: jqXHR.responseJSON.msg,
+			});
 		}
 	}
-	console.log(options)
 
 	if(test) {
 		const form = document.createElement('form');
