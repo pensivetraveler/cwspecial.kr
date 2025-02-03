@@ -23,17 +23,42 @@ $config['page_base_config'] = [
 		'includes' => $config['base_includes_config'],
 	],
 	'formProperties' => [
-		'formExist' => false,
 		'formConfig' => '',
+		'formType' => 'page',
 	],
 	'listProperties' => [
-		'listExist' => false,
 		'listConfig' => '',
+		'plugin' => 'datatable',
+		'buttons' => [
+			'add' => true,
+			'excel' => true,
+		],
+		'actions' => [
+			'edit' => true,
+			'view' => true,
+			'delete' => true,
+		],
 	],
 	'tabProperties' => [
 		'tabGroup' => '',
 	],
 ];
+
+$config['modal_base_config'] = array_replace_recursive($config['page_base_config'], [
+	'category' => 'modal',
+	'properties' => [
+		'includes' => [
+			'head' => false,
+			'header' => false,
+			'modalPrepend' => false,
+			'modalAppend' => false,
+			'footer' => false,
+			'tail' => false,
+		],
+	],
+]);
+
+
 
 $config['form_side_prefix'] = 'form_side-';
 $config['form_page_prefix'] = 'form_page-';
@@ -113,63 +138,6 @@ $config['builder_nav_side_sample'] = [
 	],
 
 ];
-
-$config['builder_base_includes_config'] = [
-	'head' => true,
-	'header' => true,
-	'modalPrepend' => true,
-	'modalAppend' => true,
-	'footer' => true,
-	'tail' => true,
-];
-
-$config['builder_page_base_config'] = [
-	'category' => 'page',
-	'type' => 'view',
-	'subType' => 'base',
-	'properties' => [
-		'baseMethod' => 'view',
-		'allows' => [],
-		'noIndex' => false,
-		'formExist' => false,
-		'listExist' => false,
-		'includes' => $config['builder_base_includes_config'],
-	],
-	'formProperties' => [
-		'formConfig' => '',
-		'formType' => 'page',
-	],
-	'listProperties' => [
-		'listConfig' => '',
-		'plugin' => 'datatable',
-		'buttons' => [
-			'add' => true,
-			'excel' => true,
-		],
-		'actions' => [
-			'edit' => true,
-			'view' => true,
-			'delete' => true,
-		],
-	],
-	'tabProperties' => [
-		'tabGroup' => '',
-	],
-];
-
-$config['builder_modal_base_config'] = array_replace_recursive($config['builder_page_base_config'], [
-	'category' => 'modal',
-	'properties' => [
-		'includes' => [
-			'head' => false,
-			'header' => false,
-			'modalPrepend' => false,
-			'modalAppend' => false,
-			'footer' => false,
-			'tail' => false,
-		],
-	],
-]);
 
 $config['builder_form_base'] = [
 	'field' => '',
