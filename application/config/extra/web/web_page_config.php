@@ -23,6 +23,11 @@ $config['page_config'] = [
 				'add' => true,
 				'excel' => false,
 			],
+			'actions' => [
+				'edit' => true,
+				'detail' => true,
+				'delete' => true,
+			],
 		],
 	],
 ];
