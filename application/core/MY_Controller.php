@@ -417,3 +417,4 @@ include_once __DIR__.'/MY_Controller_API.php';
 include_once __DIR__.'/MY_Controller_WEB.php';
 include_once __DIR__.'/MY_Controller_APP.php';
 include_once __DIR__.'/MY_Controller_ADM.php';
+include_once __DIR__.'/MY_Controller_Builder.php';
