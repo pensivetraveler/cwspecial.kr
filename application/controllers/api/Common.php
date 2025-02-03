@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Common extends MY_Controller_API
+class Common extends MY_Builder_API
 {
 	function __construct()
 	{
