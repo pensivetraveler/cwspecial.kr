@@ -40,4 +40,24 @@ class Works extends Common
 
 		parent::add();
 	}
+
+	public function edit($key = 0)
+	{
+		$this->addCSS[] = [
+			base_url('public/assets/builder/vendor/libs/dropzone/dropzone.css'),
+		];
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/vendor/libs/dropzone/dropzone.js'),
+			base_url('public/assets/builder/vendor/libs/quill/quill.js'),
+			base_url('public/assets/builder/js/forms-file-upload.js'),
+		];
+
+		parent::edit($key);
+	}
+
+	public function view($key = 0)
+	{
+		parent::view($key);
+	}
 }
