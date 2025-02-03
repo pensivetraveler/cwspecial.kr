@@ -2,56 +2,64 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['default_platform'] = 'web';
-$route['default_controller'] = ($route['default_platform']?$route['default_platform'].'/':'').'common';
-//$route['except_folders'] = ['app', 'api', 'adm', 'admin', 'module'];
-$route['except_folders'] = ['app', 'adm', 'admin', 'module', 'web'];
+$route['default_controller'] = 'common';
+$route['default_controller_filename'] = preg_replace('/' . preg_quote(substr($route['default_controller'],0,1), '/') . '/', strtoupper(substr($route['default_controller'],0,1)), $route['default_controller'], 1).'.php';
+$route['except_folders'] = ['app', 'adm', 'admin', 'module', 'web', 'api'];
+array_splice($route['except_folders'], array_search($route['default_platform'], $route['except_folders']), 1);
+$route['except_routes'] = join('|', array_merge($route['except_folders']));
+
+foreach ($route['except_folders'] as $name) {
+	if(!file_exists(APPPATH.'controllers'.DIRECTORY_SEPARATOR.$name.DIRECTORY_SEPARATOR.$route['default_controller_filename'])){
+		$route[$name] = function() {
+			show_404();
+		};
+	}else{
+		$route[$name] = $name.DIRECTORY_SEPARATOR.$route['default_controller'];
+		$route["$name/(:any)"] = "$name/$1/index";
+	}
+}
 
 /*
 |--------------------------------------------------------------------------
 | WEB
-| - 기본 주소로 이용.
-| - Home/1 의 경우 Home/index/1 로 매핑.
 |--------------------------------------------------------------------------
 */
-// 구체적인 규칙 먼저
-$route['api/(:any)/(:any)'] = 'api/$1/$2';
-$route['admin/api/(:any)/(:any)'] = 'api/$1/$2';
-// 숫자와 매칭되는 웹 경로
-$route['(?!app|api|adm|admin|module)([^/]+)/(:num)'] = 'web/$1/index/$2';
-// 포괄적인 웹 경로 (마지막에 선언)
-$route['(?!app|api|adm|admin|module).*'] = 'web/$0';
 
 /*
 |--------------------------------------------------------------------------
 | API
-| - RestController Library에서 실행된 _remap 에 의해 method name이 매핑.
 |--------------------------------------------------------------------------
 */
-$route['api'] = function() {
-	show_404();
-};
 
 /*
 |--------------------------------------------------------------------------
 | ADMIN
 |--------------------------------------------------------------------------
 */
-$route['admin'] = 'admin/common';
+$route['admin/api/(:any)/(:any)'] = 'api/$1/$2';
 
 /*
 |--------------------------------------------------------------------------
 | APP
 |--------------------------------------------------------------------------
 */
-$route['app'] = function() {
-	show_404();
-};
 
 /*
 |--------------------------------------------------------------------------
 | MODULE
 |--------------------------------------------------------------------------
 */
-$route['module'] = function() {
-	show_404();
-};
+
+/*
+|--------------------------------------------------------------------------
+| Default Platform
+|--------------------------------------------------------------------------
+ */
+if($route['default_platform']) {
+	// 숫자와 매칭되는 웹 경로
+	$route["(?!{$route['except_routes']})([^/]+)/(:num)"] = 'web/$1/index/$2';
+	$route["(?!{$route['except_routes']})([^/]+)/(:any)/(:any)"] = 'web/$1/$2/$3';
+	// 포괄적인 웹 경로 (마지막에 선언)
+	$route["(?!{$route['except_routes']}).*"] = 'web/$0';
+	$route['default_controller'] = $route['default_platform'].DIRECTORY_SEPARATOR.$route['default_controller'];
+}
