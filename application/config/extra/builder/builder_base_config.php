@@ -136,27 +136,30 @@ $config['builder_page_base_config'] = [
 		'includes' => $config['builder_base_includes_config'],
 	],
 	'formProperties' => [
-		'formExist' => false,
 		'formConfig' => '',
+		'formType' => 'page',
 	],
 	'listProperties' => [
-		'listExist' => false,
 		'listConfig' => '',
+		'plugin' => 'datatable',
+		'buttons' => [
+			'add' => true,
+			'excel' => true,
+		],
+		'actions' => [
+			'edit' => true,
+			'view' => true,
+			'delete' => true,
+		],
 	],
 	'tabProperties' => [
 		'tabGroup' => '',
 	],
 ];
 
-$config['builder_modal_base_config'] = [
+$config['builder_modal_base_config'] = array_replace_recursive($config['builder_page_base_config'], [
 	'category' => 'modal',
-	'type' => 'view',
-	'subType' => 'base',
 	'properties' => [
-		'baseMethod' => 'view',
-		'allows' => [],
-		'formExist' => false,
-		'listExist' => false,
 		'includes' => [
 			'head' => false,
 			'header' => false,
@@ -166,19 +169,7 @@ $config['builder_modal_base_config'] = [
 			'tail' => false,
 		],
 	],
-	'formProperties' => [
-		'formExist' => false,
-		'listExist' => false,
-		'formConfig' => '',
-		'formType' => '',
-	],
-	'listProperties' => [
-		'listConfig' => '',
-	],
-	'tabProperties' => [
-		'tabGroup' => '',
-	],
-];
+]);
 
 $config['builder_form_base'] = [
 	'field' => '',
