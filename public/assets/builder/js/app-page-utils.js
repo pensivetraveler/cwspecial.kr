@@ -483,8 +483,9 @@ function reformatFormData(form, data, regexp = {}, side = false) {
 
 		if(curr.type === 'file') {
 			item.validators.file = {
+				extension: curr.attributes.extension??null,
 				maxFiles : curr.attributes.max??null,
-				type : curr.attributes.accept,
+				type : curr.attributes.accept??null,
 				message : '유효한 파일을 업로드해주세요.',
 			};
 		}
