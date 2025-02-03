@@ -13,3 +13,7 @@ $config['base_upload_config'] = [
     'overwrite' => false,
     'encrypt_name' => true,
 ];
+
+$config['thumbnail_upload_config'] = array_merge($config['base_upload_config'], [
+	'allowed_types' => 'gif|jpg|jpeg|png',
+]);
