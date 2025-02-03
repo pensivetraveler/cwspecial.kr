@@ -371,7 +371,7 @@ function submitAjax(selector, options = {}, test = false) {
 function getFormData(form = null) {
 	if(!form) form = document.getElementById('formRecord');
 
-	const formData = new FormData();
+	const formData = new FormData(form);
 	form.querySelectorAll('input, textarea, select').forEach(function(node) {
 		if(!node.name) return;
 		if(checkInputSubmittable(node, form)){
@@ -394,6 +394,22 @@ function getFormData(form = null) {
 			}
 		}
 	});
+
+	if(window['Dropzone'] !== undefined) {
+		for(const inst of Dropzone.instances){
+			let field = inst.element.getAttribute('data-field');
+			if(inst.files.length > 0) {
+				if(inst.files.length === 1) {
+					formData.append(`${field}`, inst.files[0]);
+				} else {
+					inst.files.forEach((file, index) => {
+						formData.append(`${field}[${index}]`, file);
+					});
+				}
+			}
+		}
+	}
+
 	logFormData(formData);
 
 	return formData;
