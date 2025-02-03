@@ -258,3 +258,78 @@ $config['form_signup_config'] = [
 		'list_attributes' => [],
 	],
 ];
+
+$config['form_works_config'] = [
+	[
+		'field' => 'article_id',
+		'label' => 'lang:article.article_id',
+		'form' => true,
+		'rules' => 'trim|required_mod[edit]',
+		'category' => 'basic',
+		'type' => 'hidden',
+		'subtype' => 'identifier',
+		'list' => false,
+	],
+	[
+		'field' => 'board_id',
+		'label' => 'lang:board.board_id',
+		'form' => true,
+		'rules' => 'trim|required',
+		'errors' => [],
+		'category' => 'basic',
+		'type' => 'hidden',
+		'default' => 3,
+		'list' => false,
+	],
+	[
+		'field' => 'subject',
+		'label' => 'lang:article.subject',
+		'form' => true,
+		'rules' => 'trim|required|max_length[300]',
+		'errors' => [],
+		'category' => 'basic',
+		'type' => 'text',
+		'attributes' => [],
+		'list' => true,
+	],
+	[
+		'field' => 'content',
+		'label' => 'lang:article.content',
+		'form' => true,
+		'rules' => 'trim|required',
+		'errors' => [],
+		'category' => 'basic',
+		'type' => 'textarea',
+		'attributes' => [],
+		'list' => false,
+	],
+	[
+		'field' => 'thumbnail',
+		'label' => 'lang:epmagazine.thumbnail',
+		'form' => true,
+		'rules' => 'trim|dropzone_required',
+		'errors' => [],
+		'category' => 'custom',
+		'type' => 'file',
+		'subtype' => 'dropzone-full',
+		'icon' => 'ri-file-image-line',
+		'form_text' => [
+			'line' => 'Drop files here or click to upload',
+			'replace' => 'IMG',
+			'icon' => 'ri-file-image-fill',
+			'icon_size' => 16,
+		],
+		'attributes' => [
+			'max' => 1,
+			'accept' => 'image/jpeg,image/png',
+			'multiple' => 'false',
+		],
+		'form_attributes' => [
+			'with_list' => true,
+			'list_delete' => 'thumbnail',
+		],
+		'list' => true,
+		'list_attributes' => [
+		]
+	],
+];
