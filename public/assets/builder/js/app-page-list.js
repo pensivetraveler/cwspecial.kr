@@ -1,271 +1,5 @@
 'use strict';
 
-class listRender {
-	_this;
-	_fields = [];
-	_identifier;
-	_columns;
-	_columnLength;
-
-	constructor() {
-		this._this = this;
-	}
-
-	fields (columns, identifier = null) {
-		this._columns = columns;
-		this._columnLength = columns.length;
-		this._identifier = identifier;
-
-		for(const [idx, column] of this._columns.entries()) {
-			const index = idx+2;
-			if(this.render.hasOwnProperty(camelize(column.format))) {
-				this._fields.push(this.render[camelize(column.format)](index));
-			}else{
-				let render;
-				if(this.hasOwnProperty(column.field)) {
-					render = this.render[column.field](index, column);
-				}else{
-					render = this.render.common(index, column);
-				}
-
-				for(const key of ['searchable', 'orderable']) {
-					if(!render.hasOwnProperty(key)) {
-						render[key] = true;
-					}
-				}
-
-				this._fields.push(render);
-			}
-		}
-
-		return this._fields;
-	}
-
-	render = {
-		rowNum: function (index) {
-			return {
-				targets: index,
-				searchable: false,
-				orderable: false,
-				render: function (data, type, full, meta) {
-					return meta.row + meta.settings._iDisplayStart + 1;
-				}
-			}
-		},
-		actions: function(index) {
-			return {
-				targets: index,
-				searchable: false,
-				orderable: false,
-				render: function (data, type, full, meta) {
-					const dataId = common.IDENTIFIER?full[common.IDENTIFIER]:'';
-					return (
-						'<div class="d-flex align-items-center gap-50">' +
-						`<a href="javascript:;" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect delete-record" data-bs-toggle="tooltip" title="Delete Record" data-id="${dataId}"><i class="ri-delete-bin-7-line ri-20px"></i></a>`+
-						`<a href="javascript:;" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect edit-record" title="Edit Record" data-id="${dataId}"><i class="ri-edit-box-line me-2"></i></a>` +
-						'</div>'
-					);
-				}
-			}
-		},
-		select: function(index) {
-			return {
-				targets: index,
-				searchable: false,
-				orderable: false,
-				render: function (data, type, full, meta) {
-					const wrap = document.createElement('div');
-					wrap.classList.add('bootstrap-select');
-					return wrap;
-				}
-			}
-		},
-		common: function(index, column) {
-			return {
-				targets: index,
-				render: function (data, type, full, meta) {
-					return this.renderColumn(data, type, full, meta, column);
-				}
-			};
-		},
-	};
-
-	renderColumn = (data, type, full, meta, column) => {
-		let wrap;
-		switch (column.format) {
-			case 'button':
-				wrap = document.createElement('button');
-				wrap.classList.add('btn', 'btn-info', 'waves-effect', 'waves-light', 'pe-3', 'ps-3');
-				break;
-			case 'text':
-			case 'icon':
-			case 'img':
-			default :
-				wrap = document.createElement('span');
-				wrap.classList.add('d-inline-block')
-				break;
-		}
-
-		// class
-		if (column.classes.length)
-			for (const className of column.classes) wrap.classList.add(className);
-
-		// inner
-		let inner;
-		if (['recent_dt', 'created_dt', 'updated_dt'].includes(column.field)) {
-			const dateObj = new Date(data);
-			inner = dateObj.getFullYear().toString() + '-' + (dateObj.getMonth() + 1).toString().padStart(2, '0') + '-' + dateObj.getDate().toString().padStart(2, '0');
-		} else {
-			if (column.onclick.hasOwnProperty('kind')
-				&& column.onclick.kind === 'download'
-				&& !column.text
-			) {
-				column.text = 'Download';
-			}
-
-			switch (column.format) {
-				case 'text':
-					inner = column.text ? getLocale(column.text, common.LOCALE) : data;
-					break;
-				case 'button':
-					if (['popup', 'redirect', 'download'].includes(column.onclick.kind) && (data === null || data.length === 0))
-						return '-';
-					inner = column.text ? getLocale(column.text, common.LOCALE) : getLocale(column.field, common.LOCALE);
-					break;
-				case 'icon':
-					inner = `<i class="${column.icon}"></i>`;
-					break;
-				case 'img':
-					if (data === null || !data.length || !data[0].hasOwnProperty('file_link')) return '-';
-					inner = `<img class="img-thumbnail d-inline rounded-2 overflow-hidden" src="${data[0].file_link}">`;
-					wrap.setAttribute('data-bs-content', inner);
-					break;
-				case 'select':
-					break;
-				default :
-					inner = '-';
-			}
-		}
-
-		// return
-		if (isArray(full[column.field])) {
-			const html = full[column.field].reduce((acc, curr) => {
-				return acc += this.toHTML(curr, full, column, wrap, inner);
-			}, '');
-			return `<div>${html}</div>`;
-		} else {
-			return this.toHTML(data, full, column, wrap, inner);
-		}
-	}
-
-	toHTML = (data, full, column, wrap, inner) => {
-		// attrs
-		let value;
-		if(data === undefined) {
-			value = '';
-		}else{
-			value = typeof data === 'object'?JSON.stringify(data):data;
-		}
-
-		const attrs = {
-			...Object.fromEntries(
-				Object.entries({
-					identifier : full[common.IDENTIFIER],
-					value : value,
-				}).map(([key, value]) => [`data-${key}`, value])
-			)
-		};
-
-		if(Object.keys(column.onclick).length) {
-			wrap.classList.add('cursor-pointer');
-			attrs.onclick = this.getOnClick(data, full, column);
-			if(column.onclick.kind === 'bs') {
-				if(Object.keys(column.onclick.attrs).length) {
-					Object.entries(column.onclick.attrs).map(([key, value]) => attrs[`data-bs-${key}`] = value )
-				}
-			}
-		}
-
-		Object.entries(attrs).map(([key, value]) => wrap.setAttribute(key, value));
-
-		// return
-		wrap.innerHTML = inner;
-		return wrap.outerHTML;
-	}
-
-	button = (data, type, full, meta, column) => {
-		const wrap = document.createElement('button');
-		wrap.classList.add('btn', 'btn-info', 'waves-effect', 'waves-light', 'pe-3', 'ps-3');
-
-		// class
-		if(column.classes.length)
-			for(const className of classed) wrap.classList.add(className);
-
-		if(column.onclick.hasOwnProperty('kind')
-			&& column.onclick.kind === 'download'
-			&& !column.text
-		) {
-			column.text = 'Download';
-		}
-
-		const inner = column.text?getLocale(column.text, common.LOCALE):getLocale(column.field, common.LOCALE);
-
-		// return
-		if(isArray(full[column.field])) {
-			const html = full[column.field].reduce((acc, curr) => {
-				return acc += this.toHTML(curr, full, column, wrap, inner);
-			}, '');
-			return `<div>${html}</div>`;
-		}else{
-			return this.toHTML(data, full, column, wrap, inner);
-		}
-	}
-
-	getOnClick = (data, full, column) => {
-		let onClick = '';
-		if(column.hasOwnProperty('onClick') || column.hasOwnProperty('onclick')) {
-			const key = column.hasOwnProperty('onClick')?'onClick':'onclick';
-			if(!column[key].kind) throw new Error(`listRender.onClick : onclick kind is not defined. (${column.field})`);
-
-			switch (column[key].kind) {
-				case 'popup' :
-					break;
-				case 'redirect' :
-					if(column[key].hasOwnProperty('params') && column[key].attrs.hasOwnProperty('target'))
-						if(column[key].attrs.target === '_blank') return `window.open('${data}', "_blank")`;
-					return `location.href="${data}"`;
-				case 'download' :
-					if(data === null || !data.file_id) return '';
-					return `location.href="${common.CURRENT_URI}/downloader/${data.file_id}"`;
-				case 'bs' :
-					break;
-				default :
-					if(window[column[key].kind] === undefined) return '';
-
-					let params = 'null';
-					if(column[key].params) {
-						if(typeof column[key].params === 'object') {
-							if(
-								(Array.isArray(column[key].params) && column[key].params.length)
-								||
-								(!Array.isArray(column[key].params) && Object.keys(column[key].params).length)
-							){
-								params = JSON.stringify(column[key].params);
-							}
-						}else{
-							params = typeof column[key].params != "string"?column[key].params:`'${column[key].params}'`;
-						}
-					}
-					return `${column[key].kind}(this, ${params})`;
-			}
-		}
-		return onClick;
-	}
-}
-// const aaa = new listRender();
-// const fields = aaa.fields(common.LIST_COLUMNS, common.IDENTIFIER);
-
-
 let fv, offCanvasEl;
 
 // Datatable (jquery)
@@ -407,18 +141,13 @@ $(function () {
 							}
 						};
 					case 'actions' : // Actions
+						const btns = common.LIST_ACTIONS;
 						return {
 							targets: 2+common.LIST_COLUMNS.length-1,
 							searchable: false,
 							orderable: false,
 							render: function (data, type, full, meta) {
-								const dataId = common.IDENTIFIER?full[common.IDENTIFIER]:'';
-								return (
-									'<div class="d-flex align-items-center gap-50">' +
-									`<a href="javascript:;" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect delete-record" data-bs-toggle="tooltip" title="Delete Record" data-id="${dataId}"><i class="ri-delete-bin-7-line ri-20px"></i></a>`+
-									`<a href="javascript:;" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect edit-record" title="Edit Record" data-id="${dataId}"><i class="ri-edit-box-line me-2"></i></a>` +
-									'</div>'
-								);
+								return getListActinos(btns, common.IDENTIFIER?full[common.IDENTIFIER]:'');
 							}
 						}
 					case 'select' :
@@ -596,17 +325,6 @@ $(function () {
 		if(offCanvasElement === null) throw new Error(`offCanvasElement is not exist`);
 		offCanvasEl = new bootstrap.Offcanvas(offCanvasElement);
 
-		// Define Events of offCanvas
-		$('.dataTables_wrapper').on('click', '.edit-record', function() {
-			if(!common.IDENTIFIER) throw new Error(`Identifier is not defined`);
-			if(!common.SIDE_FORM && common.EDIT_VIEW_URI.length) {
-				location.href = common.EDIT_VIEW_URI + '/' + $(this).data('id');
-			}else{
-				readyFrmInputs(formRecord, 'edit', common.FORM_DATA);
-				fetchFrmValues(document.querySelector(formSelector), $(this).data('id'));
-			}
-		});
-
 		offCanvasElement.addEventListener('show.bs.offcanvas', function(e) {
 			console.log('offcanvas show');
 			refreshPlugins();
@@ -634,6 +352,12 @@ $(function () {
 		const formRecord = document.querySelector(formSelector);
 		if(formRecord === null) throw new Error(`formRecord is not exist`);
 		preparePlugins(formRecord);
+
+		$('.dataTables_wrapper').on('click', '.edit-record', function() {
+			if(!common.IDENTIFIER) throw new Error(`Identifier is not defined`);
+			readyFrmInputs(formRecord, 'edit', common.FORM_DATA);
+			fetchFrmValues(document.querySelector(formSelector), $(this).data('id'));
+		});
 
 		formRecord.addEventListener('readyFrmInputs', (e) => {
 			offCanvasEl.show();
@@ -764,6 +488,18 @@ $(function () {
 		}).on('core.form.invalid', function () {
 			// if fields are invalid
 			console.log('core.form.invalid')
+		});
+	}else{
+		$('.dataTables_wrapper').on('click', '.edit-record', function() {
+			if(!common.IDENTIFIER) throw new Error(`Identifier is not defined`);
+			if(!common.EDIT_VIEW_URI.length) throw new Error(`EDIT_VIEW_URI is not defined`);
+			location.href = common.EDIT_VIEW_URI + '/' + $(this).data('id');
+		});
+
+		$('.dataTables_wrapper').on('click', '.detail-record', function() {
+			if(!common.IDENTIFIER) throw new Error(`Identifier is not defined`);
+			if(!common.DETAIL_VIEW_URI.length) throw new Error(`DETAIL_VIEW_URI is not defined`);
+			location.href = common.DETAIL_VIEW_URI + '/' + $(this).data('id');
 		});
 	}
 });
@@ -1052,4 +788,25 @@ function getListButtons() {
 	}
 
 	return data;
+}
+
+function getListActinos(btns, dataId) {
+	let btnIcons = {
+		edit : '<i class="ri-edit-box-line"></i>',
+		detail : '<i class="ri-eye-line ri-20px"></i>',
+		delete : '<i class="ri-delete-bin-7-line ri-20px"></i>',
+	};
+
+	let btnHtml = '<div class="d-flex align-items-center gap-50">';
+	for(const btn of btns) {
+		if(btnIcons[btn] === undefined) {
+			console.warn(`${btn} Icon is not defined`);
+			continue;
+		}
+		const title = pascalize(btn);
+		btnHtml += `<a href="javascript:;" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect ${btn}-record" data-bs-toggle="tooltip" title="${title} Record" data-id="${dataId}">${btnIcons[btn]}</a>`;
+	}
+	btnHtml += '</div>';
+
+	return btnHtml;
 }
