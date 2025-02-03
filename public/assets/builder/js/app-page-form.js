@@ -637,6 +637,21 @@ function applyFrmValuesByCategory(category, groupAttr, fieldName, fields, form, 
 				case 'reply_list' :
 					// setFormListItem(`#${id}`, data[fieldName], field);
 					break;
+				case 'dropzone-full' :
+					setTimeout(() => {
+						if(data[fieldName] === undefined) console.warn(`applyFrmValues : data doesn't have '${name}'.`);
+						if(data[fieldName]) {
+							const inst = Dropzone.instances.find((item) => item.element.getAttribute('data-field') === 'thumbnail');
+							const mockFile = {
+								name: data[fieldName][0].file_name,
+								size: data[fieldName][0].file_size,
+								accepted: true,
+							};
+							inst.displayExistingFile(mockFile, data[fieldName][0].file_link)
+							inst.mockup = true;
+						}
+					},0);
+					break;
 				default :
 					if(data[fieldName] === undefined) console.warn(`applyFrmValues : data doesn't have '${name}'.`);
 					if(form[name] === undefined) console.warn(`applyFrmValues : form doesn't have '${name}'.`);
@@ -826,15 +841,3 @@ function deleteRepeater(repeater, deleteElement) {
 		},
 	});
 }
-
-// function initializeForm() {
-//     record = null;
-//     Object.keys(common.FORM_LIFECYCLE).forEach((v, k) => {
-//         if(!k) return;
-//         common.FORM_LIFECYCLE[v] = false;
-//     });
-// }
-
-// $(function() {
-//     preparePlugins();
-// })
