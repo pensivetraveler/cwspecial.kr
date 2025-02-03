@@ -327,7 +327,13 @@ const customValidatorsPreset = {
 						}
 					}
 
-					if(wrapper) valid = wrapper.files.length > 0;
+					if(wrapper) {
+						if(wrapper.mockup !== undefined && wrapper.mockup === true) {
+							valid = true;
+						}else{
+							valid = wrapper.files.length > 0;
+						}
+					}
 
 					return {
 						node: node,
