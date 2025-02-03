@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class MY_Controller_Builder extends MY_Controller_WEB
+class MY_Builder_WEB extends MY_Controller_WEB
 {
 	public array $pageConfig;
 	public string $pageType;
@@ -487,15 +487,15 @@ class MY_Controller_Builder extends MY_Controller_WEB
 		);
 
 		if(!empty(array_filter($this->pageConfig['listProperties']['actions'], function ($value) {
-				return $value === true;
-			}))) {
-				$list[] = array_merge(
-					$this->config->get('builder_form_base_list_attributes', []),
-					[
-						'label' => 'common.actions',
-						'format' => 'actions',
-					]
-				);
+			return $value === true;
+		}))) {
+			$list[] = array_merge(
+				$this->config->get('builder_form_base_list_attributes', []),
+				[
+					'label' => 'common.actions',
+					'format' => 'actions',
+				]
+			);
 		}
 
 		return $list;
