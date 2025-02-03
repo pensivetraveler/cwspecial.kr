@@ -18,6 +18,12 @@ class Common extends MY_Controller_Builder
 		$this->load->model('Model_Student', 'Model_Child');
 
 		$this->defaultController = 'dashboard';
+
+		$this->addJS['head'] = [
+			base_url('public/assets/builder/js/front-config.js'),
+			base_url('public/assets/builder/vendor/js/dropdown-hover.js'),
+			base_url('public/assets/builder/vendor/js/mega-dropdown.js'),
+		];
 	}
 
 	public function index()
@@ -37,7 +43,7 @@ class Common extends MY_Controller_Builder
 ////			->select('web.*')
 ////			->join('web', 'web.user_id = user.user_id', 'right');
 ////		$user = $this->Model_User->getData([], ['user_id' => $this->session->userdata('user_id')]);
-////		if(!$user) alert('Àß¸øµÈ Àü±ÞÀÔ´Ï´Ù.', base_url('web/auth'));
+////		if(!$user) alert('ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.', base_url('web/auth'));
 ////
 ////		if($this->session->userdata('token')) {
 ////			$this->validateToken();
@@ -199,17 +205,5 @@ class Common extends MY_Controller_Builder
 		];
 
 		parent::edit($key);
-	}
-
-	protected function viewApp($data)
-	{
-		$this->addJS['head'][] = [
-			base_url('public/assets/builder/js/view/'.strtolower($this->router->class).'_preset.js'),
-		];
-		$this->addJS['tail'][] = [
-			base_url('public/assets/builder/js/view/'.strtolower($this->router->class).'_onload.js'),
-		];
-
-		parent::viewApp($data);
 	}
 }
