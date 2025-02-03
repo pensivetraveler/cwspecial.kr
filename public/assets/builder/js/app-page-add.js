@@ -96,7 +96,7 @@ $(function () {
 	}).on('core.validator.validated', function(event) {
 		// 특정 요소에 대한 유효성 검사 시작 후
 		console.log('%c Validator for the field ' + event.field + ' is validated.', 'color: skyblue');
-		// if(!event.result.valid) {
+		if(!event.result.valid) {
 			console.log('------------------------------------------------------------');
 			console.log('%c Validator for the field ' + event.field + ' is invalid.', 'color: red');
 			console.log('Invalid validator:', event.validator);
@@ -104,7 +104,7 @@ $(function () {
 			console.log('Error message:', event.result.message);
 			console.log('Result Object:',event.result)
 			console.log('------------------------------------------------------------');
-		// }
+		}
     }).on('core.form.valid', function(event) {
 		// 유효성 검사 완료 후
 		updateFormLifeCycle('checkFrmValues', formRecord);
@@ -137,7 +137,7 @@ $(function () {
                     });
                 }
             }
-        },true);
+        });
     }).on('core.form.invalid', function () {
         // if fields are invalid
         console.log('core.form.invalid')
