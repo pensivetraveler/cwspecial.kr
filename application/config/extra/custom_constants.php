@@ -48,9 +48,9 @@ const USE_YN_COLUMN_NAME = 'use_yn';
 */
 // THIS_DOMAIN은 끝에 / 없도록.
 if(ENVIRONMENT === 'development'){
-    define("THIS_DOMAIN","");
+	define("THIS_DOMAIN","");
 }else{
-    define("THIS_DOMAIN","");
+	define("THIS_DOMAIN","");
 }
 
 /*
@@ -58,10 +58,14 @@ if(ENVIRONMENT === 'development'){
 | PROTOCOL
 |--------------------------------------------------------------------------
 */
-if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) {
-    define("_HTTP", "https://");
+if(php_sapi_name() === 'cli') {
+	define("_HTTP", "https://");
 }else{
-    define("_HTTP", "http://");
+	if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) {
+		define("_HTTP", "https://");
+	}else{
+		define("_HTTP", "http://");
+	}
 }
 
 /*
@@ -70,17 +74,17 @@ if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVE
 |--------------------------------------------------------------------------
 */
 const API_CALL_PATH = [
-    'api',
+	'api', 'adm'
 ];
 
 const PRESET_API_NOT_EXIST = [
-    'code' => 'API_NOT_EXIST',
-    'msg' => '존재하지 않는 경로입니다.',
+	'code' => 'API_NOT_EXIST',
+	'msg' => '존재하지 않는 경로입니다.',
 ];
 
 const PRESET_ERR_OCCUR = [
-    'code' => 'INTERNAL_SERVER_ERROR',
-    'msg' => '오류가 발생했습니다.',
+	'code' => 'INTERNAL_SERVER_ERROR',
+	'msg' => '오류가 발생했습니다.',
 ];
 
 /*
@@ -116,7 +120,7 @@ const AES_KEY = '';
 | APP Scheme
 |--------------------------------------------------------------------------
 */
-const APP_SCHEME = 'playtalktalk://';
+const APP_SCHEME = '';
 const APP_HISTORY_BACK = "location.href='" . APP_SCHEME . "back" . "'";
 const WEB_HISTORY_BACK = 'history.back();';
 
