@@ -1,0 +1,23 @@
+#fullpage-dropzone {
+
+}
+
+.dz-started .dz-message {
+	display: none !important;
+}
+
+#fullpage-dropzone .dz-preview {
+	margin-left: 0;
+	margin-top: 0;
+}
+
+@media (min-width: 576px) {
+	#fullpage-dropzone .dz-preview {
+		display: inline-block;
+		width: 100%;
+	}
+	#fullpage-dropzone .dz-thumbnail {
+		width: calc(100% - 1.25rem);
+		height: 40rem;
+	}
+}
