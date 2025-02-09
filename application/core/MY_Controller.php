@@ -290,6 +290,15 @@ class MY_Controller extends CI_Controller
 		return $this->Model_File->getList([], $dto);
 	}
 
+	protected function delFileData($dto)
+	{
+		$fileData = $this->getFileData($dto);
+		if(!$fileData) $this->response(['code' => UPLOAD_DATA_NOT_EXIST]);
+
+		$this->Model_File->delData($dto);
+		if(!unlink($fileData->full_path)) $this->response(['code' => INTERNAL_SERVER_ERROR]);
+	}
+
 	protected function getOptions($field, $attr = []): array
 	{
 		if (empty($attr)) $attr['option_type'] = 'field';
