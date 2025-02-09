@@ -107,9 +107,7 @@ class Common extends MY_Builder_API
 		$file_id = $this->patch('file_id') ?? null;
 		if(!$type || !$file_id) $this->response(['code' => EMPTY_REQUIRED_DATA]);
 
-		$fileData = $this->getFileData(['file_id' => $file_id]);
-		if(!$fileData) $this->response(['code' => UPLOAD_DATA_NOT_EXIST]);
-		if(!unlink($fileData->full_path)) $this->response(['code' => INTERNAL_SERVER_ERROR]);
+		$this->delFileData(['file_id' => $file_id]);
 
 		$this->response([
 			'code' => DATA_DELETED,
