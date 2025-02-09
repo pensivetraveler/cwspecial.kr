@@ -1,6 +1,6 @@
 <?php
 // upload folder 만들기
-function make_directory($path): bool
+function make_directory($path, $mode = 0755): bool
 {
     $path_list = explode(DIRECTORY_SEPARATOR, $path);
     $total_path = '';
@@ -13,6 +13,7 @@ function make_directory($path): bool
             continue;
         }else{
             $result = @mkdir($total_path, DIR_READ_MODE);
+			@chmod($total_path, $mode);
             if(!$result) continue;
         }
     }
