@@ -73,9 +73,7 @@ $bodyAttrs = implode(' ', array_map(
 		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/quill/editor.css');?>" />
 
 		<!-- Custom CSS -->
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/css/demo.css');?>" />
 		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/css/custom.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/css/style.css');?>" />
 
 		<!-- Page CSS -->
 		<!-- Page -->

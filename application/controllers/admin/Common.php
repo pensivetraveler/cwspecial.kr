@@ -21,6 +21,8 @@ class Common extends MY_Builder_WEB
 		$this->defaultController = 'dashboard';
 
 		if($this->router->class !== 'auth') $this->auth();
+
+		$this->addCSS[] = base_url('public/assets/admin/css/style.css');
 	}
 
 	protected function auth(): bool

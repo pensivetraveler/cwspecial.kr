@@ -74,7 +74,6 @@ $bodyAttrs = implode(' ', array_map(
 
 		<!-- Custom CSS -->
 		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/css/pages/front-page.css');?>" />
-		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/css/demo.css');?>" />
 		<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/css/custom.css');?>" />
 
 		<!-- Page CSS -->
