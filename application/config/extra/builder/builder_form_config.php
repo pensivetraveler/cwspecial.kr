@@ -1,7 +1,10 @@
 <?php
 $config['buider_form_config_loaded'] = true;
 
-$config['sample_form_config'] = [
+$config['form_side_prefix'] = 'form_side-';
+$config['form_page_prefix'] = 'form_page-';
+
+$config['form_sample_config'] = [
 	[
 		'field' => 'field',
 		'label' => 'lang:field',
@@ -60,3 +63,73 @@ $config['sample_form_config'] = [
 	],
 ];
 
+$config['builder_form_base'] = [
+	'field' => '',
+	'label' => '',
+	'form' => true,
+	'rules' => '',
+	'errors' => [],
+	'category' => 'basic',
+	'type' => 'text',
+	'subtype' => 'basic',
+	'default' => '',
+	'icon' => null,
+	'form_text' => '',
+	'attributes' => [],
+	'form_attributes' => [],
+	'option_attributes' => [],
+	'group' => '',
+	'group_attributes' => [],
+	'list' => false,
+	'list_attributes' => [],
+];
+
+$config['builder_form_base_form_attributes'] = [
+	'form_sync' => true,
+	'reset_value' => true,
+	'detect_changed' => true,
+	'with_btn' => false,
+	'with_list' => false,
+	'list_sorter' => false,
+	'list_onclick' => 'download',
+	'list_delete' => false,
+];
+
+$config['builder_form_base_option_attributes'] = [
+	'option_type' => 'field',
+	'option_data' => [],
+	'render' => [],
+	'option_stack' => 'vertical',
+];
+
+$config['builder_form_base_group_attributes'] = [
+	'label' => '',
+	'form_text' => '',
+	'type' => 'base',
+	'key' => '',
+	'envelope_name' => false,
+	'group_repeater' => false,
+	'repeater_type' => 'base',
+	'repeater_id' => '',
+	'repeater_count' => 1,
+];
+
+$config['builder_form_base_list_attributes'] = [
+	'list' => true,
+	'field' => '',
+	'label' => '',
+	'format' => 'text',
+	'icon' => '',
+	'text' => '',
+	'classes' => [],
+	'onclick' => [],
+	'render' => [],
+	'option_attributes' => [],
+];
+
+$config['builder_form_filter_base'] = array_replace_recursive($config['builder_form_base'], [
+	'icon' => null,
+	'filter_attributes' => [
+		'type' => 'where',
+	],
+]);
