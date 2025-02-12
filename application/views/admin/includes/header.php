@@ -25,14 +25,14 @@
 
 					<div class="menu-inner-shadow"></div>
 
-					<?php $this->load->view('admin/includes/header_nav_left'); ?>
+					<?php $this->_view('admin/includes/header_nav_left'); ?>
 				</aside>
 				<!-- / Menu -->
 
 				<!-- Layout page -->
 				<div class="layout-page">
 					<!-- Navbar -->
-					<?php $this->load->view('admin/includes/header_nav_top'); ?>
+					<?php $this->_view('admin/includes/header_nav_top'); ?>
 					<!-- / Navbar -->
 					<!-- Content wrapper -->
 					<main class="content-wrapper">

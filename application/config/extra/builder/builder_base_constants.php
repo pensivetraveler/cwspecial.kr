@@ -2,6 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 define("BUILDER_ASSET_URI", 'public/assets/' . basename(__DIR__) . '/');
+
+const BUILDER_FLAGNAME = 'builder';
 const BUILDER_ASSET_PATH = FCPATH . BUILDER_ASSET_URI;
 
 const BUILDER_ASSET_AUDIO_URI = BUILDER_ASSET_URI . 'audio/';

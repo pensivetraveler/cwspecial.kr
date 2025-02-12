@@ -9,9 +9,9 @@
     ]);
 	foreach ($formData as $item):
 		if($item['category'] === 'group'):
-			$this->load->view("admin/layout/form_{$formType}_group_".$item['view'], ['item' => $item]);
+			$this->_view("admin/layout/form_{$formType}_group_".$item['view'], ['item' => $item]);
 		elseif($item['category'] === 'custom'):
-			$this->load->view("admin/layout/form_{$formType}_custom_".$item['view'], ['item' => $item]);
+			$this->_view("admin/layout/form_{$formType}_custom_".$item['view'], ['item' => $item]);
 		elseif($item['type'] === 'hidden'):
 			echo form_input(
 				[

@@ -147,7 +147,7 @@
 							aria-label="Close"></button>
 				</div>
 				<div class="offcanvas-body flex-grow-1">
-					<?php $this->load->view('admin/layout/form_side', ['formType' => 'side', 'formData' => $formData]); ?>
+					<?php $this->_view('admin/layout/form_side', ['formType' => 'side', 'formData' => $formData]); ?>
 				</div>
 			</div>
 			<!--/ Modal to add new record -->
