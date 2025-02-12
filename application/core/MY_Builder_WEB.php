@@ -28,6 +28,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		require_once APPPATH . 'config/extra/builder/builder_base_constants.php';
 		$this->load->helper(["builder/builder_web","builder/builder_base","builder/builder_form",]);
 		$this->lang->load("builder/base", $this->config->item('language'));
+		$this->lang->load('builder/form_validation', $this->config->item('language'));
 
 		if(!$this->flag) show_error("Platform flag is not set.");
 		foreach (glob(APPPATH . "config/extra/{$this->flag}/*_config.php") as $file) {
@@ -342,8 +343,6 @@ class MY_Builder_WEB extends MY_Controller_WEB
 				$rule = $match[1];
 				$param = $match[2];
 			}
-			$this->lang->load('form_validation');
-			$this->lang->load('custom_form_validation');
 			if($error_msg = $this->form_validation->get_error_msg($rule, $item['label'], $param, $item['errors'])){
 				$carry[$rule] = $error_msg;
 			}

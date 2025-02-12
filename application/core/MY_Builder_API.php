@@ -30,6 +30,9 @@ class MY_Builder_API extends MY_Controller_API
 	{
 		parent::__construct();
 
+		$this->lang->load("builder/base", $this->config->item('language'));
+		$this->lang->load('builder/form_validation', $this->config->item('language'));
+
 		$this->identifier = '';
 		$this->listConfigName = 'list_'.strtolower($this->router->class).'_config';
 		$this->formConfigName = 'form_'.strtolower($this->router->class).'_config';
