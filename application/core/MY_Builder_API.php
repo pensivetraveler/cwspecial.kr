@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class MY_Builder_API extends MY_Controller_API
 {
+	public string $flag;
 	protected string $table = '';
 	protected string $identifier = '';
 	protected array $primaryKeyList = [];
@@ -30,9 +31,6 @@ class MY_Builder_API extends MY_Controller_API
 	{
 		parent::__construct();
 
-		$this->lang->load("builder/base", $this->config->item('language'));
-		$this->lang->load('builder/form_validation', $this->config->item('language'));
-
 		$this->identifier = '';
 		$this->listConfigName = 'list_'.strtolower($this->router->class).'_config';
 		$this->formConfigName = 'form_'.strtolower($this->router->class).'_config';
@@ -49,7 +47,7 @@ class MY_Builder_API extends MY_Controller_API
 		if($this->uri->segment(1) === 'api'){
 			$flag = 'web';
 		}else{
-			$flag = $this->uri->segment(1);
+			$flag = $this->flag??$this->uri->segment(1);
 		}
 
 		$this->config->load('extra/builder/builder_base_config', false);
