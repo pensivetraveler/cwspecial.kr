@@ -552,7 +552,8 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		// lastRow
 		$lastRowColumns = $rowColumns;
 		if($lastRowColumns + FILTER_BASE_COLSPAN > 12) {
-			$list[$rowIdx++] = [
+			$rowIdx++;
+			$list[$rowIdx] = [
 				['type' => 'filter', 'subtype' => 'space', 'colspan' => 9],
 			];
 			$lastRowColumns = 9;
