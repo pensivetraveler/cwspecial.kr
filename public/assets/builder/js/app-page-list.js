@@ -147,7 +147,7 @@ $(function () {
 							searchable: false,
 							orderable: false,
 							render: function (data, type, full, meta) {
-								return getListActinos(btns, common.IDENTIFIER?full[common.IDENTIFIER]:'');
+								return getListActions(btns, common.IDENTIFIER?full[common.IDENTIFIER]:'');
 							}
 						}
 					case 'select' :
@@ -279,7 +279,7 @@ $(function () {
 	});
 
 	$('.dataTables_wrapper').on('click', '.detail-record', function() {
-		if(!common.IDENTIFIER) throw new Error(`Identifier is not defined`);
+		if(!common.IDENTIFIER.length) throw new Error(`Identifier is not defined`);
 		location.href = common.DETAIL_VIEW_URI + '/' + $(this).data('id');
 	});
 
@@ -790,7 +790,7 @@ function getListButtons() {
 	return data;
 }
 
-function getListActinos(btns, dataId) {
+function getListActions(btns, dataId) {
 	let btnIcons = {
 		edit : '<i class="ri-edit-box-line"></i>',
 		detail : '<i class="ri-eye-line ri-20px"></i>',
