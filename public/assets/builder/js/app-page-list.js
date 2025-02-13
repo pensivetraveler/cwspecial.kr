@@ -761,8 +761,8 @@ function getListButtons() {
 				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">' + getLocale('Upload Excel', common.LOCALE) + '</span>',
 				className: 'add-new btn btn-primary waves-effect waves-light me-4',
 				action: function () {
-					if (!common.SIDE_FORM && common.ADD_VIEW_URI.length) {
-						location.href = common.ADD_VIEW_URI;
+					if (!common.SIDE_FORM && common.EXCEL_VIEW_URI.length) {
+						location.href = common.EXCEL_VIEW_URI;
 					} else {
 						readyFrmInputs(formRecord, 'add', common.FORM_DATA);
 					}

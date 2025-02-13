@@ -213,10 +213,22 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			}
 		}
 		foreach ($this->config->get("page_base_config", []) as $key=>$val) {
-			if(is_array($val)) {
-				$pageConfig[$key] = array_merge($val, $pageConfig[$key]??[]);
+			if(!array_key_exists($key, $pageConfig)) {
+				$pageConfig[$key] = $val;
 			}else{
-				$pageConfig[$key] = $pageConfig[$key]??$val;
+				if(is_array($val)) {
+					foreach ($val as $subKey=>$subVal) {
+						if(!array_key_exists($subKey, $pageConfig[$key])) {
+							$pageConfig[$key][$subKey] = $subVal;
+							continue;
+						}
+						if(is_array($subVal)) {
+							$pageConfig[$key][$subKey] = array_merge($subVal, $pageConfig[$key][$subKey]);
+						}
+					}
+				}else{
+					$pageConfig[$key] = $pageConfig[$key]??$val;
+				}
 			}
 		}
 		$this->pageConfig = $pageConfig;
