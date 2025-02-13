@@ -541,7 +541,7 @@ class MY_Builder_API extends MY_Controller_API
 					}else{
 						if(!array_key_exists($key, $data)) {
 							$errorMsg = 'Required';
-						}else if(empty($data[$key]) && gettype($data[$key]) !== 'integer') {
+						}else if(is_empty($data, $key)) {
 							$value = $data[$key];
 							$errorMsg = 'notEmpty';
 						}
