@@ -43,7 +43,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		$this->lang->load("{$this->flag}/nav", $this->config->item('language'));
 		$this->lang->load("{$this->flag}/form", $this->config->item('language'));
 
-		$this->titleList = [camelize($this->flag)];
+		$this->titleList = [ucfirst($this->flag)];
 		$this->pageConfig = [];
 		$this->pageType = 'form';
 		$this->sideForm = false;
