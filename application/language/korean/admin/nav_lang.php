@@ -5,6 +5,7 @@ $lang['nav']['List'] = '목록';
 $lang['nav']['View'] = '조회';
 $lang['nav']['Add'] = '등록';
 $lang['nav']['Edit'] = '수정';
+$lang['nav']['Excel'] = '일괄 등록';
 
 $lang['nav']['Administrators'] = '관리자';
 $lang['nav']['Administrators Management'] = '관리자 관리';

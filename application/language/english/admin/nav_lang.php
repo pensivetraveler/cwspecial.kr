@@ -5,6 +5,7 @@ $lang['nav']['List'] = 'List';
 $lang['nav']['View'] = 'View';
 $lang['nav']['Add'] = 'Add';
 $lang['nav']['Edit'] = 'Edit';
+$lang['nav']['Excel'] = 'Batch Registration';
 
 $lang['nav']['Administrators'] = 'Administrators';
 $lang['nav']['Administrators Management'] = 'Administrators Management';

@@ -143,6 +143,21 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		$this->viewApp($data);
 	}
 
+	public function excel()
+	{
+		$this->addJS['head'][] = [
+			base_url('public/assets/builder/vendor/libs/jquery-tabledit/jquery.tabledit.js'),
+			base_url('public/assets/builder/js/app-page-excel.js'),
+			"https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js",
+		];
+
+		$this->titleList[] = 'Excel';
+
+		$data['backLink'] = WEB_HISTORY_BACK;
+
+		$this->viewApp($data);
+	}
+
 	protected function viewApp($data)
 	{
 		if(!array_key_exists('subPage', $data)) {
@@ -265,6 +280,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 				'DETAIL_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'view',
 				'ADD_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'add',
 				'EDIT_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'edit',
+				'EXCEL_VIEW_URI' => $this->href.DIRECTORY_SEPARATOR.'excel',
 				'SIDE_FORM' => $this->sideForm,
 			]);
 		}
