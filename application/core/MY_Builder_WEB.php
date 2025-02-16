@@ -612,7 +612,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		foreach ($this->formColumns as $column) {
 			if(!$column['form']) continue;
 			if($column['type'] === 'hidden') continue;
-			if(in_array($column['field'], [CREATED_ID_COLUMN_NAME, CREATED_DT_COLUMN_NAME, UPDATED_ID_COLUMN_NAME, UPDATED_DT_COLUMN_NAME])) continue;
+			if(in_array($column['field'], [CREATED_ID_COLUMN_NAME, CREATED_DT_COLUMN_NAME, UPDATED_ID_COLUMN_NAME, UPDATED_DT_COLUMN_NAME, DEL_YN_COLUMN_NAME, USE_YN_COLUMN_NAME, RECENT_DT_COLUMN_NAME])) continue;
 			$list[] = [
 				'field' => $column['field'],
 				'required' => strpos($column['rules'], 'required')!==false,

@@ -47,6 +47,7 @@ const UPDATED_DT_COLUMN_NAME = 'updated_dt';
 const UPDATED_ID_COLUMN_NAME = 'updated_id';
 const DEL_YN_COLUMN_NAME = 'del_yn';
 const USE_YN_COLUMN_NAME = 'use_yn';
+const RECENT_DT_COLUMN_NAME = 'recent_dt';
 
 /*
 |--------------------------------------------------------------------------
