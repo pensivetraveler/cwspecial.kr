@@ -125,7 +125,7 @@ function showAlert(obj = {}) {
 		if(obj.type === undefined) obj.type = 'success';
 		if(!['success', 'warning', 'error'].includes(obj.type)) throw new Error(`showAlert : Type is not allowed. ${obj.type}`);
 		if(obj.title !== undefined) title = getLocale(obj.title, common.LOCALE);
-		if(obj.text !== undefined) text = getLocale(obj.text, common.LOCALE);
+		if(obj.text !== undefined || obj.html !== undefined) text = getLocale(obj.text, common.LOCALE);
 
 		switch (obj.type) {
 			case 'success' :
@@ -143,7 +143,7 @@ function showAlert(obj = {}) {
 		}
 
 		obj.title = title;
-		obj.text = text;
+		if(obj.html === undefined) obj.text = text;
 
 		showSwalAlert(obj);
 	} catch (error) {
@@ -162,10 +162,10 @@ function swalKeydownHandler(event) {
 }
 
 function showSwalAlert(obj) {
-	console.log(obj)
 	Swal.fire({
 		title: obj.title,
-		text: obj.text,
+		text: obj.text??null,
+		html: obj.html??null,
 		icon: obj.type,
 		customClass: {
 			confirmButton: 'btn btn-primary waves-effect waves-light'
@@ -371,7 +371,7 @@ function submitAjax(selector, options = {}, test = false) {
 function getFormData(form = null) {
 	if(!form) form = document.getElementById('formRecord');
 
-	const formData = new FormData(form);
+	const formData = new FormData();
 	form.querySelectorAll('input, textarea, select').forEach(function(node) {
 		if(!node.name) return;
 		if(checkInputSubmittable(node, form)){
@@ -482,6 +482,7 @@ function reformatFormData(form, data, regexp = {}, side = false) {
 		}
 
 		if(curr.type === 'file') {
+			console.log(curr.attributes.accept)
 			item.validators.file = {
 				extension: curr.attributes.extension??null,
 				maxFiles : curr.attributes.max??null,

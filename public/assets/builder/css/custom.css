@@ -537,3 +537,10 @@ html[data-style="dark"] .form-type-side .input-group .form-floating > div:has(.s
 .light-style .form-control.flatpickr-time {
 	border: 1px solid #cfd0d6;
 }
+
+/*********************************************
+    [data-method="excel"]
+ *********************************************/
+[data-method="excel"] td.input-required {
+	background-color: var(--bs-warning);
+}

@@ -1,4 +1,7 @@
 $(function() {
+	const fieldList = excelHeaders.map(item => item.label);
+	const requiredList = excelHeaders.filter(item => item.required).map(item => item.label);
+
 	function getEditableColumns(tableSelector, excludeIndices = [0]) {
 		let editableColumns = [];
 		let columnCount = $(tableSelector + " thead th").length; // 전체 컬럼 개수
@@ -30,62 +33,129 @@ $(function() {
 			let worksheet = workbook.Sheets[sheetName];
 
 			let json = XLSX.utils.sheet_to_json(worksheet, { header: 1 }); // JSON 변환
-
-			if(json.length > 0) {
-				// table 초기화
-				const table = document.getElementById('inline-editable');
-				$(table).find('thead tr').empty();
-				$(table).find('tbody').empty();
-
-				// thead
-				const thead = table.querySelector('thead tr');
-				const init = document.createElement('th');
-				init.innerText = '#';
-				thead.appendChild(init);
-				let colCount = 0;
-				for(const [idx, col] of json[0].entries()) {
-					const th = document.createElement('th');
-					th.innerText = col;
-					thead.appendChild(th)
-					colCount++;
-				}
-				const last = document.createElement('th');
-				last.innerText = '삭제';
-				thead.appendChild(last);
-
-				// tbody
-				const tbody = table.querySelector('tbody');
-				for(let i = 1; i < json.length; i++) {
-					if(json[i].length === 0) continue;
-
-					const row = document.createElement('tr');
-					const init = document.createElement('td');
-					init.innerText = i;
-					row.appendChild(init);
-					for(let j = 0; j < colCount; j++) {
-						const obj = json[i];
-						const td = document.createElement('td');
-						td.innerText = obj[j]??'';
-						row.appendChild(td);
-					}
-					const last = document.createElement('td');
-					const btn = document.createElement('button');
-					btn.innerText = 'remove';
-					btn.value = 'remove';
-					last.appendChild(btn);
-					row.appendChild(last);
-					tbody.appendChild(row);
-				}
+			if(!json.length) {
+				showAlert({
+					type: 'error',
+					text: '업로드 파일을 확인해주세요.',
+				})
+				return;
 			}
-			console.log(json); // 콘솔 출력
+
+			// header 검사
+			const notFields = [];
+			for(const item of json[0]) if(!fieldList.includes(item)) notFields.push(item);
+			console.log(requiredList)
+
+			if(notFields.length) {
+				showAlert({
+					type: 'error',
+					html: "허용되지 않는 컬럼이 포함되어있습니다.<br><span class='small mt-2'>"+notFields.join(', ')+"</span>",
+				})
+				return;
+			}
+
+			// table 초기화
+			const table = document.getElementById('inline-editable');
+			$(table).find('thead tr').empty();
+			$(table).find('tbody').empty();
+
+			// thead
+			const thead = table.querySelector('thead tr');
+			const init = document.createElement('th');
+			init.innerText = '#';
+			thead.appendChild(init);
+			let colCount = 0;
+			for(const [idx, col] of json[0].entries()) {
+				const th = document.createElement('th');
+				th.innerText = col;
+				thead.appendChild(th)
+				colCount++;
+			}
+			const last = document.createElement('th');
+			last.innerText = '삭제';
+			thead.appendChild(last);
+
+			// tbody
+			let totalRowCount = 0;
+			let totalErrorCount = 0;
+			const tbody = table.querySelector('tbody');
+			for(let i = 1; i < json.length; i++) {
+				if(json[i].length === 0) continue;
+				const row = document.createElement('tr');
+				const init = document.createElement('td');
+				init.innerText = i;
+				row.appendChild(init);
+				for(let j = 0; j < colCount; j++) {
+					const obj = json[i];
+					const td = document.createElement('td');
+					td.innerText = obj[j]??'';
+
+					// required 확인
+					if(!td.innerText.length) {
+						if(requiredList.includes(fieldList[j])) {
+							td.classList.add('input-required');
+							totalErrorCount++;
+						}
+					}
+
+					row.appendChild(td);
+				}
+				const last = document.createElement('td');
+				const btn = document.createElement('button');
+				btn.classList.add(...['btn', 'btn-danger', 'p-1']);
+				btn.innerText = '삭제';
+				btn.value = 'remove';
+				last.appendChild(btn);
+				row.appendChild(last);
+				tbody.appendChild(row);
+				totalRowCount++;
+			}
+
+			document.getElementById('totalRowCount').innerText = totalRowCount.toString();
+			document.getElementById('totalErrorCount').innerText = totalErrorCount.toString();
+
+			if(totalErrorCount > 0) {
+				document.getElementById('excelFormSubmit').setAttribute('disabled', 'disabled');
+				document.getElementById('btnErrorFind').removeAttribute('disabled');
+			}
 
 			$("#inline-editable").Tabledit({
+				url: false,
 				inputClass: 'form-control form-control-sm',
 				editButton: false,
 				deleteButton: false,
 				columns: {
 					identifier: [0, "id"],
 					editable: getEditableColumns('#inline-editable')
+				},
+				onSuccess: function (data, textStatus, jqXHR) {
+					console.log(data)
+					console.log(textStatus)
+					console.log(jqXHR)
+				},
+				onSubmit: function(action, serializedData, jqXHR) {
+					console.log("AJAX 요청 차단됨:", action, serializedData);
+					if (jqXHR) jqXHR.abort(); // 안전하게 AJAX 요청 중단
+					return false;
+				},
+			});
+
+			$('#inline-editable').on('change', 'input.tabledit-input', function() {
+				const index = getNodeIndexInParent(this);
+				const required = requiredList.includes(fieldList[index-1]);
+				const wrap = this.closest('td');
+				this.value = this.value.trim();
+				if(required) {
+					if(!this.value.length) {
+						if(!wrap.classList.contains('input-required')) wrap.classList.add('input-required');
+					}else{
+						if(wrap.classList.contains('input-required')) wrap.classList.remove('input-required');
+					}
+				}
+
+				if(!document.querySelectorAll('td.input-required').length) {
+					document.getElementById('excelFormSubmit').removeAttribute('disabled');
+					document.getElementById('btnErrorFind').setAttribute('disabled', 'disabled');
 				}
 			});
 		};
@@ -93,5 +163,52 @@ $(function() {
 		reader.onerror = function(error) {
 			console.error("파일 읽기 오류:", error);
 		};
+	});
+
+	document.getElementById('btnErrorFind').addEventListener('click', function() {
+		const errors = document.querySelectorAll('td.input-required');
+		if(!errors.length) return;
+
+		const container = $('#inline-editable').parents('.table-responsive')[0];
+		const containerPos = container.getBoundingClientRect();
+		const columnPos = errors[0].getBoundingClientRect();
+		window.scrollTo(0, columnPos.y - 100);
+		console.log(columnPos)
+
+		setTimeout(function() {
+			const scrollX = Math.max(columnPos.x-containerPos.width, 0);
+			$(container).animate({ scrollLeft: scrollX }, 500);
+		}, 500);
+	});
+
+	$('#excelFormSubmit').on('click', function() {
+		let editedData = [];
+
+		$('#inline-editable tbody tr').each(function() {
+			let row = $(this);
+			let rowData = {};
+			$(row).find('td').each(function (k, v) {
+				if(k === 0 || k === $(row).find('td').length-1) return;
+				const columnName = excelHeaders[k-1].field;
+				rowData[columnName] = $(v).text();
+			});
+			editedData.push(rowData);
+		});
+
+		// AJAX를 통해 서버로 데이터 전송
+		$.ajax({
+			url: API_URI+'/excel',  // 서버의 저장 API URL
+			type: 'POST',
+			dataType: 'json',
+			data: { data: editedData },
+			success: function(response) {
+				console.log("저장 성공:", response);
+				// Swal.fire("저장 완료", "데이터가 성공적으로 저장되었습니다.", "success");
+			},
+			error: function(error) {
+				console.log("저장 실패:", error);
+				// Swal.fire("저장 실패", "데이터 저장 중 오류가 발생했습니다.", "error");
+			}
+		});
 	});
 })
