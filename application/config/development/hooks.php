@@ -39,11 +39,11 @@
  * Use this code if your .env files on *CodeIgniter ROOT* folder
  */
 $hook['pre_system'][] = array(
-    'class'    => 'MY_Hooks',
-    'function' => 'loadEnv',
-    'filename' => 'MY_Hooks.php',
-    'filepath' => 'hooks',
-    'params'   => array()
+	'class'    => 'MY_Hooks',
+	'function' => 'loadEnv',
+	'filename' => 'MY_Hooks.php',
+	'filepath' => 'hooks',
+	'params'   => array()
 );
 
 
@@ -52,11 +52,11 @@ $hook['pre_system'][] = array(
  * 서버 점검 시, 모든 라우트에 대한 접근 제한을 해아할 경우
  */
 $hook['pre_controller'][] = array(
-    'class'    => 'MY_Hooks',
-    'function' => 'systemOfInspection',
-    'filename' => 'MY_Hooks.php',
-    'filepath' => 'hooks',
-    'params'   => array()
+	'class'    => 'MY_Hooks',
+	'function' => 'systemOfInspection',
+	'filename' => 'MY_Hooks.php',
+	'filepath' => 'hooks',
+	'params'   => array()
 );
 
 
@@ -65,22 +65,23 @@ $hook['pre_controller'][] = array(
  * 서버 점검 시, 모든 라우트에 대한 접근 제한을 해아할 경우
  */
 $hook['pre_controller'][] = array (
-    'class' => 'MY_Hooks',
-    'function' => 'setPearPath',
-    'filename' => 'MY_Hooks.php',
-    'filepath' => 'hooks'
+	'class' => 'MY_Hooks',
+	'function' => 'setPearPath',
+	'filename' => 'MY_Hooks.php',
+	'filepath' => 'hooks'
 );
+
 
 /**
  * Permission check
  * https://www.cikorea.net/bbs/view/tip?idx=8009
  */
 $hook['post_controller_constructor'][] = array(
-    'class'    => 'MY_Hooks',
-    'function' => 'checkPermission',
-    'filename' => 'MY_Hooks.php',
-    'filepath' => 'hooks',
-    'params'   => array()
+	'class'    => 'MY_Hooks',
+	'function' => 'checkPermission',
+	'filename' => 'MY_Hooks.php',
+	'filepath' => 'hooks',
+	'params'   => array()
 );
 
 
@@ -89,43 +90,61 @@ $hook['post_controller_constructor'][] = array(
  * https://blog.naver.com/awspro/222017107778
  */
 $hook['post_controller_constructor'][] = array(
-    'class'    => 'MY_Hooks',
-    'function' => 'setPHPVars',
-    'filename' => 'MY_Hooks.php',
-    'filepath' => 'hooks',
-    'params'   => array()
+	'class'    => 'MY_Hooks',
+	'function' => 'setPHPVars',
+	'filename' => 'MY_Hooks.php',
+	'filepath' => 'hooks',
+	'params'   => array()
 );
 
+
+/**
+ * setFormValidation
+ * config에 정의된 regexp 값을 토대로 form valdation method 추가
+ */
 $hook['post_controller_constructor'][] = array(
-    'class'    => 'MY_Hooks',
-    'function' => 'setFormValidation',
-    'filename' => 'MY_Hooks.php',
-    'filepath' => 'hooks',
-    'params'   => array()
+	'class'    => 'MY_Hooks',
+	'function' => 'setFormValidation',
+	'filename' => 'MY_Hooks.php',
+	'filepath' => 'hooks',
+	'params'   => array()
 );
+
+
+/**
+ * setUploadMaxSize
+ * 업로드 가능 파일 크기를 define
+ */
+$hook['post_controller_constructor'][] = array (
+	'class' => 'MY_Hooks',
+	'function' => 'setUploadMaxSize',
+	'filename' => 'MY_Hooks.php',
+	'filepath' => 'hooks'
+);
+
 
 /**
  * Set Life Cycle : Post Controller
  */
 $hook['post_controller'][] = array(
-    'class'    => 'MY_Hooks',
-    'function' => 'setLifeCycle',
-    'filename' => 'MY_Hooks.php',
-    'filepath' => 'hooks',
-    'params'   => array(
-        'life_cycle' => 'post_controller',
-    )
+	'class'    => 'MY_Hooks',
+	'function' => 'setLifeCycle',
+	'filename' => 'MY_Hooks.php',
+	'filepath' => 'hooks',
+	'params'   => array(
+		'life_cycle' => 'post_controller',
+	)
 );
 
 /**
  * header security
  */
 $hook['post_controller'][] = array(
-    'class'    => 'MY_Hooks',
-    'function' => 'setHeaderSecure',
-    'filename' => 'MY_Hooks.php',
-    'filepath' => 'hooks',
-    'params'   => array()
+	'class'    => 'MY_Hooks',
+	'function' => 'setHeaderSecure',
+	'filename' => 'MY_Hooks.php',
+	'filepath' => 'hooks',
+	'params'   => array()
 );
 
 /**
@@ -145,11 +164,11 @@ $hook['post_controller'][] = array(
  */
 if (ENVIRONMENT == 'production')
 {
-    $hook['display_override'][] = array(
-        'class'    => 'MY_Hooks',
-        'function' => 'compress',
-        'filename' => 'MY_Hooks.php',
-        'filepath' => 'hooks',
-        'params'   => array(),
-    );
+	$hook['display_override'][] = array(
+		'class'    => 'MY_Hooks',
+		'function' => 'compress',
+		'filename' => 'MY_Hooks.php',
+		'filepath' => 'hooks',
+		'params'   => array(),
+	);
 }

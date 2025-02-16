@@ -141,6 +141,21 @@ class MY_Hooks
 				$CI->form_validation->addMethod($name, $regexp);
 	}
 
+	public function setUploadMaxSize()
+	{
+		$uploadMaxSize = ini_get('upload_max_filesize');
+		$postMaxSize = ini_get('post_max_size');
+
+		define('POST_MAX_SIZE', convert_to_bytes($postMaxSize));
+		if(convert_to_bytes($uploadMaxSize) > convert_to_bytes($postMaxSize)) {
+			define('UPLOAD_MAX_FILESIZE', convert_to_bytes($postMaxSize));
+			define('UPLOAD_MAX_FILESIZE_TXT', $postMaxSize);
+		}else{
+			define('UPLOAD_MAX_FILESIZE', convert_to_bytes($uploadMaxSize));
+			define('UPLOAD_MAX_FILESIZE_TXT', $uploadMaxSize);
+		}
+	}
+
 	public function setHeaderSecure()
 	{
 		// Get CI instance
