@@ -11,7 +11,7 @@
 			<div class="mt-4">
 				<h6 class="mb-1">유의사항</h6>
 				<p class="text-start mb-0">
-					- 파일제한 : 20MB
+					- 파일제한 : <?=UPLOAD_MAX_FILESIZE_TXT?>B
 				</p>
 				<p class="text-start mb-0">
 					- 허용파일 : 파일 확장자 <span class="h6">.xlsx</span> 파일
@@ -27,6 +27,9 @@
 				</p>
 				<p class="text-start mb-0">
 					- 샘플 양식을 활용 시 첫번째 행은 삭제하지 마십시오.
+				</p>
+				<p class="text-start mt-4">
+					<a href="<?=$sampleFile?>" class="btn btn-secondary p-2" download=""><i class="ri-download-line ri-14px me-2"></i><span class="small">샘플 파일 다운로드</span></a>
 				</p>
 			</div>
 			<div class="row mt-8">
