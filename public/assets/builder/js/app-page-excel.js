@@ -66,26 +66,27 @@ $(function() {
 
 			// table 초기화
 			const table = document.getElementById('inline-editable');
-			$(table).find('thead tr').empty();
-			$(table).find('tbody').empty();
 
 			// thead
-			const thead = table.querySelector('thead tr');
-			const init = document.createElement('th');
-			init.innerText = '#';
-			thead.appendChild(init);
-			let colCount = 0;
-			for(const [idx, col] of json[0].entries()) {
-				const th = document.createElement('th');
-				th.innerText = col;
-				thead.appendChild(th)
-				colCount++;
-			}
-			const last = document.createElement('th');
-			last.innerText = '삭제';
-			thead.appendChild(last);
+			// $(table).find('thead tr').empty();
+			// const thead = table.querySelector('thead tr');
+			// const init = document.createElement('th');
+			// init.innerText = '#';
+			// thead.appendChild(init);
+			// let colCount = 0;
+			// for(const [idx, col] of json[0].entries()) {
+			// 	const th = document.createElement('th');
+			// 	th.innerText = col;
+			// 	thead.appendChild(th)
+			// 	colCount++;
+			// }
+			// const last = document.createElement('th');
+			// last.innerText = '삭제';
+			// thead.appendChild(last);
+			const colCount = json[0].length;
 
 			// tbody
+			$(table).find('tbody').empty();
 			let totalRowCount = 0;
 			let totalErrorCount = 0;
 			const tbody = table.querySelector('tbody');
@@ -235,5 +236,22 @@ $(function() {
 				}
 			}
 		});
+	});
+
+	$('#resetExcelForm').on('click', function() {
+		const table = document.getElementById('inline-editable');
+		const tbody = $(table).find('tbody')[0];
+		$(tbody).empty();
+		const tr = document.createElement('tr');
+		tr.classList.add('no-result');
+		const td = document.createElement('td');
+		td.setAttribute('colspan', $(table).find('thead tr th').length+2);
+		td.classList.add('text-center');
+		td.innerHTML = '파일을 업로드하세요';
+		tr.appendChild(td);
+		tbody.appendChild(tr);
+
+		document.getElementById('excelFormSubmit').setAttribute('disabled', 'disabled');
+		document.getElementById('btnErrorFind').setAttribute('disabled', 'disabled');
 	});
 })

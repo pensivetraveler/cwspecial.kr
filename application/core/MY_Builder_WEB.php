@@ -157,6 +157,8 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		$data['sampleFile'] = $this->getExcelSample($data['excelHeaders']);
 		$data['backLink'] = WEB_HISTORY_BACK;
 
+		if(!count($data['excelHeaders'])) show_error('엑셀 헤더 값이 불충분합니다.', 404);
+
 		$this->viewApp($data);
 	}
 

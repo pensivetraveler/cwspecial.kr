@@ -45,7 +45,7 @@
 				</div>
 				<div class="col-6">
 					<h6 class="mb-1">업로드 내역</h6>
-					<ul class="mt-2 p-4 rounded-2 bg-label-primary">
+					<ul class="mt-2 p-4 rounded-3 bg-label-primary">
 						<li class="mb-2 d-flex align-items-center">
 							<i class="ri-circle-fill text-body ri-10px me-2"></i>
 							<span class="me-2">총 행 개수 : </span>
@@ -74,7 +74,7 @@
 					</div>
 				</div>
 				<div class="col-md-6 col-sm-12 d-flex align-items-center justify-content-end">
-					<button class="btn btn-outline-primary w-px-100 btn-reset waves-effect me-4" type="reset">초기화</button>
+					<button id="resetExcelForm" class="btn btn-outline-primary w-px-100 btn-reset waves-effect me-4" type="reset">초기화</button>
 					<button id="excelFormSubmit" class="btn btn-primary w-px-100 btn-search waves-effect waves-light" type="button" disabled>저장</button>
 				</div>
 			</div>
