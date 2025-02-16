@@ -197,7 +197,7 @@ $(function() {
 
 		// AJAX를 통해 서버로 데이터 전송
 		$.ajax({
-			url: API_URI+'/excel',  // 서버의 저장 API URL
+			url: common.API_URI+'/excel',  // 서버의 저장 API URL
 			type: 'POST',
 			dataType: 'json',
 			data: { data: editedData },
