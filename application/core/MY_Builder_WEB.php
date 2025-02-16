@@ -153,6 +153,8 @@ class MY_Builder_WEB extends MY_Controller_WEB
 
 		$this->titleList[] = 'Excel';
 
+		$data['excelHeaders'] = $this->getExcelHeaders();
+		$data['sampleFile'] = $this->getExcelSample($data['excelHeaders']);
 		$data['backLink'] = WEB_HISTORY_BACK;
 
 		$this->viewApp($data);
@@ -600,5 +602,67 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		];
 
 		return $list;
+	}
+
+	protected function getExcelHeaders()
+	{
+		$list = [];
+		foreach ($this->formColumns as $column) {
+			if($column['type'] === 'hidden') continue;
+			if(in_array($column['field'], [CREATED_ID_COLUMN_NAME, CREATED_DT_COLUMN_NAME, UPDATED_ID_COLUMN_NAME, UPDATED_DT_COLUMN_NAME])) continue;
+			$list[] = [
+				'field' => $column['field'],
+				'required' => strpos($column['rules'], 'required')!==false,
+				'label' => lang($column['label']),
+			];
+		}
+		return $list;
+	}
+
+	protected function getExcelSample($data)
+	{
+		$sampleUri = '';
+		$filename = $this->router->class.'_upload_sample.xlsx';;
+		$filepath = 'public'.DIRECTORY_SEPARATOR.'sample'.DIRECTORY_SEPARATOR;
+
+		if(file_exists(FCPATH.$filepath.$filename) || count($data)) {
+			$sampleUri = DIRECTORY_SEPARATOR.$filepath.$filename;
+
+			if(!file_exists(FCPATH.$filepath.$filename) && count($data)) {
+				$this->load->library('excel_lib');
+				$this->load->helper('excel');
+				$excel = $this->excel_lib->load();
+				$excel->setActiveSheetIndex(0);
+				$sheet = $excel->getActiveSheet();
+
+				for($i = 0; $i < count($data); $i++) {
+					$alphabet = number_to_alphabet($i);
+					$sheet->setCellValue($alphabet.'1', $data[$i]['label']);
+				}
+				$lastAlphabet = number_to_alphabet(count($data)-1);
+
+				$sheet->getStyle('A1:'.$lastAlphabet.'1')->applyFromArray([
+					'fill' => [
+						'type' => PHPExcel_Style_Fill::FILL_SOLID,
+						'color' => ['rgb' => 'FFFF00'],
+					],
+				]);
+				$sheet->getStyle('A1:'.$lastAlphabet.'5')->applyFromArray([
+					'borders' => [
+						'allborders' => [
+							'style' => PHPExcel_Style_Border::BORDER_THIN,
+							'color' => array('rgb' => 'A6A6A6')
+						],
+					],
+				]);
+
+				// 폴더가 없으면 생성
+				if (!file_exists($filepath)) mkdir($filepath, 0755, true);
+
+				$writer = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+				$writer->save($filepath . $filename);
+			}
+		}
+		return $sampleUri;
 	}
 }
