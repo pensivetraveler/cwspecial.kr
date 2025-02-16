@@ -32,4 +32,5 @@ $lang['status_code'][REQUIRED_DATA_ERROR] = '데이터 요청 중 오류가 발�
 $lang['status_code'][CREATE_FOLDER_FAIL] = '폴더 생성이 실패했습니다.';
 $lang['status_code'][UPLOAD_FILE_FAIL] = '파일 업로드가 실패했습니다.';
 $lang['status_code'][WRITE_FILEDB_FAIL] = '데이터 DB 쓰기가 실패했습니다.';
+$lang['status_code'][MODEL_IS_NOT_DEFINED] = 'Model이 정의되지 않았습니다.';
 $lang['status_code'][FOR_TEST] = 'TEST';
