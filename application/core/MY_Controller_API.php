@@ -135,6 +135,8 @@ class MY_Controller_API extends RestController
 
 	public function response($data = null, $http_code = null)
     {
+		header('Content-Type: application/json');
+
         if(is_empty($data, 'code') && $http_code === null)
             show_error('response : Insufficient response data provided');
 

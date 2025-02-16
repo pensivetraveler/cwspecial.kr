@@ -781,4 +781,29 @@ class MY_Builder_API extends MY_Controller_API
 			], RestController::HTTP_NOT_FOUND);
 		}
 	}
+
+	public function excelUpload_post()
+	{
+		$data = $this->input->post('data');
+		if(!property_exists($this, 'Model')) {
+			$this->response([
+				'code' => MODEL_IS_NOT_DEFINED,
+				'data' => $data,
+			], RestController::HTTP_INTERNAL_SERVER_ERROR);
+		}
+
+		try {
+			$this->Model->addList($data);
+
+			$this->response([
+				'code' => DATA_CREATED,
+				'data' => [],
+			], RestController::HTTP_CREATED);
+		} catch (Exception $e) {
+			$this->response([
+				'code' => WRITE_FILEDB_FAIL,
+				'data' => $data,
+			], RestController::HTTP_INTERNAL_SERVER_ERROR);
+		}
+	}
 }

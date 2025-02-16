@@ -22,6 +22,16 @@ $(function() {
 		let file = event.target.files[0];
 		if (!file) return;
 
+		let allowedExtensions = /(\.xls|\.xlsx)$/i;
+		if (!allowedExtensions.exec(file.name)) {
+			showAlert({
+				type : 'warning',
+				text: "엑셀 파일(.xls, .xlsx)만 업로드 가능합니다.",
+			});
+			event.target.value = ""; // 파일 선택 초기화
+			return;
+		}
+
 		let reader = new FileReader();
 		reader.readAsArrayBuffer(file);
 
@@ -117,6 +127,8 @@ $(function() {
 			if(totalErrorCount > 0) {
 				document.getElementById('excelFormSubmit').setAttribute('disabled', 'disabled');
 				document.getElementById('btnErrorFind').removeAttribute('disabled');
+			}else{
+				document.getElementById('excelFormSubmit').removeAttribute('disabled');
 			}
 
 			$("#inline-editable").Tabledit({
@@ -197,17 +209,30 @@ $(function() {
 
 		// AJAX를 통해 서버로 데이터 전송
 		$.ajax({
-			url: common.API_URI+'/excel',  // 서버의 저장 API URL
+			url: common.API_URI+'/excelUpload',  // 서버의 저장 API URL
 			type: 'POST',
 			dataType: 'json',
 			data: { data: editedData },
 			success: function(response) {
-				console.log("저장 성공:", response);
-				// Swal.fire("저장 완료", "데이터가 성공적으로 저장되었습니다.", "success");
+				showAlert({
+					type : 'success',
+					text: 'Registered Successfully',
+					callback: 'reload',
+				});
 			},
-			error: function(error) {
-				console.log("저장 실패:", error);
-				// Swal.fire("저장 실패", "데이터 저장 중 오류가 발생했습니다.", "error");
+			error: function(jqXHR) {
+				if(jqXHR.status === 409) {
+					const key = Object.keys(jqXHR.responseJSON.data)[0];
+					showAlert({
+						type : 'error',
+						text: `${jqXHR.responseJSON.msg} (${key} : ${jqXHR.responseJSON.data[key]})`,
+					});
+				}else{
+					showAlert({
+						type : 'error',
+						text: jqXHR.responseJSON.msg,
+					});
+				}
 			}
 		});
 	});

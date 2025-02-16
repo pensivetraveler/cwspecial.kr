@@ -66,14 +66,16 @@
 				<div class="col-md-6 col-sm-12">
 					<div class="input-group input-group-merge">
 						<div class="form-floating form-floating-outline">
-							<input type="file" name="excelFile" id="excelFile" accept="application/vnd.sealed.xls" class="form-control">
+							<input type="file" name="excelFile" id="excelFile"
+								   accept=".xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+								   class="form-control">
 							<label for="form_side-thumbnail">엑셀업로드</label>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6 col-sm-12 d-flex align-items-center justify-content-end">
 					<button class="btn btn-outline-primary w-px-100 btn-reset waves-effect me-4" type="reset">초기화</button>
-					<button id="excelFormSubmit" class="btn btn-primary w-px-100 btn-search waves-effect waves-light" type="button">저장</button>
+					<button id="excelFormSubmit" class="btn btn-primary w-px-100 btn-search waves-effect waves-light" type="button" disabled>저장</button>
 				</div>
 			</div>
 			<?=form_close();?>
@@ -90,7 +92,7 @@
 					<tr>
 						<th>#</th>
 						<?php foreach ($excelHeaders as $item): ?>
-						<th data-required="<?=$item['required']?>"><?=$item['label']?></th>
+							<th data-required="<?=$item['required']?>"><?=$item['label']?></th>
 						<?php endforeach; ?>
 						<th>삭제</th>
 					</tr>
