@@ -9,7 +9,8 @@ $lang['placeholder'] = [
 	'Enter The User Email' => '이메일을 입력하세요.',
 	'Enter The Subject' => '제목을 입력하세요.',
 	'Enter The Content' => '내용 및 발달영역을 입력하세요.',
-	'Enter The Exact Address' => '상세주소를 입력하세요.',
+	'Search The Address' => '주소를 검색하세요.',
+	'Enter The Extra Address' => '상세주소를 입력하세요.',
 	'Password Dots' => '&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;',
 ];
 

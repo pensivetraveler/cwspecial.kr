@@ -8,7 +8,8 @@ $lang['placeholder'] = [
 	'Enter The User Email' => 'Enter The User Email',
 	'Enter The Subject' => 'Enter The Subject',
 	'Enter The Content' => 'Enter The Content',
-	'Enter The Exact Address' => 'Enter The Exact Address',
+	'Search The Address' => 'Search The Address.',
+	'Enter The Extra Address' => 'Enter The Extra Address',
 	'Password Dots' => '&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;',
 ];
 
