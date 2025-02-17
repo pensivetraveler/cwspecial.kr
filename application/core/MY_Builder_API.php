@@ -799,7 +799,8 @@ class MY_Builder_API extends MY_Controller_API
 
 	protected function beforeExcelUpload()
 	{
-		return $this->input->post('data');
+		$json_data = file_get_contents("php://input");
+		return json_decode($json_data, true);
 	}
 
 	protected function afterExcelUpload($data)
