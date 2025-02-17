@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class MY_Builder_WEB extends MY_Controller_WEB
 {
+	public string $flag = '';
 	public array $pageConfig;
 	public string $pageType;
 	public bool $sideForm;
@@ -16,15 +17,15 @@ class MY_Builder_WEB extends MY_Controller_WEB
 	public string $viewPath;
 
 
-	public string $flag = '';
 
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->config->load('extra/autologin_config', false);
-		$this->config->load('extra/builder/builder_base_config', false);
-		$this->config->load('extra/builder/builder_form_config', false);
+		foreach (['builder_base_config', 'builder_form_config', 'builder_nav_config', 'builder_page_config'] as $config) {
+			$this->config->load('extra/builder/'.$config, false);
+		}
 		require_once APPPATH . 'config/extra/builder/builder_base_constants.php';
 		$this->load->helper(["builder/builder_web","builder/builder_base","builder/builder_form",]);
 		$this->lang->load("builder/base", $this->config->item('language'));
@@ -272,7 +273,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 				'LIST_COLUMNS' => $this->setListColumns(),
 				'LIST_PLUGIN' => $this->pageConfig['listProperties']['plugin'],
 				'LIST_FILTERS' => $this->setListFilters(),
-				'LIST_BUTTONS' => $this->pageConfig['listProperties']['buttons']??['add' => true],
+				'LIST_BUTTONS' => $this->pageConfig['listProperties']['buttons'],
 				'LIST_ACTIONS' => array_keys(array_filter($this->pageConfig['listProperties']['actions'], function ($value) {
 					return $value === true || $value === 1;
 				})),
@@ -613,6 +614,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			if(!$column['form']) continue;
 			if($column['type'] === 'hidden') continue;
 			if(in_array($column['field'], [CREATED_ID_COLUMN_NAME, CREATED_DT_COLUMN_NAME, UPDATED_ID_COLUMN_NAME, UPDATED_DT_COLUMN_NAME, DEL_YN_COLUMN_NAME, USE_YN_COLUMN_NAME, RECENT_DT_COLUMN_NAME])) continue;
+			if(preg_match('/matches\[(.*?)\]/', $column['rules'], $matches)) continue;
 			$list[] = [
 				'field' => $column['field'],
 				'required' => strpos($column['rules'], 'required')!==false,
@@ -641,10 +643,19 @@ class MY_Builder_WEB extends MY_Controller_WEB
 				for($i = 0; $i < count($data); $i++) {
 					$alphabet = number_to_alphabet($i);
 					$sheet->setCellValue($alphabet.'1', $data[$i]['label']);
+
+					if($data[$i]['required']) {
+						$sheet->getStyle($alphabet.'1')
+							->getFont()->setBold(true)
+							->getColor()->setARGB(PHPExcel_Style_Color::COLOR_RED);
+					}
 				}
 				$lastAlphabet = number_to_alphabet(count($data)-1);
 
 				$sheet->getStyle('A1:'.$lastAlphabet.'1')->applyFromArray([
+					'alignment' => [
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, // 가로 가운데 정렬
+					],
 					'fill' => [
 						'type' => PHPExcel_Style_Fill::FILL_SOLID,
 						'color' => ['rgb' => 'FFFF00'],
