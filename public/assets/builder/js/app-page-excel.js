@@ -215,6 +215,7 @@ $(function() {
 			dataType: 'json',
 			data: { data: editedData },
 			success: function(response) {
+				console.log(response)
 				showAlert({
 					type : 'success',
 					text: 'Registered Successfully',
@@ -222,11 +223,16 @@ $(function() {
 				});
 			},
 			error: function(jqXHR) {
-				if(jqXHR.status === 409) {
-					const key = Object.keys(jqXHR.responseJSON.data)[0];
+				console.log(jqXHR)
+				if([404,409].includes(Math.floor(jqXHR.responseJSON.code/10))) {
+					let key = Object.keys(jqXHR.responseJSON.data)[0];
+					let targetData = jqXHR.responseJSON.data[key];
+					let filtered = excelHeaders.filter(item => item.field === key);
+					if(filtered.length) key = filtered[0].label;
+
 					showAlert({
 						type : 'error',
-						text: `${jqXHR.responseJSON.msg} (${key} : ${jqXHR.responseJSON.data[key]})`,
+						html: `<p>${jqXHR.responseJSON.msg}</p><p class="text-danger mt-2 mb-0">(${key} : ${targetData})</p>`,
 					});
 				}else{
 					showAlert({
