@@ -16,8 +16,6 @@ class MY_Builder_WEB extends MY_Controller_WEB
 	public array $formColumns;
 	public string $viewPath;
 
-
-
 	public function __construct()
 	{
 		parent::__construct();
