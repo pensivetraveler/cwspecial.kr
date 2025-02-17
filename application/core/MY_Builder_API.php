@@ -271,9 +271,7 @@ class MY_Builder_API extends MY_Controller_API
 	{
 		$this->checkIdentifierExist($key);
 
-		$dto = $this->validate($this->delete());
-
-		return $dto;
+		return $key;
 	}
 
 	protected function afterDelete($key)

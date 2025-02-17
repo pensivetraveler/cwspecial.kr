@@ -244,7 +244,7 @@ class MY_Form_validation extends CI_Form_validation
             $query = $this->CI->db
                 ->where($identifier, $id)
                 ->get($table)->row();
-			return (is_null($query) || !(is_empty($query->{$field})) && !is_file_posted($field));
+			return (is_null($query) || is_empty($query, $field)) && is_file_posted($field);
         }
     }
 

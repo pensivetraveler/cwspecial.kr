@@ -808,6 +808,7 @@ function deleteFile(btn, type = '') {
 				type: 'success',
 				title: 'Complete',
 				text: response.msg,
+				callback: 'reload',
 			});
 			itemWrap.remove();
 			if(!listWrap.children.length) listWrap.classList.add('d-none');
