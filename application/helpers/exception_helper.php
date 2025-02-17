@@ -185,7 +185,7 @@ if ( ! function_exists('_view'))
 	{
 		$CI = &get_instance();
 		if(!file_exists(VIEWPATH.$path.'.php')) {
-			$path = preg_replace('/^[^\/]+/', BUILDER_FLAGNAME, $path);
+			$path = preg_replace('/^[^\/]+/', 'errors', $path);
 		}
 		$CI->load->view($path, $vars, $return);
 	}
