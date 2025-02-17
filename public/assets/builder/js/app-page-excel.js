@@ -54,7 +54,6 @@ $(function() {
 			// header 검사
 			const notFields = [];
 			for(const item of json[0]) if(!fieldList.includes(item)) notFields.push(item);
-			console.log(requiredList)
 
 			if(notFields.length) {
 				showAlert({
@@ -66,23 +65,6 @@ $(function() {
 
 			// table 초기화
 			const table = document.getElementById('inline-editable');
-
-			// thead
-			// $(table).find('thead tr').empty();
-			// const thead = table.querySelector('thead tr');
-			// const init = document.createElement('th');
-			// init.innerText = '#';
-			// thead.appendChild(init);
-			// let colCount = 0;
-			// for(const [idx, col] of json[0].entries()) {
-			// 	const th = document.createElement('th');
-			// 	th.innerText = col;
-			// 	thead.appendChild(th)
-			// 	colCount++;
-			// }
-			// const last = document.createElement('th');
-			// last.innerText = '삭제';
-			// thead.appendChild(last);
 			const colCount = json[0].length;
 
 			// tbody
