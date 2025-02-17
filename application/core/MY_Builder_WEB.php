@@ -282,10 +282,10 @@ class MY_Builder_WEB extends MY_Controller_WEB
 
 		if($this->pageConfig['properties']['formExist'] && $this->pageConfig['properties']['listExist']) {
 			$this->addJsVars([
-				'DETAIL_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'view',
-				'ADD_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'add',
-				'EDIT_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'edit',
-				'EXCEL_VIEW_URI' => $this->href.DIRECTORY_SEPARATOR.'excel',
+				'PAGE_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'view',
+				'PAGE_ADD_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'add',
+				'PAGE_EDIT_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'edit',
+				'PAGE_EXCEL_URI' => $this->href.DIRECTORY_SEPARATOR.'excel',
 				'SIDE_FORM' => $this->sideForm,
 			]);
 		}

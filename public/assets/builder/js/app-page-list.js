@@ -280,7 +280,7 @@ $(function () {
 
 	$('.dataTables_wrapper').on('click', '.detail-record', function() {
 		if(!common.IDENTIFIER.length) throw new Error(`Identifier is not defined`);
-		location.href = common.DETAIL_VIEW_URI + '/' + $(this).data('id');
+		location.href = common.PAGE_VIEW_URI + '/' + $(this).data('id');
 	});
 
 	$('.dataTables_wrapper tbody').on('click', '.delete-record', function () {
@@ -492,14 +492,14 @@ $(function () {
 	}else{
 		$('.dataTables_wrapper').on('click', '.edit-record', function() {
 			if(!common.IDENTIFIER) throw new Error(`Identifier is not defined`);
-			if(!common.EDIT_VIEW_URI.length) throw new Error(`EDIT_VIEW_URI is not defined`);
-			location.href = common.EDIT_VIEW_URI + '/' + $(this).data('id');
+			if(!common.PAGE_EDIT_URI.length) throw new Error(`PAGE_EDIT_URI is not defined`);
+			location.href = common.PAGE_EDIT_URI + '/' + $(this).data('id');
 		});
 
 		$('.dataTables_wrapper').on('click', '.detail-record', function() {
 			if(!common.IDENTIFIER) throw new Error(`Identifier is not defined`);
-			if(!common.DETAIL_VIEW_URI.length) throw new Error(`DETAIL_VIEW_URI is not defined`);
-			location.href = common.DETAIL_VIEW_URI + '/' + $(this).data('id');
+			if(!common.PAGE_VIEW_URI.length) throw new Error(`PAGE_VIEW_URI is not defined`);
+			location.href = common.PAGE_VIEW_URI + '/' + $(this).data('id');
 		});
 	}
 });
@@ -761,10 +761,10 @@ function getListButtons() {
 				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">' + getLocale('Upload Excel', common.LOCALE) + '</span>',
 				className: 'add-new btn btn-primary waves-effect waves-light me-4',
 				action: function () {
-					if (common.EXCEL_VIEW_URI.length) {
-						location.href = common.EXCEL_VIEW_URI;
+					if (common.PAGE_EXCEL_URI.length) {
+						location.href = common.PAGE_EXCEL_URI;
 					}else{
-						console.warn('EXCEL_VIEW_URI is not defined')
+						console.warn('PAGE_EXCEL_URI is not defined')
 					}
 				}
 			}
@@ -777,8 +777,8 @@ function getListButtons() {
 				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">'+getLocale('Add New Record', common.LOCALE)+'</span>',
 				className: 'add-new btn btn-primary waves-effect waves-light',
 				action: function () {
-					if(!common.SIDE_FORM && common.ADD_VIEW_URI.length) {
-						location.href = common.ADD_VIEW_URI;
+					if(!common.SIDE_FORM && common.PAGE_ADD_URI.length) {
+						location.href = common.PAGE_ADD_URI;
 					}else{
 						readyFrmInputs(formRecord, 'add', common.FORM_DATA);
 					}
