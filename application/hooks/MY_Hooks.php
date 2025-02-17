@@ -16,12 +16,6 @@ class MY_Hooks
 		exit;
 	}
 
-	public function setLifeCycle($param)
-	{
-		$CI =& get_instance();
-		$CI->config->set_item('life_cycle', $param['life_cycle']);
-	}
-
 	public function loadEnv()
 	{
 		$dotenv = new Symfony\Component\Dotenv\Dotenv();
@@ -130,8 +124,9 @@ class MY_Hooks
 		if(!array_key_exists('ERRORS', $data)) $data['ERRORS'] = [];
 
 		$CI->phptojs->put($data);
-	}
 
+		$CI->config->set_item('life_cycle', 'post_controller');
+	}
 	public function setFormValidation()
 	{
 		$CI =& get_instance();

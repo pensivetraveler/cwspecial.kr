@@ -124,19 +124,6 @@ $hook['post_controller_constructor'][] = array (
 
 
 /**
- * Set Life Cycle : Post Controller
- */
-$hook['post_controller'][] = array(
-	'class'    => 'MY_Hooks',
-	'function' => 'setLifeCycle',
-	'filename' => 'MY_Hooks.php',
-	'filepath' => 'hooks',
-	'params'   => array(
-		'life_cycle' => 'post_controller',
-	)
-);
-
-/**
  * header security
  */
 $hook['post_controller'][] = array(
