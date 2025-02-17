@@ -46,6 +46,33 @@ if ( ! function_exists('form_options_by_field'))
     }
 }
 
+
+if ( ! function_exists('get_field_option_data'))
+{
+	/**
+	 * get_field_option_data
+	 * @param string $field
+	 * @param $key
+	 * @param $value
+	 * @return mixed
+	 */
+	function get_field_option_data(string $field = 'default', $key = null, $value = null): mixed
+	{
+		$CI =& get_instance();
+		$options = $CI->config->get(implode('.', ['options', $field]), [], false);
+
+		if($key) {
+			return array_key_exists($key, $options)?$options[$key]:null;
+		}
+
+		if($value) {
+			return array_search($value, $options);
+		}
+
+		return null;
+	}
+}
+
 if ( ! function_exists('get_group_field_name'))
 {
     function get_group_field_name($group_attr, $group_name, $field_name, $index = 0): string
