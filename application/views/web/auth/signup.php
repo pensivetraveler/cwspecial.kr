@@ -31,7 +31,7 @@
 		<div class="card mb-6">
 			<h5 class="card-header">1. 기본 인적 사항</h5>
 			<div class="card-body">
-				<?php $this->_view("admin/layout/form_{$formType}_custom_unique", ['item' => $code]); ?>
+				<?php _view("admin/layout/form_{$formType}_custom_unique", ['item' => $code]); ?>
 				<div class="row mb-4 form-validation-unit">
 					<?=form_label(lang($grade['label']), $grade['id'], ['class' => 'col-sm-2 col-form-label'])?>
 					<div class="col-sm-10">
@@ -120,9 +120,9 @@
 		<div class="card mb-6">
 			<h5 class="card-header">2. 사이트 이용 정보</h5>
 			<div class="card-body">
-				<?php $this->_view("admin/layout/form_{$formType}_custom_unique", ['item' => $id]); ?>
-				<?php $this->_view("admin/layout/form_{$formType}_custom_unique", ['item' => $email]); ?>
-				<?php $this->_view("admin/layout/form_{$formType}_group_".$user_password['view'], ['item' => $user_password]); ?>
+				<?php _view("admin/layout/form_{$formType}_custom_unique", ['item' => $id]); ?>
+				<?php _view("admin/layout/form_{$formType}_custom_unique", ['item' => $email]); ?>
+				<?php _view("admin/layout/form_{$formType}_group_".$user_password['view'], ['item' => $user_password]); ?>
 			</div>
 		</div>
 		<div class="row">

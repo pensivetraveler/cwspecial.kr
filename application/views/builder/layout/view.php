@@ -9,7 +9,7 @@
 			<h5 class="mb-0"><?=lang('nav.'.$titleList[1])?> 조회</h5>
 		</div>
 		<div class="card-body">
-			<?php $this->_view('admin/layout/form_page', ['formType' => 'page', 'formData' => $formData]); ?>
+			<?php _view('admin/layout/form_page', ['formType' => 'page', 'formData' => $formData]); ?>
 		</div>
 	</div>
 </div>

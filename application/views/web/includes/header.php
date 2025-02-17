@@ -1,5 +1,5 @@
 		<!-- Navbar -->
-		<?php $this->_view('web/includes/header_nav_top'); ?>
+		<?php _view('web/includes/header_nav_top'); ?>
 		<!-- / Navbar -->
 		<!-- Layout wrapper -->
 		<div id="screen-container" class="layout-wrapper layout-content-navbar">
