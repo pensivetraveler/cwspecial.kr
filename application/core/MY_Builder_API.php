@@ -782,6 +782,14 @@ class MY_Builder_API extends MY_Controller_API
 		}
 	}
 
+	public function excelValidate_post()
+	{
+		$this->response([
+			'code' => DATA_PROCESSED,
+			'data' => $this->input->post('data'),
+		], RestController::HTTP_OK);
+	}
+
 	public function excelUpload_post()
 	{
 		$data = $this->beforeExcelUpload();

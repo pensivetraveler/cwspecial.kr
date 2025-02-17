@@ -541,6 +541,10 @@ html[data-style="dark"] .form-type-side .input-group .form-floating > div:has(.s
 /*********************************************
     [data-method="excel"]
  *********************************************/
-[data-method="excel"] td.input-required {
+[data-method="excel"] td.edit-required {
 	background-color: var(--bs-warning);
+}
+
+[data-method="excel"] tr.submit-completed {
+	background-color: #cbcbcb;
 }

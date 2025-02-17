@@ -92,7 +92,7 @@
 					<tr>
 						<th>#</th>
 						<?php foreach ($excelHeaders as $item): ?>
-							<th data-required="<?=$item['required']?>"><?=$item['label']?></th>
+						<th data-field="<?=$item['field']?>" data-required="<?=$item['required']?>"><?=$item['label']?></th>
 						<?php endforeach; ?>
 						<th>삭제</th>
 					</tr>
