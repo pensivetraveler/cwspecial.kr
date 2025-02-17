@@ -161,4 +161,60 @@ class Auth extends Common
 			],
 		], RestController::HTTP_CREATED);
 	}
+
+	public function findId_post()
+	{
+		$this->validateFormRules('form_find_id_config');
+
+		$params = [
+			'email' => $this->input->post('email'),
+			'tel' => $this->input->post('tel'),
+		];
+
+		$count = $this->Model->getCnt($params);
+
+		if(!$count) {
+			$this->response(['code' => USER_NOT_EXIST,]);
+		}else{
+			$this->response([
+				'code' => DATA_RETRIEVED,
+				'data' => [
+					'result' => [
+						'id' => $this->Model->getData(['id'], $params),
+					],
+					'redirect_to' => '/admin/auth/login',
+				],
+			]);
+		}
+	}
+
+	public function findPassword_post()
+	{
+		$this->validateFormRules('form_find_id_config');
+
+		$params = [
+			'id' => $this->input->post('id'),
+			'email' => $this->input->post('email'),
+			'tel' => $this->input->post('tel'),
+		];
+
+		$count = $this->Model->getCnt($params);
+
+		if(!$count) {
+			$this->response(['code' => USER_NOT_EXIST,]);
+		}else{
+			$password = $this->Model->getData(['password'], $params);
+			$password = $this->encryption->decrypt($password);
+
+			$this->response([
+				'code' => DATA_RETRIEVED,
+				'data' => [
+					'result' => [
+						'password' => $password,
+					],
+					'redirect_to' => '/admin/auth/login',
+				],
+			]);
+		}
+	}
 }

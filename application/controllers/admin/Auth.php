@@ -23,10 +23,9 @@ class Auth extends Common
 		$this->addJsVars([
 			'API_URI' => '/api/auth',
 			'API_URI_ADD' => 'login',
-			'IDENTIFIER' => $this->setIdentifier(),
 			'FORM_DATA' => $this->setFormData(),
 			'FORM_REGEXP' => $this->config->item('regexp'),
-			'AFTER_LOGIN_URI' => '/admin/dashboard',
+			'REDIRECT_URI' => '/admin/dashboard'
 		], true);
 
 		$this->addCSS[] = [
@@ -74,4 +73,78 @@ class Auth extends Common
 
         redirect('admin/auth');
     }
+
+	public function findId()
+	{
+		if($this->session->userdata('user_id') && $this->session->userdata('token')) redirect('admin/dashboard');
+
+		$this->formColumns = $this->setFormColumns('find_id');
+		$this->addJsVars([
+			'API_URI' => '/adm/auth/',
+			'API_URI_ADD' => 'findId',
+			'FORM_DATA' => $this->setFormData(),
+			'FORM_REGEXP' => $this->config->item('regexp'),
+			'REDIRECT_URI' => '/admin/auth/login'
+		]);
+
+		$this->addCSS[] = [
+			base_url('public/assets/builder/vendor/css/pages/page-auth.css'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
+			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css'),
+		];
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/vendor/libs/@form-validation/popular.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/bootstrap5.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/auto-focus.js'),
+			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js'),
+		];
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/js/app-page-auth.js'),
+		];
+
+		$data['subPage'] = 'admin/auth/find_id';
+		$data['backLink'] = WEB_HISTORY_BACK;
+		$data['formData'] = restructure_admin_form_data($this->jsVars['FORM_DATA'], $this->sideForm?'side':'page');
+
+		$this->viewApp($data);
+	}
+
+	public function findPassword()
+	{
+		if($this->session->userdata('user_id') && $this->session->userdata('token')) redirect('admin/dashboard');
+
+		$this->formColumns = $this->setFormColumns('find_password');
+		$this->addJsVars([
+			'API_URI' => '/adm/auth/',
+			'API_URI_ADD' => 'findPassword',
+			'FORM_DATA' => $this->setFormData(),
+			'FORM_REGEXP' => $this->config->item('regexp'),
+			'REDIRECT_URI' => '/admin/auth/login'
+		]);
+
+		$this->addCSS[] = [
+			base_url('public/assets/builder/vendor/css/pages/page-auth.css'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
+			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css'),
+		];
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/vendor/libs/@form-validation/popular.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/bootstrap5.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/auto-focus.js'),
+			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js'),
+		];
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/js/app-page-auth.js'),
+		];
+
+		$data['subPage'] = 'admin/auth/find_password';
+		$data['backLink'] = WEB_HISTORY_BACK;
+		$data['formData'] = restructure_admin_form_data($this->jsVars['FORM_DATA'], $this->sideForm?'side':'page');
+
+		$this->viewApp($data);
+	}
 }

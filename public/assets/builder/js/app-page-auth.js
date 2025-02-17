@@ -96,9 +96,19 @@ $(function() {
 		// You need to grab the form data and create an Ajax request to send them
 		submitAjax(formSelector, {
 			success: function(response) {
-				console.log(response)
-				if(response.data.autologin) setCookie('autologin', response.data.autologin, 30);
-				redirect(common.AFTER_LOGIN_URI);
+				if(response.data.aul_key) setCookie('autologin', response.data.autologin, 30);
+				if(response.data.result !== undefined) {
+					let key = Object.keys(response.data.result)[0];
+					let val = response.data.result[key];
+					showAlert({
+						type: 'success',
+						html: `데이터가 조회되었습니다.<br><p class="text-danger mt-2 mb-0">(${getLocale('user.'+key, common.LOCALE)} : ${val})</p>`,
+						callback: redirect,
+						params: response.data.redirect_to??common.REDIRECT_URI??null,
+					})
+				}else{
+					redirect(response.data.redirect_to??common.REDIRECT_URI??null)
+				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.warn(jqXHR.responseJSON)
