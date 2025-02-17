@@ -27,7 +27,7 @@ class Auth extends Common
 			'FORM_DATA' => $this->setFormData(),
 			'FORM_REGEXP' => $this->config->item('regexp'),
 			'AFTER_LOGIN_URI' => '/dashboard',
-		], true);
+		]);
 
 		$this->addCSS[] = [
 			base_url('public/assets/builder/vendor/css/pages/page-auth.css'),
@@ -71,7 +71,7 @@ class Auth extends Common
 			'IDENTIFIER' => $this->setIdentifier(),
 			'FORM_DATA' => $this->setFormData(),
 			'FORM_REGEXP' => $this->config->item('regexp'),
-		], true);
+		]);
 
 		$this->addCSS[] = [
 			base_url('public/assets/builder/vendor/css/pages/page-auth.css'),
