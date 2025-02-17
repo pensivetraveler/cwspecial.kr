@@ -784,7 +784,18 @@ class MY_Builder_API extends MY_Controller_API
 
 	public function excelUpload_post()
 	{
-		$data = $this->input->post('data');
+		$data = $this->beforeExcelUpload();
+
+		$this->afterExcelUpload($data);
+	}
+
+	protected function beforeExcelUpload()
+	{
+		return $this->input->post('data');
+	}
+
+	protected function afterExcelUpload($data)
+	{
 		if(!property_exists($this, 'Model')) {
 			$this->response([
 				'code' => MODEL_IS_NOT_DEFINED,
