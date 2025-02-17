@@ -148,11 +148,13 @@ class MY_Controller_WEB extends MY_Controller
         if(!$this->config->item('error_occurs')) $this->load->view($this->baseViewPath, $data);
     }
 
-    protected function addJsVars($data, $afterConstruct = false)
-    {
+	protected function addJsVars($data)
+	{
 		foreach ($data as $key => $val) {
 			$this->jsVars[$key] = $val;
 		}
-        if($afterConstruct) $this->phptojs->append($data);
-    }
+		if($this->config->item('life_cycle') === 'post_controller') {
+			$this->phptojs->append($data);
+		}
+	}
 }
