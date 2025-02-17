@@ -25,6 +25,7 @@ $lang['status_code'][ERROR_DOWNLOAD_NOTFILE] = 'DOWNLOAD 파일이 조회되지 
 $lang['status_code'][DATA_ALREADY_EXIST] = '등록된 데이터가 존재합니다.';
 $lang['status_code'][ID_ALREADY_EXIST] = '등록된 아이디가 존재합니다.';
 $lang['status_code'][EMAIL_ALREADY_EXIST] = '등록된 이메일이 존재합니다.';
+$lang['status_code'][WRONG_DATA_TYPE] = '데이터 타입을 확인해주세요.';
 $lang['status_code'][COUNT_LIMIT_REACHED] = '등록 가능한 데이터의 개수가 이미 충족되었습니다.';
 $lang['status_code'][INTERNAL_SERVER_ERROR] = '서버에서 에러가 발생했습니다.';
 $lang['status_code'][MODEL_DATA_NOT_COINCIDENCE] = '테이블 프로퍼티를 검토해주세요';

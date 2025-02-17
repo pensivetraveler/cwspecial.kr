@@ -88,6 +88,7 @@ $lang['status_code'][ERROR_DOWNLOAD_NOTFILE] = 'Download file is not available.'
 $lang['status_code'][DATA_ALREADY_EXIST] = 'The data already exists.';
 $lang['status_code'][ID_ALREADY_EXIST] = 'The ID already exists.';
 $lang['status_code'][EMAIL_ALREADY_EXIST] = 'The email already exists.';
+$lang['status_code'][WRONG_DATA_TYPE] = 'The data type is not correct.';
 $lang['status_code'][COUNT_LIMIT_REACHED] = 'The data count limit has been reached.';
 $lang['status_code'][INTERNAL_SERVER_ERROR] = 'An error occurred on the server.';
 $lang['status_code'][MODEL_DATA_NOT_COINCIDENCE] = 'Please review the table properties.';
