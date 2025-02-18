@@ -141,13 +141,12 @@ $(function () {
 							}
 						};
 					case 'actions' : // Actions
-						const btns = common.LIST_ACTIONS;
 						return {
 							targets: 2+common.LIST_COLUMNS.length-1,
 							searchable: false,
 							orderable: false,
 							render: function (data, type, full, meta) {
-								return getListActions(btns, common.IDENTIFIER?full[common.IDENTIFIER]:'');
+								return getListActions(common.LIST_ACTIONS, common.IDENTIFIER?full[common.IDENTIFIER]:'');
 							}
 						}
 					case 'select' :
@@ -278,7 +277,7 @@ $(function () {
 		}
 	});
 
-	$('.dataTables_wrapper').on('click', '.detail-record', function() {
+	$('.dataTables_wrapper').on('click', '.view-record', function() {
 		if(!common.IDENTIFIER.length) throw new Error(`Identifier is not defined`);
 		location.href = common.PAGE_VIEW_URI + '/' + $(this).data('id');
 	});
@@ -496,7 +495,7 @@ $(function () {
 			location.href = common.PAGE_EDIT_URI + '/' + $(this).data('id');
 		});
 
-		$('.dataTables_wrapper').on('click', '.detail-record', function() {
+		$('.dataTables_wrapper').on('click', '.view-record', function() {
 			if(!common.IDENTIFIER) throw new Error(`Identifier is not defined`);
 			if(!common.PAGE_VIEW_URI.length) throw new Error(`PAGE_VIEW_URI is not defined`);
 			location.href = common.PAGE_VIEW_URI + '/' + $(this).data('id');
@@ -793,7 +792,7 @@ function getListButtons() {
 function getListActions(btns, dataId) {
 	let btnIcons = {
 		edit : '<i class="ri-edit-box-line"></i>',
-		detail : '<i class="ri-eye-line ri-20px"></i>',
+		view : '<i class="ri-eye-line ri-20px"></i>',
 		delete : '<i class="ri-delete-bin-7-line ri-20px"></i>',
 	};
 

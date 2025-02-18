@@ -1059,7 +1059,7 @@ function getListButtons() {
 function getListActinos(btns, dataId) {
 	let btnIcons = {
 		edit : '<i class="ri-edit-box-line"></i>',
-		detail : '<i class="ri-eye-line ri-20px"></i>',
+		view : '<i class="ri-eye-line ri-20px"></i>',
 		delete : '<i class="ri-delete-bin-7-line ri-20px"></i>',
 	};
 

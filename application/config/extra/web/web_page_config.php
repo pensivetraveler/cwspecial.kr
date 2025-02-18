@@ -25,8 +25,64 @@ $config['page_config'] = [
 			],
 			'actions' => [
 				'edit' => true,
-				'detail' => true,
+				'view' => true,
 				'delete' => true,
+			],
+		],
+	],
+	'notices' => [
+		'category' => 'page',
+		'type' => 'list',
+		'subType' => 'base',
+		'properties' => [
+			'baseMethod' => 'list',
+			'allows' => ['list','view'],
+			'formExist' => true,
+			'listExist' => true,
+		],
+		'formProperties' => [
+			'formConfig' => 'notices',
+			'formType' => 'page',
+		],
+		'listProperties' => [
+			'listConfig' => 'notices',
+			'plugin' => 'datatable',
+			'buttons' => [
+				'add' => true,
+				'excel' => false,
+			],
+			'actions' => [
+				'edit' => false,
+				'view' => true,
+				'delete' => false,
+			],
+		],
+	],
+	'inquiries' => [
+		'category' => 'page',
+		'type' => 'list',
+		'subType' => 'base',
+		'properties' => [
+			'baseMethod' => 'list',
+			'allows' => ['list','view'],
+			'formExist' => true,
+			'listExist' => true,
+		],
+		'formProperties' => [
+			'formConfig' => 'notices',
+			'formType' => 'page',
+		],
+		'listProperties' => [
+			'listConfig' => 'notices',
+			'plugin' => 'datatable',
+			'buttons' => [
+				'add' => true,
+				'excel' => false,
+			],
+			'actions' => [
+				'edit' => false,
+				'view' => true,
+				'delete' => false,
 			],
 		],
 	],

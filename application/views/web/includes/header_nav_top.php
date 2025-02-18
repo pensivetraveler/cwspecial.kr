@@ -42,7 +42,7 @@
 					<a class="nav-link fw-medium" href="<?=base_url('/notices')?>">공지사항</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link fw-medium" href="<?=base_url('/inquiry')?>">1:1 문의</a>
+					<a class="nav-link fw-medium" href="<?=base_url('/inquiries')?>">1:1 문의</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link fw-medium" href="<?=base_url('/myinfo')?>">내 정보</a>

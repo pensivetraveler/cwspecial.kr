@@ -22,3 +22,41 @@ $config['list_works_config'] = [
 	],
 ];
 
+$config['list_notices_config'] = [
+	[
+		'field' => 'subject',
+		'label' => 'lang:article.subject',
+	],
+	[
+		'field' => 'created_id',
+		'label' => 'lang:common.created_id',
+	],
+	[
+		'field' => 'recent_dt',
+		'label' => 'lang:common.recent_dt',
+	],
+	[
+		'field' => 'view_count',
+		'label' => 'lang:article.view_count',
+	],
+];
+
+$config['list_inquiries_config'] = [
+	[
+		'field' => 'subject',
+		'label' => 'lang:article.subject',
+	],
+	[
+		'field' => 'created_id',
+		'label' => 'lang:common.created_id',
+	],
+	[
+		'field' => 'recent_dt',
+		'label' => 'lang:common.recent_dt',
+	],
+	[
+		'field' => 'view_count',
+		'label' => 'lang:article.view_count',
+	],
+];
+
