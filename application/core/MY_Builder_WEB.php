@@ -222,7 +222,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			$pageConfig = $this->config->get("page_config")[strtolower($this->router->class)];
 			if(is_empty($pageConfig, 'properties')) $pageConfig['properties'] = [];
 			if(is_empty($pageConfig['properties'], 'baseMethod')) $pageConfig['properties']['baseMethod'] = $pageConfig['type'];
-			if(array_key_exists( 'allows', $pageConfig['properties'])) $pageConfig['properties'] = [];
+			if(array_key_exists( 'allows', $pageConfig['properties'])) $pageConfig['properties']['allows'] = [];
 			if(empty($pageConfig['properties']['allows'])) $pageConfig['properties']['allows'][] = $pageConfig['properties']['baseMethod'];
 		}
 		foreach ($this->config->get("page_base_config", []) as $key=>$val) {
