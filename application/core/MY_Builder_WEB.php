@@ -164,10 +164,11 @@ class MY_Builder_WEB extends MY_Controller_WEB
 	protected function viewApp($data)
 	{
 		if(!array_key_exists('subPage', $data)) {
+			$path = $view = '';
 			foreach ([$this->router->class, 'layout'] as $subdivide) {
-				foreach ([BUILDER_FLAGNAME, get_path()] as $firstpath) {
+				foreach ([get_path(), BUILDER_FLAGNAME] as $firstpath) {
+					if($view) continue;
 					$path = $firstpath.DIRECTORY_SEPARATOR.$subdivide.DIRECTORY_SEPARATOR;
-					$view = '';
 					if($this->router->method === 'index') {
 						foreach (['index', 'list'] as $method) {
 							if(file_exists(VIEWPATH.$path.$method.'.php')) {
@@ -179,10 +180,9 @@ class MY_Builder_WEB extends MY_Controller_WEB
 							$view = $this->router->method;
 						}
 					}
-					if($view) break;
 				}
 			}
-			if(empty($view) || !file_exists(VIEWPATH.$path.$view.'.php')){
+			if(is_null($view) || !file_exists(VIEWPATH.$path.$view.'.php')){
 				trigger_error("viewApp : View file for {$this->router->class}:{$this->router->method} does not exist.", E_USER_ERROR);
 			}else{
 				$data['subPage'] = $path.$view;
