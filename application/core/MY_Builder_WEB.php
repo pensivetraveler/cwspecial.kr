@@ -164,28 +164,22 @@ class MY_Builder_WEB extends MY_Controller_WEB
 	protected function viewApp($data)
 	{
 		if(!array_key_exists('subPage', $data)) {
-			$path = $view = '';
-			foreach ([$this->router->class, 'layout'] as $subdivide) {
-				foreach ([get_path(), BUILDER_FLAGNAME] as $firstpath) {
-					if($view) continue;
-					$path = $firstpath.DIRECTORY_SEPARATOR.$subdivide.DIRECTORY_SEPARATOR;
-					if($this->router->method === 'index') {
-						foreach (['index', 'list'] as $method) {
-							if(file_exists(VIEWPATH.$path.$method.'.php')) {
-								$view = $method;
-							}
-						}
-					}else{
-						if(file_exists(VIEWPATH.$path.$this->router->method.'.php')) {
-							$view = $this->router->method;
-						}
+			$view = null;
+			foreach ([get_path(), BUILDER_FLAGNAME] as $firstPath) {
+				if(!file_exists(VIEWPATH.$firstPath)) continue;
+				foreach ([$this->router->class, 'layout'] as $secondPath) {
+					$path = $firstPath.DIRECTORY_SEPARATOR.$secondPath.DIRECTORY_SEPARATOR;
+					$method = $this->router->method === 'index'?$this->pageConfig['properties']['baseMethod']:$this->router->method;
+					if(file_exists(VIEWPATH.$path.$method.'.php')) {
+						$view = $path.$method;
 					}
+					if($view) break;
 				}
 			}
-			if(is_null($view) || !file_exists(VIEWPATH.$path.$view.'.php')){
+			if(is_null($view) || !file_exists(VIEWPATH.$view.'.php')){
 				trigger_error("viewApp : View file for {$this->router->class}:{$this->router->method} does not exist.", E_USER_ERROR);
 			}else{
-				$data['subPage'] = $path.$view;
+				$data['subPage'] = $view;
 			}
 		}
 
@@ -226,9 +220,10 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		$pageConfig = [];
 		if(!is_empty($this->config->item("page_config"), strtolower($this->router->class))){
 			$pageConfig = $this->config->get("page_config")[strtolower($this->router->class)];
-			if(is_empty($pageConfig, 'properties') || is_empty($pageConfig['properties'], 'baseMethod')) {
-				$pageConfig['properties']['baseMethod'] = $pageConfig['type'];
-			}
+			if(is_empty($pageConfig, 'properties')) $pageConfig['properties'] = [];
+			if(is_empty($pageConfig['properties'], 'baseMethod')) $pageConfig['properties']['baseMethod'] = $pageConfig['type'];
+			if(array_key_exists( 'allows', $pageConfig['properties'])) $pageConfig['properties'] = [];
+			if(empty($pageConfig['properties']['allows'])) $pageConfig['properties']['allows'][] = $pageConfig['properties']['baseMethod'];
 		}
 		foreach ($this->config->get("page_base_config", []) as $key=>$val) {
 			if(!array_key_exists($key, $pageConfig)) {
