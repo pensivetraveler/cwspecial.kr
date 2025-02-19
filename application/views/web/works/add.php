@@ -1,6 +1,5 @@
 <?php
 extract(trans_formdata_dit_type($formData));
-//print_data($thumbnail);
 ?>
 <!-- Basic Layout -->
 <div class="row g-6 mb-6">
