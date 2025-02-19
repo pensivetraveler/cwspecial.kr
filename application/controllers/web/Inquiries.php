@@ -8,7 +8,7 @@ class Inquiries extends Common
 	{
 		parent::__construct();
 
-		$this->titleList[] = 'Inquiries Management';
+		$this->titleList[] = 'Inquiries';
 		$this->addJsVars([
 			'API_URI' => '/api/articles',
 			'API_PARAMS' => [

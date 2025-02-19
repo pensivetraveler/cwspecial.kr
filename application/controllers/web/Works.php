@@ -8,7 +8,7 @@ class Works extends Common
 	{
 		parent::__construct();
 
-		$this->titleList[] = 'Works Management';
+		$this->titleList[] = 'Works';
 		$this->addJsVars([
 			'API_URI' => '/api/articles',
 			'API_PARAMS' => [

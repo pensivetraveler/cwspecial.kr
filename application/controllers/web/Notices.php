@@ -8,7 +8,7 @@ class Notices extends Common
 	{
 		parent::__construct();
 
-		$this->titleList[] = 'Notices Management';
+		$this->titleList[] = 'Notices';
 		$this->addJsVars([
 			'API_URI' => '/api/articles',
 			'API_PARAMS' => [
