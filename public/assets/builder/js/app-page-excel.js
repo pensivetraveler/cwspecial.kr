@@ -39,97 +39,95 @@ function getEditableColumns(tableSelector, excludeIndices = [0]) {
 }
 
 async function validateData(dataArray, chunkSize = 50) {
-	return new Promise((resolve) => {
-		let index = 0;
-		let valid = true;
+	let index = 0;
+	let valid = true;
 
-		function sendChunk() {
-			if (!valid || index >= dataArray.length) {
-				resolve(valid); // 모든 요청이 끝나면 resolve
-				return;
-			}
+	while (index < dataArray.length) {
+		if (!valid) break; // 에러 발생 시 중단
 
-			let chunk = dataArray.slice(index, index + chunkSize);
-			index += chunkSize;
+		let chunk = dataArray.slice(index, index + chunkSize);
+		index += chunkSize;
 
-			$.ajax({
+		try {
+			const response = await $.ajax({
 				url: common.API_URI + '/excelValidate',
 				type: "POST",
 				data: JSON.stringify(chunk),
 				contentType: "application/json",
-				success: function(response) {
-					console.log("Chunk sent successfully");
-					sendChunk(); // 다음 청크 보내기
-				},
-				error: function(xhr) {
-					console.log(xhr.responseJSON.data)
-					if([404,409].includes(Math.floor(xhr.responseJSON.code/10))) {
-						emitErrorMessage(xhr.responseJSON);
-					}else{
-						showAlert({
-							type : 'error',
-							text: xhr.responseJSON.msg,
-						});
-					}
-					valid = false;
-					resolve(valid); // 에러 발생 시 즉시 반환
-				}
 			});
-		}
 
-		sendChunk();
-	});
+			console.log("Chunk sent successfully");
+		} catch (xhr) {
+			console.log(xhr.responseJSON?.data || "Unknown error response");
+
+			if (xhr.responseJSON && [404, 409].includes(Math.floor(xhr.responseJSON.code / 10))) {
+				emitErrorMessage(xhr.responseJSON);
+			} else {
+				showAlert({
+					type: "error",
+					text: xhr.responseJSON ? xhr.responseJSON.msg : "Unknown Error",
+				});
+			}
+
+			valid = false;
+			break; // 에러 발생 시 중단
+		}
+	}
+
+	return valid;
 }
 
 async function submitData(dataArray, chunkSize = 50) {
-	return new Promise((resolve) => {
-		let index = 0;
-		let valid = true;
+	let index = 0;
+	let valid = true;
 
-		function sendChunk() {
-			if (!valid || index >= dataArray.length) {
-				resolve(valid); // 모든 요청이 끝나면 resolve
-				showAlert({
-					type : 'success',
-					text: 'Registered Successfully',
-					callback: 'reload',
-				});
-				return;
-			}
+	while (index < dataArray.length) {
+		if (!valid) break;
 
-			let chunk = dataArray.slice(index, index + chunkSize);
-			index += chunkSize;
+		let chunk = dataArray.slice(index, index + chunkSize);
+		index += chunkSize;
 
-			$.ajax({
-				url: common.API_URI+'/excelUpload',  // 서버의 저장 API URL
+		try {
+			const response = await $.ajax({
+				url: common.API_URI + '/excelUpload',
 				type: 'POST',
 				dataType: 'json',
-				data: JSON.stringify(editedData),
-				success: function(response) {
-					console.log(response)
+				contentType: 'application/json', // content-type 지정
+				data: JSON.stringify(chunk),
+			});
 
-					for(const tr of document.querySelectorAll('#inline-editable tbody tr')){
-						if(parseInt(tr.id)>index && parseInt(tr.id)<=index+chunkSize){
-							tr.classList.add('submit-completed');
-						}
-					}
-				},
-				error: function(xhr) {
-					console.log(xhr)
-					if([404,409].includes(Math.floor(xhr.responseJSON.code/10))) {
-						emitErrorMessage(xhr.responseJSON);
-					}else{
-						showAlert({
-							type : 'error',
-							text: xhr.responseJSON.msg,
-						});
-					}
+			console.log(response);
+
+			// 성공적으로 처리된 row에 class 추가
+			document.querySelectorAll('#inline-editable tbody tr').forEach(tr => {
+				if (parseInt(tr.id) > index - chunkSize && parseInt(tr.id) <= index) {
+					tr.classList.add('submit-completed');
 				}
 			});
-		}
 
-		sendChunk();
-	});
+		} catch (xhr) {
+			valid = false; // 에러 발생 시 중단
+
+			if (xhr.responseJSON && [404, 409].includes(Math.floor(xhr.responseJSON.code / 10))) {
+				emitErrorMessage(xhr.responseJSON);
+			} else {
+				showAlert({
+					type: 'error',
+					text: xhr.responseJSON ? xhr.responseJSON.msg : 'Unknown Error',
+				});
+			}
+		}
+	}
+
+	if (valid) {
+		showAlert({
+			type: 'success',
+			text: 'Registered Successfully',
+			callback: 'reload',
+		});
+	}
+
+	return valid;
 }
 
 $(function() {
