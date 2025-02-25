@@ -2,13 +2,14 @@
 $bodyAttrsList = [
 		'data-class' => $class ?? '',
 		'data-method' => $method ?? '',
+		'data-onload' => 'false',
 ];
 if (ENVIRONMENT === 'production') {
 	$bodyAttrsList = array_merge($bodyAttrsList, [
-//		'oncontextmenu' => 'return false',
-//		'onselectstart' => 'return false',
-//		'ondragstart' => 'return true',
-//		'onkeydown' => 'return false',
+			'oncontextmenu' => 'return false',
+			'onselectstart' => 'return false',
+			'ondragstart' => 'return true',
+			'onkeydown' => 'return false',
 	]);
 }
 $bodyAttrs = implode(' ', array_map(
