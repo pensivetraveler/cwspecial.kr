@@ -2,7 +2,7 @@
 
 namespace api;
 
-class Common
+class ArticlePrefer
 {
 
 }

@@ -724,7 +724,7 @@ class MY_Builder_API extends MY_Controller_API
 	protected function checkIdentifierExist($key, $model = null)
 	{
 		if(!$model) $model = $this->Model;
-		$this->checkCnt([$model->identifier => $key], $model);
+		if(!empty($model->identifier)) $this->checkCnt([$model->identifier => $key], $model);
 	}
 
 	protected function checkUniqueExist($dto, $model = null, $add = true)
