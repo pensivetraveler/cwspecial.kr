@@ -399,7 +399,7 @@ $config['form_inquiries_config'] = [
 		'errors' => [],
 		'category' => 'basic',
 		'type' => 'hidden',
-		'default' => 3,
+		'default' => 2,
 		'list' => false,
 	],
 	[
