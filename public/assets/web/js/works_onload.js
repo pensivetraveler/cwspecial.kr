@@ -1,3 +1,72 @@
+function getArticlePreference() {
+	let result = null;
+	$.ajax({
+		async: false,
+		url: '/api/articlePrefer/',
+		headers: {
+			'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
+		},
+		data: {
+			article_id : common.KEY,
+		},
+		method: 'get',
+		dataType: 'json',
+		success: function (response, textStatus, jqXHR) {
+			if(response.data.length) result = response.data[0].prefer_cd;
+		},
+	});
+	return result;
+}
+
+function setArticlePreference(prefCd = null) {
+	if(prefCd === null) prefCd = getArticlePreference();
+
+	if(prefCd !== null) {
+		const smlCd = prefCd.substring(3, 6);
+		if(smlCd === '001') {
+			$('.btn-pref-001').removeClass('btn-dribbble').addClass('btn-outline-dribbble');
+			$('.btn-pref-002').removeClass('btn-outline-linkedin').addClass('btn-linkedin');
+			$('.btn-pref-003').removeClass('btn-outline-dark').addClass('btn-dark');
+		}else if(smlCd === '002') {
+			$('.btn-pref-001').removeClass('btn-outline-dribbble').addClass('btn-dribbble');
+			$('.btn-pref-002').removeClass('btn-linkedin').addClass('btn-outline-linkedin');
+			$('.btn-pref-003').removeClass('btn-outline-dark').addClass('btn-dark');
+		}else {
+			$('.btn-pref-001').removeClass('btn-outline-dribbble').addClass('btn-dribbble');
+			$('.btn-pref-002').removeClass('btn-outline-linkedin').addClass('btn-linkedin');
+			$('.btn-pref-003').removeClass('btn-dark').addClass('btn-outline-dark');
+		}
+	}
+}
+
+function submitArticlePreference(prefCd) {
+	$.ajax({
+		url: '/api/articlePrefer/',
+		headers: {
+			'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
+		},
+		data: {
+			article_id : common.KEY,
+			prefer_cd : prefCd,
+		},
+		method: 'put',
+		dataType: 'json',
+		success: function (response, textStatus, jqXHR) {
+			setArticlePreference(prefCd);
+			showAlert({
+				type: 'success',
+				text: jqXHR.responseJSON.msg,
+			});
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			showAlert({
+				type: 'warning',
+				text: jqXHR.responseJSON.msg,
+			});
+		}
+	});
+}
+
 $(function() {
 	const previewTemplate = `<div class="dz-preview dz-file-preview">
 <div class="dz-details">
@@ -51,5 +120,55 @@ $(function() {
 				});
 			},
 		});
-	}
+	};
+
+	$('.btn-work-edit').on('click', function (e) {
+		const isMine = checkMyData();
+		if(isMine) {
+			location.href = '/works/edit/'+common.KEY;
+		}else{
+			showAlert({
+				type: 'warning',
+				text: jqXHR.responseJSON.msg,
+			});
+		}
+	});
+
+	$('.btn-pref-001').on('click', function (e) {
+		const isMine = checkMyData();
+		if(!isMine) {
+			submitArticlePreference('PRF001');
+		}else{
+			showAlert({
+				type: 'warning',
+				text: getLocale('You can not vote to your data', common.LOCALE),
+			});
+		}
+	});
+
+	$('.btn-pref-002').on('click', function (e) {
+		const isMine = checkMyData();
+		if(!isMine) {
+			submitArticlePreference('PRF002');
+		}else{
+			showAlert({
+				type: 'warning',
+				text: getLocale('You can not vote to your data', common.LOCALE),
+			});
+		}
+	});
+
+	$('.btn-pref-003').on('click', function (e) {
+		const isMine = checkMyData();
+		if(!isMine) {
+			submitArticlePreference('PRF003');
+		}else{
+			showAlert({
+				type: 'warning',
+				text: getLocale('You can not vote to your data', common.LOCALE),
+			});
+		}
+	});
+
+	setArticlePreference();
 })
