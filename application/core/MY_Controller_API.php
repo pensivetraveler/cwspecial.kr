@@ -31,13 +31,9 @@ class MY_Controller_API extends RestController
 
     public function index_put($key = 0)
     {
-        if($key === 0) {
-            $this->keyNotExist();
-        }else{
-            $data = $this->beforePut($key);
+		$data = $this->beforePut($key);
 
-            $this->afterPut($key, $data);
-        }
+		$this->afterPut($key, $data);
     }
 
     public function index_patch($key = 0)
