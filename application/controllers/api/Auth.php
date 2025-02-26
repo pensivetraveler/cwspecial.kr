@@ -131,7 +131,7 @@ class Auth extends Common
 				'user_id' => $user->user_id,
 				'id' => $user->id,
 				'name' => $user->name,
-				'is_admin' => $user->user_cd==='USR001',
+				'is_admin' => in_array($user->user_cd, ['USR000', 'USR001']),
 			]),
 		]);
 

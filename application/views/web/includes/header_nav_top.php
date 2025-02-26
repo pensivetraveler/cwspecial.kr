@@ -47,9 +47,11 @@
 				<li class="nav-item">
 					<a class="nav-link fw-medium" href="<?=base_url('/myinfo')?>">내 정보</a>
 				</li>
+				<?php if($isAdmin): ?>
 				<li class="nav-item">
 					<a class="nav-link fw-medium" href="<?=base_url('/admin/dashboard')?>" target="_blank">Admin</a>
 				</li>
+				<?php endif; ?>
 			</ul>
 		</div>
 		<div class="landing-menu-overlay d-lg-none"></div>
@@ -57,15 +59,25 @@
 		<!-- Toolbar: Start -->
 		<ul class="navbar-nav flex-row align-items-center ms-auto">
 			<!-- navbar button: Start -->
+			<?php if(!$isLogin): ?>
 			<li>
 				<a
 					href="<?=base_url('/auth/login')?>"
 					class="btn btn-primary px-2 px-sm-4 px-lg-2 px-xl-4"
-					target="_blank"
 				><span class="tf-icons ri-user-line me-md-1"></span
-					><span class="d-none d-md-block">Login/Register</span></a
+					><span class="d-none d-md-block"><?=lang('Login')?></span></a
 				>
 			</li>
+			<?php else: ?>
+			<li>
+				<a
+					href="<?=base_url('/auth/logout')?>"
+					class="btn btn-primary px-2 px-sm-4 px-lg-2 px-xl-4"
+				><span class="tf-icons ri-user-line me-md-1"></span
+					><span class="d-none d-md-block"><?=lang('Logout')?></span></a
+				>
+			</li>
+			<?php endif; ?>
 			<!-- navbar button: End -->
 		</ul>
 		<!-- Toolbar: End -->

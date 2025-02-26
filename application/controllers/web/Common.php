@@ -8,6 +8,7 @@ class Common extends MY_Builder_WEB
 	public bool $formConfigExist;
 	public array $navAuth;
 	public bool $isLogin;
+	public bool $isAdmin;
 
 	function __construct()
 	{
@@ -27,6 +28,7 @@ class Common extends MY_Builder_WEB
 		];
 
 		$this->isLogin = $this->session->userdata('user_id') && $this->session->userdata('token');
+		$this->isAdmin = is_null($this->session->userdata('is_admin'))?false:$this->session->userdata('is_admin');
 	}
 
 	public function index()
@@ -41,6 +43,7 @@ class Common extends MY_Builder_WEB
 	protected function viewApp($data)
 	{
 		$data['isLogin'] = $this->isLogin;
+		$data['isAdmin'] = $this->isAdmin;
 
 		parent::viewApp($data);
 	}
