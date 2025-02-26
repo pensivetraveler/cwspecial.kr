@@ -15,6 +15,7 @@
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/sweetalert2/sweetalert2.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/vendor/js/menu.js');?>"></script>
 
+		<?php if(!isset($status_code) || !in_array($status_code, [404, 500])): ?>
 		<!-- Main JS -->
 		<script src="<?php echo base_url('public/assets/builder/js/front-main.js');?>"></script>
 
@@ -29,7 +30,7 @@
 		<script>
 			$(function() {
 				if(
-						<?=$this->config->item('phptojs.namespace')?>.HOOK_PHPTOJS_VAR_DIALOG !== null
+					<?=$this->config->item('phptojs.namespace')?>.HOOK_PHPTOJS_VAR_DIALOG !== null
 					&&
 					Object.keys(<?=$this->config->item('phptojs.namespace')?>.HOOK_PHPTOJS_VAR_DIALOG).length > 0
 				) {
@@ -53,18 +54,20 @@
 			});
 		</script>
 		<?php endif; ?>
+
 		<div
 				style="
-							display: none;
-							position: absolute;
-							top: 0;
-							left: 0;
-							/*width: 100vw;*/
-							/*height: 100vh;*/
-							width: 400px;
-							height: 800px;
-							border: 5px solid red;
-						"
+						display: none;
+						position: absolute;
+						top: 0;
+						left: 0;
+						/*width: 100vw;*/
+						/*height: 100vh;*/
+						width: 400px;
+						height: 800px;
+						border: 5px solid red;
+					"
 		></div>
+		<?php endif; ?>
 	</body>
 </html>

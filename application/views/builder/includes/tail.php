@@ -15,6 +15,7 @@
 		<script src="<?php echo base_url('public/assets/builder/vendor/libs/sweetalert2/sweetalert2.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/vendor/js/menu.js');?>"></script>
 
+		<?php if(!isset($status_code) || !in_array($status_code, [404, 500])): ?>
 		<!-- Main JS -->
 		<script src="<?php echo base_url('public/assets/builder/js/front-main.js');?>"></script>
 
@@ -53,6 +54,7 @@
 			});
 		</script>
 		<?php endif; ?>
+
 		<div
 				style="
 							display: none;
@@ -66,5 +68,6 @@
 							border: 5px solid red;
 						"
 		></div>
+		<?php endif; ?>
 	</body>
 </html>
