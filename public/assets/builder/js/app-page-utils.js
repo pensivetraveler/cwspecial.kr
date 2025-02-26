@@ -17,7 +17,7 @@ function getLocale(key, locale = []) {
 		let result = locale;
 
 		if(key.indexOf('.') === -1 || key.substring(key.length-1,key.length) === '.'){
-			result = locale.hasOwnProperty(key) !== -1 ? result[key] : undefined;
+			result = locale.hasOwnProperty(key) ? result[key] : undefined;
 		}else{
 			const keys = key.split('.');
 
