@@ -45,7 +45,7 @@
 					<a class="nav-link fw-medium" href="<?=base_url('/inquiries')?>">1:1 문의</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link fw-medium" href="<?=base_url('/myinfo')?>">내 정보</a>
+					<a class="nav-link fw-medium" href="<?=base_url('/myInfo')?>">내 정보</a>
 				</li>
 				<?php if($isAdmin): ?>
 				<li class="nav-item">
