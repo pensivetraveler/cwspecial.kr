@@ -48,7 +48,7 @@ $config['page_config'] = [
 			'listConfig' => 'notices',
 			'plugin' => 'datatable',
 			'buttons' => [
-				'add' => true,
+				'add' => false,
 				'excel' => false,
 			],
 			'actions' => [
@@ -64,16 +64,16 @@ $config['page_config'] = [
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
-			'allows' => ['list','view'],
+			'allows' => ['list','view','add','edit'],
 			'formExist' => true,
 			'listExist' => true,
 		],
 		'formProperties' => [
-			'formConfig' => 'notices',
+			'formConfig' => 'inquiries',
 			'formType' => 'page',
 		],
 		'listProperties' => [
-			'listConfig' => 'notices',
+			'listConfig' => 'inquiries',
 			'plugin' => 'datatable',
 			'buttons' => [
 				'add' => true,
