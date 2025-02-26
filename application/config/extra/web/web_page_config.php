@@ -86,4 +86,19 @@ $config['page_config'] = [
 			],
 		],
 	],
+	'myinfo' => [
+		'category' => 'page',
+		'type' => 'view',
+		'subType' => 'base',
+		'properties' => [
+			'baseMethod' => 'edit',
+			'allows' => ['edit'],
+			'formExist' => true,
+			'listExist' => false,
+		],
+		'formProperties' => [
+			'formConfig' => 'myinfo',
+			'formType' => 'page',
+		],
+	],
 ];
