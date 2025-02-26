@@ -13,6 +13,7 @@ class Inquiries extends Common
 			'API_URI' => '/api/articles',
 			'API_PARAMS' => [
 				'board_id' => 2,
+				'created_id' => $this->session->userdata('user_id'),
 			],
 		]);
 	}
