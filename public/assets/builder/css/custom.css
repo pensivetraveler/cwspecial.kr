@@ -2,7 +2,6 @@
 * demo.css
 * File include item demo only specific css only
 ******************************************************************************/
-
 .light-style .menu .app-brand.demo {
 	height: 64px;
 }
@@ -542,9 +541,78 @@ html[data-style="dark"] .form-type-side .input-group .form-floating > div:has(.s
     [data-method="excel"]
  *********************************************/
 [data-method="excel"] td.edit-required {
-	background-color: var(--bs-warning);
+	background-color: var(--bs-yellow);
+	border: 2px solid var(--bs-primary);
+	border-radius: .05rem;
 }
 
 [data-method="excel"] tr.submit-completed {
 	background-color: #cbcbcb;
+}
+
+/*********************************************
+    [data-method="view"]
+ *********************************************/
+[data-method="view"][data-onload="false"] .view-data {
+	background-color: #cbcbcb;
+	border-radius: .2rem;
+}
+[data-method="view"][data-onload="false"] #subject {
+	height: 1.75rem;
+}
+[data-method="view"] #thumbnail {
+	background-color: #eee;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+[data-method="view"] #content {
+	min-height: 600px;
+}
+[data-method="view"] #created_id {
+	min-width: 6rem;
+	height: 1.375rem;
+}
+[data-method="view"] #view_count {
+	min-width: 1.75rem;
+}
+
+/*********************************************
+    #comment-container
+ *********************************************/
+#comment-container .target-comment-wrap {
+	display: none;
+}
+#comment-container .target-comment-wrap[data-loaded="true"] {
+	display: block;
+	margin-bottom: 1rem;
+}
+#comment-container .target-comment-wrap[data-loaded="true"]>div {
+	background-color: #eee;
+	padding: .5rem 1rem;
+}
+#comment-container #comment-list:not(:has(li)) {
+	display: none;
+}
+#comment-container #comment-list>li:not(:first-child) {
+	border-top: 1px solid #e5e6e8 !important;
+}
+#comment-container .comment-reply-list {
+	background-color: #eee;
+}
+#comment-container .comment-reply-list:has(li) {
+	padding: .5rem 2rem;
+	margin: 1rem 0 0 2rem;
+}
+#comment-container .comment-reply-list li {
+	position: relative;
+}
+#comment-container .comment-reply-list li:not(:first-child) {
+	border-top: 1px dashed #cbcbcb;
+}
+#comment-container .comment-reply-list li i {
+	position: absolute;
+	top: 1rem;
+	left: -2rem;
+	height: 20px;
+	width: 20px;
 }
