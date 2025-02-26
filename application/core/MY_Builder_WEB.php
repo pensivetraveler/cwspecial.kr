@@ -270,7 +270,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 
 		if($this->pageConfig['properties']['listExist']) {
 			$this->addJsVars([
-				'LIST_VIEW_URI' => $this->href,
+				'PAGE_LIST_URI' => $this->href,
 				'LIST_COLUMNS' => $this->setListColumns(),
 				'LIST_PLUGIN' => $this->pageConfig['listProperties']['plugin'],
 				'LIST_FILTERS' => $this->setListFilters(),

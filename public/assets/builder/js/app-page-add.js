@@ -113,14 +113,24 @@ $(function () {
         // You need to grab the form data and create an Ajax request to send them
         submitAjax(formSelector, {
             success: function(response) {
-                showAlert({
-                    type: 'success',
-                    title: 'Complete',
-					text: formRecord['_mode'].value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
-                    callback: redirect,
-                    params: common.LIST_VIEW_URI,
-                });
 				updateFormLifeCycle('transFrmValues', formRecord);
+				showAlert({
+					type: 'success',
+					title: 'Complete',
+					text: formRecord['_mode'].value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
+					...(() => {
+						if (common.PAGE_LIST_URI) {
+							return {
+								callback: redirect,
+								params: common.PAGE_LIST_URI,
+							};
+						} else {
+							return {
+								callback: 'reload',
+							};
+						}
+					})(),
+				});
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.warn(jqXHR.responseJSON)
