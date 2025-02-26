@@ -214,9 +214,7 @@ class MY_Builder_API extends MY_Controller_API
 
 		$this->checkUniqueExist($dto, $model, is_empty($key));
 
-		if(count($this->fileList) > 0) {
-			$dto = $this->uploadFileInList($dto);
-		}
+		if(count($this->fileList) > 0) $dto = $this->uploadFileInList($dto);
 
 		return $dto;
 	}
@@ -234,20 +232,43 @@ class MY_Builder_API extends MY_Controller_API
 	{
 		if($key) $this->checkIdentifierExist($key);
 
-		$dto = $this->validate($this->input->put(), $model);
+		$dto = $this->validate($this->put(), $model);
 
-		$this->checkUniqueExist($dto, $model, is_empty($key));
-
-		if(count($this->fileList) > 0) {
-			$dto = $this->uploadFileInList($dto);
-		}
+		if($key) $this->checkUniqueExist($dto, $model, false);
 
 		return $dto;
 	}
 
 	protected function afterPut($key, $dto)
 	{
-		$this->modData($key, $dto, true);
+		if($key) {
+			$this->modData($key, $dto, true);
+		}else{
+			if($this->Model->primaryKeyList) {
+				$where = [];
+				foreach ($this->Model->primaryKeyList as $key) {
+					if(array_key_exists($key, $dto)) {
+						$where[$key] = $dto[$key];
+					}
+				}
+				if($this->Model->getCnt($where)){
+					$this->Model->modData($dto, $where, true);
+					$this->response([
+						'code' => DATA_EDITED,
+					]);
+				}else{
+					$this->Model->addData($dto, true);
+					$this->response([
+						'code' => DATA_CREATED,
+					], RestController::HTTP_CREATED);
+				}
+			}else{
+				$this->Model->addData($dto, true);
+				$this->response([
+					'code' => DATA_CREATED,
+				], RestController::HTTP_CREATED);
+			}
+		}
 	}
 
 
@@ -255,11 +276,7 @@ class MY_Builder_API extends MY_Controller_API
 	{
 		$this->checkIdentifierExist($key);
 
-		$dto = $this->validate($this->patch());
-
-		$this->checkUniqueExist($dto, $model, is_empty($key));
-
-		return $dto;
+		return $this->validate($this->patch());
 	}
 
 	protected function afterPatch($key, $dto)
@@ -270,14 +287,10 @@ class MY_Builder_API extends MY_Controller_API
 	protected function beforeDelete($key)
 	{
 		$this->checkIdentifierExist($key);
-
-		return $key;
 	}
 
 	protected function afterDelete($key)
 	{
-		$this->checkIdentifierExist($key);
-
 		$this->delData($key, true);
 	}
 
@@ -373,6 +386,8 @@ class MY_Builder_API extends MY_Controller_API
 				$this->validateMessages,
 				$this->validateCallback,
 			);
+		}else{
+			return $data;
 		}
 	}
 
@@ -724,7 +739,7 @@ class MY_Builder_API extends MY_Controller_API
 	protected function checkIdentifierExist($key, $model = null)
 	{
 		if(!$model) $model = $this->Model;
-		if(!empty($model->identifier)) $this->checkCnt([$model->identifier => $key], $model);
+		$this->checkCnt([$model->identifier => $key], $model);
 	}
 
 	protected function checkUniqueExist($dto, $model = null, $add = true)
