@@ -169,8 +169,8 @@ function preparePlugins(form) {
 							text: getLocale('You can\'t undo this action', common.LOCALE),
 							icon: 'warning',
 							showCancelButton: true,
-							confirmButtonText: getLocale('delete', common.LOCALE),
-							cancelButtonText: getLocale('cancel', common.LOCALE),
+							confirmButtonText: getLocale('Delete', common.LOCALE),
+							cancelButtonText: getLocale('Cancel', common.LOCALE),
 							customClass: {
 								confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
 								cancelButton: 'btn btn-outline-secondary waves-effect'
