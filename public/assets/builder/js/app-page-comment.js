@@ -1,3 +1,79 @@
+function getCommentBtns(comment, isReply = false) {
+	let btnHTML = '';
+	if(!isReply) btnHTML += `<button class="btn p-1 btn-outline-primary btn-comment btn-comment-reply">${getLocale('Reply', common.LOCALE)}</button>`;
+	if(comment.mine_yn) {
+		btnHTML += `
+				<button class="btn p-1 btn-outline-primary btn-comment btn-comment-edit">${getLocale('Edit', common.LOCALE)}</button>
+				<button class="btn p-1 btn-outline-danger btn-comment btn-comment-delete">${getLocale('Delete', common.LOCALE)}</button>
+			`;
+	}
+	return btnHTML;
+}
+
+function setCommentList(comments) {
+	const container = document.getElementById('comment-container');
+	if(!container) return;
+
+	const commentListWrap = document.getElementById('comment-list');
+	commentListWrap.innerHTML = '';
+	for(const comment of comments) {
+		const date = comment.created_dt.substring(0, 10).replace(/-/g, '.');
+		const time = comment.created_dt.substring(11, comment.created_dt.length);
+		const btnHTML = getCommentBtns(comment);
+
+		let replyList = '';
+		for(const reply of comment.reply_list) {
+			const replyDate = reply.created_dt.substring(0, 10).replace(/-/g, '.');
+			const replyTime = reply.created_dt.substring(11, reply.created_dt.length);
+			const replyBtns = getCommentBtns(reply, true);
+			replyList += `
+				<li class="ms-8 py-4" data-comment-id="${reply.comment_id}" data-mine-yn="${reply.mine_yn}" data-comment-depth="1">
+					<i class="ri-corner-down-right-line"></i>
+						<div class="d-flex">
+							<div class="w-px-200 me-4 comment-creater">${reply.creater.name} (${reply.creater.id})</div>
+							<div class="flex-fill me-8 comment-content">${reply.content}</div>
+							<div class="d-flex justify-content-end align-items-center">
+								<div class="btn-wrap">${replyBtns}</div>
+								<div class="text-end w-px-100 comment-time">${replyDate}<br>${replyTime}</div>
+							</div>
+						</div>
+				</li>
+			`;
+		}
+
+		const commentHTML = `
+			<li class="py-6" data-comment-id="${comment.comment_id}" data-mine-yn="${comment.mine_yn}" data-commen-depth="0">
+				<div class="d-flex">
+					<div class="w-px-200 me-4 comment-creater">${comment.creater.name} (${comment.creater.id})</div>
+					<div class="flex-fill me-8 comment-content">${comment.content}</div>
+					<div class="d-flex justify-content-end align-items-center">
+						<div class="btn-wrap">${btnHTML}</div>
+						<div class="text-end w-px-100 comment-time">${date}<br>${time}</div>
+					</div>
+				</div>
+				<ul class="comment-reply-list list-unstyled rounded-2">${replyList}</ul>
+			</li>
+		`;
+		commentListWrap.innerHTML += commentHTML;
+	}
+}
+
+function getCommentList() {
+	$.ajax({
+		url : '/api/comments',
+		method : 'get',
+		data : {
+			article_id: document.getElementById('formComment').article_id.value,
+		},
+		success : function (response) {
+			setCommentList(response.data);
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.warn(jqXHR.responseJSON)
+		},
+	});
+}
+
 $(function() {
 	const formComment = document.getElementById('formComment');
 
@@ -7,9 +83,9 @@ $(function() {
 		{
 			fields: {
 				content : {
-					validator: {
+					validators: {
 						notEmpty: {
-
+							message: 'The comment is required',
 						}
 					}
 				},
@@ -87,16 +163,15 @@ $(function() {
 	}).on('core.form.valid', function(event) {
 		// Send the form data to back-end
 		// You need to grab the form data and create an Ajax request to send them
-		submitAjax(formSelector, {
+		submitAjax('#formComment', {
+			url: '/api/comments'+(formComment.comment_id.value?'/'+formComment.comment_id.value:''),
 			success: function(response) {
 				showAlert({
 					type: 'success',
 					title: 'Complete',
 					text: formComment['_mode'].value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
-					callback: dt.ajax.reload,
-					params: [null, false]
+					callback: getCommentList,
 				});
-				updateFormLifeCycle('transFrmValues', formComment);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.warn(jqXHR.responseJSON)
@@ -110,6 +185,7 @@ $(function() {
 					showAlert({
 						type: 'warning',
 						text: jqXHR.responseJSON.msg,
+						callback: getCommentList,
 					});
 				}
 			}
@@ -119,4 +195,78 @@ $(function() {
 		console.log('core.form.invalid')
 	});
 
+	$('#comment-list').on('click', '.btn-comment', function (e) {
+		const commentWrap = e.target.closest('li');
+		const commentId = commentWrap.getAttribute('data-comment-id');
+		formComment.parent_id.value = '';
+		formComment.comment_id.value = '';
+		formComment.content.value = '';
+		formComment.depth.value = '';
+
+		if(e.target.classList.contains('btn-comment-reply')) {
+			formComment.parent_id.value = commentId;
+			formComment.depth.value = 1;
+			document.getElementById('target-comment-content').innerText = makeEllipsis(commentWrap.querySelector('.comment-content').innerText, 20);
+			document.querySelector('.target-comment-wrap').setAttribute('data-loaded', 'true');
+			document.getElementById('target-comment-action').innerText = getLocale('Reply', common.LOCALE);
+		}else{
+			const mineYn = commentWrap.getAttribute('data-mine-yn');
+			if(mineYn !== 'true') {
+				showAlert({
+					type: 'warning',
+					text: getLocale("It's not my comment.", 'ko'),
+				});
+				return;
+			}
+
+			formComment.parent_id.value = 0;
+			formComment.comment_id.value = commentId;
+
+			if(e.target.classList.contains('btn-comment-edit')) {
+				document.getElementById('target-comment-content').innerText = makeEllipsis(commentWrap.querySelector('.comment-content').innerText, 20);
+				document.querySelector('.target-comment-wrap').setAttribute('data-loaded', 'true');
+				formComment.content.value = commentWrap.querySelector('.comment-content').innerText;
+				document.getElementById('target-comment-action').innerText = getLocale('Edit', common.LOCALE);
+			}
+
+			if(e.target.classList.contains('btn-comment-delete')) {
+				Swal.fire({
+					title: '<h5>'+getLocale('Do you really want to delete?', common.LOCALE)+'</h5>',
+					showCancelButton: true,
+					confirmButtonText: getLocale('Delete', common.LOCALE),
+					cancelButtonText: getLocale('Cancel', common.LOCALE),
+					customClass: {
+						confirmButton: 'btn btn-danger me-3 waves-effect waves-light',
+						cancelButton: 'btn btn-outline-secondary waves-effect'
+					},
+					buttonsStyling: false
+				}).then(function (result) {
+					if (result.isConfirmed) {
+						executeAjax({
+							url: '/api/comments/'+formComment.comment_id.value,
+							method: 'delete',
+							after : {
+								callback: showAlert,
+								params: {
+									type: 'success',
+									title: 'Complete',
+									text: 'Delete Completed',
+									callback: getCommentList,
+								},
+							}
+						});
+					}
+				});
+			}
+		}
+	});
+
+	$('.btn-write-cancel').on('click', function(e) {
+		formComment.comment_id.value = '';
+		formComment.content.value = '';
+		document.getElementById('target-comment-content').innerText = '';
+		document.querySelector('.target-comment-wrap').setAttribute('data-loaded', 'false');
+	});
+
+	getCommentList();
 });
