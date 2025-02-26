@@ -108,6 +108,14 @@ class MY_Builder_WEB extends MY_Controller_WEB
 
 		$data['backLink'] = WEB_HISTORY_BACK;
 		$data['viewData'] = restructure_admin_form_data($this->jsVars['FORM_DATA']);
+		$data['identifier'] = null;
+		if(!is_null(array_search('identifier', array_column($data['viewData'], 'view')))) {
+			$data['identifier'] = $data['viewData'][array_search('identifier', array_column($data['viewData'], 'view'))];
+		}
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/js/app-page-comment.js')
+		];
 
 		$this->viewApp($data);
 	}
@@ -268,6 +276,9 @@ class MY_Builder_WEB extends MY_Controller_WEB
 				'LIST_FILTERS' => $this->setListFilters(),
 				'LIST_BUTTONS' => $this->pageConfig['listProperties']['buttons'],
 				'LIST_ACTIONS' => array_keys(array_filter($this->pageConfig['listProperties']['actions'], function ($value) {
+					return $value === true || $value === 1;
+				})),
+				'LIST_EXPORTS' => array_keys(array_filter($this->pageConfig['listProperties']['exports'], function ($value) {
 					return $value === true || $value === 1;
 				})),
 			]);

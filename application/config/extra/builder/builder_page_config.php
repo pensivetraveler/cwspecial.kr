@@ -29,6 +29,13 @@ $config['page_base_config'] = [
 	'listProperties' => [
 		'listConfig' => '',
 		'plugin' => 'datatable',
+		'exports' => [
+			'print' => false,
+			'csv' => false,
+			'excel' => false,
+			'pdf' => false,
+			'copy' => false,
+		],
 		'buttons' => [
 			'add' => true,
 			'excel' => true,
@@ -38,6 +45,10 @@ $config['page_base_config'] = [
 			'view' => true,
 			'delete' => true,
 		],
+	],
+	'viewProperties' => [
+		'viewConfig' => '',
+		'extraFormConfig' => '',
 	],
 	'tabProperties' => [
 		'tabGroup' => '',

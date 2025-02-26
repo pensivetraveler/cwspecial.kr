@@ -291,8 +291,8 @@ $(function () {
 			text: getLocale('You can\'t undo this action', common.LOCALE),
 			icon: 'warning',
 			showCancelButton: true,
-			confirmButtonText: getLocale('delete', common.LOCALE),
-			cancelButtonText: getLocale('cancel', common.LOCALE),
+			confirmButtonText: getLocale('Delete', common.LOCALE),
+			cancelButtonText: getLocale('Cancel', common.LOCALE),
 			customClass: {
 				confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
 				cancelButton: 'btn btn-outline-secondary waves-effect'
@@ -683,13 +683,49 @@ function getColumnOnclick(data, full, column) {
 }
 
 function getListButtons() {
-	const data = [
-		{
-			extend: 'collection',
-			className: 'btn btn-outline-secondary dropdown-toggle me-4 waves-effect waves-light',
-			text: `<i class="ri-external-link-line me-sm-1"></i> <span class="d-none d-sm-inline-block">${getLocale('Export', common.LOCALE)}</span>`,
-			buttons: [
-				{
+	const data = getListExports();
+
+	if(common.LIST_BUTTONS.hasOwnProperty('excel') && common.LIST_BUTTONS['excel']) {
+		data.push(
+			{
+				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">' + getLocale('Upload Excel', common.LOCALE) + '</span>',
+				className: 'add-new btn btn-primary waves-effect waves-light me-4',
+				action: function () {
+					if (common.PAGE_EXCEL_URI.length) {
+						location.href = common.PAGE_EXCEL_URI;
+					}else{
+						console.warn('PAGE_EXCEL_URI is not defined')
+					}
+				}
+			}
+		);
+	}
+
+	if(common.LIST_BUTTONS.hasOwnProperty('add') && common.LIST_BUTTONS['add']) {
+		data.push(
+			{
+				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">'+getLocale('Add New Record', common.LOCALE)+'</span>',
+				className: 'add-new btn btn-primary waves-effect waves-light',
+				action: function () {
+					if(!common.SIDE_FORM && common.PAGE_ADD_URI.length) {
+						location.href = common.PAGE_ADD_URI;
+					}else{
+						readyFrmInputs(formRecord, 'add', common.FORM_DATA);
+					}
+				}
+			}
+		);
+	}
+
+	return data;
+}
+
+function getListExports() {
+	const btns = [];
+	for(const kind of common.LIST_EXPORTS) {
+		switch (kind) {
+			case 'print' :
+				btns.push({
 					extend: 'print',
 					text: `<i class="ri-printer-line me-1" ></i>${getLocale('Print', common.LOCALE)}`,
 					className: 'dropdown-item',
@@ -725,8 +761,36 @@ function getListButtons() {
 							.css('border-color', 'inherit')
 							.css('background-color', 'inherit');
 					}
-				},
-				{
+				});
+				break;
+			case 'csv' :
+				btns.push({
+					extend: 'csv',
+					text: `<i class="ri-file-text-line me-1" ></i>${getLocale('Csv', common.LOCALE)}`,
+					className: 'dropdown-item',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5],
+						// prevent avatar to be display
+						format: {
+							body: function (inner, coldex, rowdex) {
+								if (inner.length <= 0) return inner;
+								var el = $.parseHTML(inner);
+								var result = '';
+								$.each(el, function (index, item) {
+									if (item.classList !== undefined && item.classList.contains('user-name')) {
+										result = result + item.lastChild.firstChild.textContent;
+									} else if (item.innerText === undefined) {
+										result = result + item.textContent;
+									} else result = result + item.innerText;
+								});
+								return result;
+							}
+						}
+					}
+				})
+				break;
+			case 'excel' :
+				btns.push({
 					extend: 'excel',
 					text: `<i class="ri-file-excel-line me-1"></i>${getLocale('Excel', common.LOCALE)}`,
 					className: 'dropdown-item',
@@ -749,44 +813,75 @@ function getListButtons() {
 							}
 						}
 					}
-				},
-			]
-		},
-	];
-
-	if(common.LIST_BUTTONS.hasOwnProperty('excel') && common.LIST_BUTTONS['excel']) {
-		data.push(
-			{
-				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">' + getLocale('Upload Excel', common.LOCALE) + '</span>',
-				className: 'add-new btn btn-primary waves-effect waves-light me-4',
-				action: function () {
-					if (common.PAGE_EXCEL_URI.length) {
-						location.href = common.PAGE_EXCEL_URI;
-					}else{
-						console.warn('PAGE_EXCEL_URI is not defined')
+				});
+				break;
+			case 'pdf' :
+				btns.push({
+					extend: 'pdf',
+					text: `<i class="ri-file-pdf-line me-1"></i>${getLocale('Pdf', common.LOCALE)}`,
+					className: 'dropdown-item',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5],
+						// prevent avatar to be display
+						format: {
+							body: function (inner, coldex, rowdex) {
+								if (inner.length <= 0) return inner;
+								var el = $.parseHTML(inner);
+								var result = '';
+								$.each(el, function (index, item) {
+									if (item.classList !== undefined && item.classList.contains('user-name')) {
+										result = result + item.lastChild.firstChild.textContent;
+									} else if (item.innerText === undefined) {
+										result = result + item.textContent;
+									} else result = result + item.innerText;
+								});
+								return result;
+							}
+						}
 					}
-				}
-			}
-		);
+				});
+				break;
+			case 'copy' :
+				btns.push({
+					extend: 'copy',
+					text: `<i class="ri-file-copy-line me-1"></i>${getLocale('Copy', common.LOCALE)}`,
+					className: 'dropdown-item',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5],
+						// prevent avatar to be display
+						format: {
+							body: function (inner, coldex, rowdex) {
+								if (inner.length <= 0) return inner;
+								var el = $.parseHTML(inner);
+								var result = '';
+								$.each(el, function (index, item) {
+									if (item.classList !== undefined && item.classList.contains('user-name')) {
+										result = result + item.lastChild.firstChild.textContent;
+									} else if (item.innerText === undefined) {
+										result = result + item.textContent;
+									} else result = result + item.innerText;
+								});
+								return result;
+							}
+						}
+					}
+				});
+				break;
+		}
 	}
 
-	if(common.LIST_BUTTONS.hasOwnProperty('add') && common.LIST_BUTTONS['add']) {
-		data.push(
+	if(btns.length > 0) {
+		return [
 			{
-				text: '<i class="ri-add-line ri-16px me-0 me-sm-2 align-baseline"></i><span class="d-none d-sm-inline-block">'+getLocale('Add New Record', common.LOCALE)+'</span>',
-				className: 'add-new btn btn-primary waves-effect waves-light',
-				action: function () {
-					if(!common.SIDE_FORM && common.PAGE_ADD_URI.length) {
-						location.href = common.PAGE_ADD_URI;
-					}else{
-						readyFrmInputs(formRecord, 'add', common.FORM_DATA);
-					}
-				}
+				extend: 'collection',
+				className: 'btn btn-outline-secondary dropdown-toggle me-4 waves-effect waves-light',
+				text: `<i class="ri-external-link-line me-sm-1"></i> <span class="d-none d-sm-inline-block">${getLocale('Export', common.LOCALE)}</span>`,
+				buttons: btns,
 			}
-		);
+		];
+	}else{
+		return [];
 	}
-
-	return data;
 }
 
 function getListActions(btns, dataId) {
