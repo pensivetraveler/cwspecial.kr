@@ -101,22 +101,17 @@ $bodyAttrs = implode(' ', array_map(
 		<!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 		<script src="<?php echo base_url('public/assets/builder/js/config.js');?>"></script>
 
-		<script>
-			const appName = '<?=$this->config->config['phptojs']['namespace']?>';
-			window.<?=$this->config->config['phptojs']['namespace']?> = window.<?=$this->config->config['phptojs']['namespace']?> || {};
-			const appPlugins = {};
-		</script>
-
 		<!-- Custom JS -->
 		<script src="<?php echo base_url('public/assets/builder/js/app-page-preset.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/js/app-page-utils.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/js/app-page-errors.js');?>"></script>
-		<?php if(isset($addJS['head'])) add_javascript($addJS['head']); ?>
 
-		<?php if(property_exists($this, 'phptojs')) echo $this->phptojs->getJsVars(); ?>
-
-		<?php if(!isset($status_code) || $status_code !== 404): ?>
+		<?php if(!isset($status_code) || !in_array($status_code, [404, 500])): ?>
 		<script>
+			const appName = '<?=$this->config->config['phptojs']['namespace']?>';
+			window.<?=$this->config->config['phptojs']['namespace']?> = window.<?=$this->config->config['phptojs']['namespace']?> || {};
+			const appPlugins = {};
+
 			if(!window.<?=$this->config->config['phptojs']['namespace']?>.hasOwnProperty('ERRORS'))
 				window.<?=$this->config->config['phptojs']['namespace']?>.ERRORS = [];
 
@@ -146,6 +141,9 @@ $bodyAttrs = implode(' ', array_map(
 				}, 500)
 			};
 		</script>
+
+		<?php if(isset($addJS['head'])) add_javascript($addJS['head']); ?>
+		<?php if(property_exists($this, 'phptojs')) echo $this->phptojs->getJsVars(); ?>
 		<?php endif; ?>
 
 		<?php if(ENVIRONMENT === 'production'): ?>
