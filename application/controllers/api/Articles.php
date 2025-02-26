@@ -9,6 +9,8 @@ class Articles extends Common
 		parent::__construct();
 
 		$this->load->model('Model_Article', 'Model');
+		$this->load->model('Model_Comment');
+		$this->load->model('Model_User');
 
 		$this->setProperties($this->Model);
 

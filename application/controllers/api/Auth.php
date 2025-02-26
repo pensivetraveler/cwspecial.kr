@@ -124,7 +124,16 @@ class Auth extends Common
 			set_cookie($cookie_name, $cookie_value, $cookie_expire);
 		}
 
-		$this->session->set_userdata('user_id', $user->user_id);
+
+		$this->session->set_userdata([
+			'user_id' => $user->user_id,
+			'token' => $this->setToken([
+				'user_id' => $user->user_id,
+				'id' => $user->id,
+				'name' => $user->name,
+				'is_admin' => $user->user_cd==='USR001',
+			]),
+		]);
 
 		$this->response([
 			'code' => DATA_AVAILABLE,
