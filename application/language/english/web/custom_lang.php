@@ -1,4 +1,6 @@
 <?php
+$lang['You can not vote to your data'] = 'You can not vot to your data.';
+
 $lang['placeholder'] = [
 	'Select The Student' => 'Select The Student.',
 	'Select The Grade' => 'Select The Grade.',
