@@ -14,9 +14,9 @@ class Dashboard extends Common
 
 	public function index()
 	{
-		$user_id = $this->session->userdata('user_id');
-		if(!$user_id) redirect('/auth/login');
+		if(!$this->isLogin) redirect('/auth');
 
+		$user_id = $this->session->userdata('user_id');
 		$userData = $this->Model_User->getData([], ['user_id' => $user_id]);
 		if(!$userData) {
 			$this->session->sess_destroy();

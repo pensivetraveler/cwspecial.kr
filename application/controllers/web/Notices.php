@@ -19,11 +19,9 @@ class Notices extends Common
 
 	public function index()
 	{
-		if(!$this->session->userdata('user_id')) {
-			redirect('/auth');
-		}else{
-			$this->list();
-		}
+		if(!$this->isLogin) redirect('/auth');
+
+		$this->list();
 	}
 
 }

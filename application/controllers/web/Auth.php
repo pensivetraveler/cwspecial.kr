@@ -17,7 +17,7 @@ class Auth extends Common
 
 	public function login()
 	{
-		if($this->session->userdata('user_id') && $this->session->userdata('token')) redirect('web/dashboard');
+		if($this->session->userdata('user_id') && $this->session->userdata('token')) redirect('dashboard');
 
 		$this->formColumns = $this->setFormColumns('login');
 		$this->addJsVars([
@@ -26,7 +26,7 @@ class Auth extends Common
 			'IDENTIFIER' => $this->setIdentifier(),
 			'FORM_DATA' => $this->setFormData(),
 			'FORM_REGEXP' => $this->config->item('regexp'),
-			'AFTER_LOGIN_URI' => '/dashboard',
+			'REDIRECT_URI' => '/dashboard',
 		]);
 
 		$this->addCSS[] = [
@@ -108,7 +108,7 @@ class Auth extends Common
 
 	public function logout()
 	{
-		if (!$this->session->userdata('user_id')) redirect('web/auth');
+		if (!$this->session->userdata('user_id')) redirect('/auth');
 
 		$this->Model_User_Autologin->delData([
 			'user_id' => $this->session->userdata('user_id'),
@@ -125,6 +125,6 @@ class Auth extends Common
 			setcookie($this->config->item('sess_cookie_name'), '', time() - 3600, '/');
 		}
 
-		redirect('web/auth');
+		redirect('/auth');
 	}
 }

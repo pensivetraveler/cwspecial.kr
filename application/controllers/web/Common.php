@@ -7,6 +7,7 @@ class Common extends MY_Builder_WEB
 	public string $viewPath;
 	public bool $formConfigExist;
 	public array $navAuth;
+	public bool $isLogin;
 
 	function __construct()
 	{
@@ -24,57 +25,25 @@ class Common extends MY_Builder_WEB
 			base_url('public/assets/builder/vendor/js/dropdown-hover.js'),
 			base_url('public/assets/builder/vendor/js/mega-dropdown.js'),
 		];
+
+		$this->isLogin = $this->session->userdata('user_id') && $this->session->userdata('token');
 	}
 
 	public function index()
 	{
-		if(!$this->session->userdata('user_id')) {
+		if(!$this->isLogin) {
 			redirect('/auth');
 		}else{
 			redirect('/dashboard');
 		}
 	}
 
-//	protected function auth(): bool
-//	{
-////		if(!$this->session->userdata('user_id')) redirect('web/auth');
-////
-////		$this->db
-////			->select('web.*')
-////			->join('web', 'web.user_id = user.user_id', 'right');
-////		$user = $this->Model_User->getData([], ['user_id' => $this->session->userdata('user_id')]);
-////		if(!$user) alert('�߸��� �����Դϴ�.', base_url('web/auth'));
-////
-////		if($this->session->userdata('token')) {
-////			$this->validateToken();
-////		}else{
-////			$this->session->set_userdata('token', $this->setToken([
-////				'user_id' => $user->user_id,
-////				'id' => $user->id,
-////				'name' => $user->name,
-////				'tel' => $user->tel,
-////				'through' => 'web',
-////			]));
-////		}
-////
-////		$this->userData = $user;
-////
-////		$this->headerData = [
-////			'id' => $user->id,
-////			'user_id' => $user->user_id,
-////			'web_id' => $user->web_id,
-////			'name' => $user->name,
-////			'user_cd' => $user->user_cd,
-////			'web_cd' => $user->web_cd,
-////		];
-////
-////		$this->db
-////			->select('menu.*')
-////			->join('menu', 'menu.menu_id = web_auth.menu_id');
-////		$this->navAuth = $this->Model_Admin_Auth->getList([], ['web_id' => $user->web_id]);
-////
-//		return true;
-//	}
+	protected function viewApp($data)
+	{
+		$data['isLogin'] = $this->isLogin;
+
+		parent::viewApp($data);
+	}
 
 	public function list()
 	{
@@ -130,6 +99,21 @@ class Common extends MY_Builder_WEB
 
 	public function view($key = 0)
 	{
+		$this->addCSS[] = [
+			base_url('public/assets/builder/vendor/libs/tagify/tagify.css'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
+			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css'),
+		];
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/vendor/libs/autosize/autosize.js'),
+			base_url('public/assets/builder/vendor/libs/tagify/tagify.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/popular.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/bootstrap5.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/auto-focus.js'),
+			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js'),
+		];
+
 		$this->addJS['tail'][] = [
 			base_url('public/assets/builder/js/app-page-view.js'),
 		];
