@@ -71,9 +71,4 @@ $(function() {
 	$('.btn-view-list').on('click', function(e) {
 		location.href = common.PAGE_LIST_URI;
 	});
-
-	$('.btn-view-edit').on('click', function(e) {
-		const isMine = checkMyData();
-		if(isMine) location.href = common.PAGE_EDIT_URI + '/' + common.KEY;
-	});
 });
