@@ -1,3 +1,12 @@
+body {
+	background-image: url(/public/assets/web/img/bg.png);
+	background-repeat: repeat;
+}
+
+.light-style .navbar.landing-navbar {
+	border-color: orange;
+}
+
 #fullpage-dropzone {
 
 }
