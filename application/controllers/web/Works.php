@@ -41,6 +41,18 @@ class Works extends Common
 
 	public function edit($key = 0)
 	{
+		$tokenData = $this->validateToken();
+
+		if(property_exists($this, 'Model')) {
+			$articleData = $this->Model->getData([], [
+				$this->Model->identifier => $key,
+				'created_id' => $tokenData->user_id,
+			]);
+			if(!$articleData) {
+				parent::edit(0);
+			}
+		}
+
 		$this->addCSS[] = [
 			base_url('public/assets/builder/vendor/libs/dropzone/dropzone.css'),
 		];
