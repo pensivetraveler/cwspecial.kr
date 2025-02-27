@@ -41,6 +41,21 @@ $config['form_login_config'] = [
 	],
 ];
 
+$config['form_password_check_config'] = [
+	[
+		'field' => 'password',
+		'label' => 'lang:user.password',
+		'rules' => 'trim|required',
+		'errors' => [],
+		'category' => 'basic',
+		'type' => 'password',
+		'attributes' => [
+			'autocomplete' => 'new-password',
+			'placeholder' => 'Password Dots',
+		],
+	],
+];
+
 $config['form_signup_config'] = [
 	[
 		'field' => 'user_cd',
