@@ -9,16 +9,9 @@
 										<span class="footer-text">©
 										  <script>
 											document.write(new Date().getFullYear());
-										  </script>2025
-										  , Made with <i class="tf-icons ri-heart-fill text-danger"></i> by
+										  </script>
+										  경남AAC작업실
 										</span>
-										<a href="https://pixinvent.com" target="_blank" class="footer-link fw-medium footer-theme-link">Pixinvent</a>
-									</div>
-									<div>
-										<a href="https://github.com/pixinvent" class="footer-link me-4" target="_blank"><i class="ri-github-fill"></i></a>
-										<a href="https://www.facebook.com/pixinvents/" class="footer-link me-4" target="_blank"><i class="ri-facebook-circle-fill"></i></a>
-										<a href="https://twitter.com/pixinvents" class="footer-link me-4" target="_blank"><i class="ri-twitter-fill"></i></a>
-										<a href="https://www.instagram.com/pixinvents/" class="footer-link" target="_blank"><i class="ri-instagram-line"></i></a>
 									</div>
 								</div>
 							</div>
