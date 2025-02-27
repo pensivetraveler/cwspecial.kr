@@ -68,6 +68,10 @@ class Works extends Common
 
 	public function view($key = 0)
 	{
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/js/app-page-article.js'),
+		];
+
 		parent::view($key);
 	}
 }

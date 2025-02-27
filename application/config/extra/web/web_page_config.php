@@ -58,7 +58,7 @@ $config['page_config'] = [
 			],
 		],
 		'viewProperties' => [
-			'comments' => true,
+			'comments' => false,
 		],
 	],
 	'inquiries' => [

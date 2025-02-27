@@ -59,7 +59,7 @@ extract(trans_formdata_dit_type($viewData));
 			<div class="row mt-4 btn-view-wrap">
 				<div class="col-sm-6 text-start btn-view-wrap-left"></div>
 				<div class="col-sm-6 text-end btn-view-wrap-right">
-					<button type="button" class="btn btn-outline-primary w-px-150 btn-view-list"><?=lang('List')?></button>
+					<button type="button" class="btn btn-outline-primary w-px-150 btn-article-list"><?=lang('List')?></button>
 				</div>
 			</div>
 		</div>

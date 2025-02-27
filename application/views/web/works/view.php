@@ -66,8 +66,8 @@ extract(trans_formdata_dit_type($viewData));
 					<button type="button" class="btn btn-dark w-px-150 btn-pref-003">별로에요</button>
 				</div>
 				<div class="col-sm-6 text-end btn-wrap-right">
-					<button type="button" class="btn btn-outline-primary w-px-150 btn-view-list"><?=lang('List')?></button>
-					<button type="button" class="btn btn-outline-primary w-px-150 btn-view-edit"><?=lang('Edit')?></button>
+					<button type="button" class="btn btn-outline-primary w-px-150 btn-article-list"><?=lang('List')?></button>
+					<button type="button" class="btn btn-outline-primary w-px-150 btn-article-edit"><?=lang('Edit')?></button>
 				</div>
 			</div>
 		</div>
