@@ -100,19 +100,19 @@ class Auth extends Common
 		$count = $this->Model->getCnt(['id' => $params['id']]);
 		if(!$count) $this->response(['code' => USER_NOT_EXIST,]);
 
-		$user = $this->Model->getData([], ['id' => $params['id']]);
-		if(!custom_password_verify($user->password, $params['password'], true)) $this->response(['code' => PASSWORD_IS_NOT_MATCHED, 'data' => []]);
+		$userData = $this->Model->getData([], ['id' => $params['id']]);
+		if(!custom_password_verify($userData->password, $params['password'], true)) $this->response(['code' => PASSWORD_IS_NOT_MATCHED, 'data' => []]);
 
 		if ($this->input->post('autologin')) {
 			$vericode = array('$', '/', '.');
 			$hash = str_replace(
 				$vericode,
 				'',
-				password_hash(random_string('alnum', 10) . element('user_id', (array)$user) . ctimestamp() . element('id', (array)$user), PASSWORD_BCRYPT)
+				password_hash(random_string('alnum', 10) . element('user_id', (array)$userData) . ctimestamp() . element('id', (array)$userData), PASSWORD_BCRYPT)
 			);
 
 			$this->Model_User_Autologin->addData([
-				'user_id' => element('user_id', (array)$user),
+				'user_id' => element('user_id', (array)$userData),
 				'aul_key' => $hash,
 				'aul_ip' => $this->input->ip_address(),
 				'aul_datetime' => cdate('Y-m-d H:i:s'),
@@ -125,12 +125,12 @@ class Auth extends Common
 		}
 
 		$this->session->set_userdata([
-			'user_id' => $user->user_id,
+			'user_id' => $userData->user_id,
 			'token' => $this->setToken([
-				'user_id' => $user->user_id,
-				'id' => $user->id,
-				'name' => $user->name,
-				'is_admin' => in_array($user->user_cd, ['USR000', 'USR001']),
+				'user_id' => $userData->user_id,
+				'id' => $userData->id,
+				'name' => $userData->name,
+				'is_admin' => in_array($userData->user_cd, ['USR000', 'USR001']),
 			]),
 		]);
 
@@ -250,6 +250,25 @@ class Auth extends Common
 		if (isset($_COOKIE[$this->config->item('sess_cookie_name')])) {
 			setcookie($this->config->item('sess_cookie_name'), '', time() - 3600, '/');
 		}
+
+		$this->response([
+			'code' => DATA_PROCESSED,
+		]);
+	}
+
+	public function passwordCheck_post()
+	{
+		$tokenData = $this->validateToken();
+
+		$params = [
+			'password' => $this->input->post('password'),
+		];
+
+		$userData = $this->Model->getData([], [
+			'user_id' => $tokenData->user_id,
+		]);
+
+		if(!custom_password_verify($userData->password, $params['password'], true)) $this->response(['code' => PASSWORD_IS_NOT_MATCHED, 'data' => []]);
 
 		$this->response([
 			'code' => DATA_PROCESSED,
