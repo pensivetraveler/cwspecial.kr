@@ -59,14 +59,15 @@ extract(trans_formdata_dit_type($viewData));
 					</div>
 				</div>
 			</div>
-			<div class="row mt-4">
-				<div class="col-sm-6 text-start">
-					<button type="button" class="btn btn-outline-primary w-px-150 btn-work-edit">수정하기</button>
-				</div>
-				<div class="col-sm-6 text-end">
+			<div class="row mt-4 btn-wrap">
+				<div class="col-sm-6 text-start btn-wrap-left">
 					<button type="button" class="btn btn-dribbble w-px-150 me-4 btn-pref-001">좋아요</button>
 					<button type="button" class="btn btn-linkedin w-px-150 me-4 btn-pref-002">그저 그래요</button>
 					<button type="button" class="btn btn-dark w-px-150 btn-pref-003">별로에요</button>
+				</div>
+				<div class="col-sm-6 text-end btn-wrap-right">
+					<button type="button" class="btn btn-outline-primary w-px-150 btn-view-list"><?=lang('List')?></button>
+					<button type="button" class="btn btn-outline-primary w-px-150 btn-view-edit"><?=lang('Edit')?></button>
 				</div>
 			</div>
 		</div>
