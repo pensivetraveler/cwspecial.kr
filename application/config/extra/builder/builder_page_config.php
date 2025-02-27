@@ -49,6 +49,7 @@ $config['page_base_config'] = [
 	'viewProperties' => [
 		'viewConfig' => '',
 		'extraFormConfig' => '',
+		'comments' => false,
 	],
 	'tabProperties' => [
 		'tabGroup' => '',

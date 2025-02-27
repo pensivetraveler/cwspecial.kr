@@ -29,6 +29,9 @@ $config['page_config'] = [
 				'delete' => true,
 			],
 		],
+		'viewProperties' => [
+			'comments' => true,
+		],
 	],
 	'notices' => [
 		'category' => 'page',
@@ -57,6 +60,9 @@ $config['page_config'] = [
 				'delete' => false,
 			],
 		],
+		'viewProperties' => [
+			'comments' => true,
+		],
 	],
 	'inquiries' => [
 		'category' => 'page',
@@ -84,6 +90,9 @@ $config['page_config'] = [
 				'view' => true,
 				'delete' => false,
 			],
+		],
+		'viewProperties' => [
+			'comments' => true,
 		],
 	],
 	'myinfo' => [
