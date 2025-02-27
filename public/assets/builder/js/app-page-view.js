@@ -1,4 +1,4 @@
-function checkMyData() {
+function checkMyData(showError = true) {
 	let result = false;
 	$.ajax({
 		async: false,
@@ -9,6 +9,14 @@ function checkMyData() {
 		dataType: 'json',
 		success: function (response, textStatus, jqXHR) {
 			result = true;
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			if(showError) {
+				showAlert({
+					type: 'warning',
+					text: jqXHR.responseJSON.msg,
+				});
+			}
 		},
 	});
 	return result;
@@ -59,4 +67,13 @@ function getViewData() {
 
 $(function() {
 	getViewData();
+
+	$('.btn-view-list').on('click', function(e) {
+		location.href = common.PAGE_LIST_URI;
+	});
+
+	$('.btn-view-edit').on('click', function(e) {
+		const isMine = checkMyData();
+		if(isMine) location.href = common.PAGE_EDIT_URI + '/' + common.KEY;
+	});
 });
