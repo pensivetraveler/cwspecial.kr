@@ -19,6 +19,7 @@ $lang['status_code'][ERROR_DOWNLOAD_NOTDATA] = 'DOWNLOAD 데이터가 조회되�
 $lang['status_code'][UPLOAD_DATA_NOT_EXIST] = 'UPLOAD 데이터가 조회되지 않습니다.';
 $lang['status_code'][FORBIDDEN_ACCESS] = '접근 금지.';
 $lang['status_code'][NO_PERMISSION] = '권한이 없습니다.';
+$lang['status_code'][WITHDRWAN_USER] = '탈퇴한 계정입니다.';
 $lang['status_code'][DATA_NOT_EXIST] = '데이터가 존재하지 않습니다.';
 $lang['status_code'][USER_NOT_EXIST] = '일치하는 계정이 존재하지 않습니다.';
 $lang['status_code'][PASSWORD_IS_NOT_MATCHED] = '비밀번호를 확인해주세요.';
