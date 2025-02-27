@@ -124,7 +124,6 @@ class Auth extends Common
 			set_cookie($cookie_name, $cookie_value, $cookie_expire);
 		}
 
-
 		$this->session->set_userdata([
 			'user_id' => $user->user_id,
 			'token' => $this->setToken([
@@ -137,7 +136,6 @@ class Auth extends Common
 
 		$this->response([
 			'code' => DATA_AVAILABLE,
-			'msg' => DATA_PROCESSED,
 			'data' => [
 				'aul_key' => $cookie_value ?? '',
 			],
@@ -225,5 +223,36 @@ class Auth extends Common
 				],
 			]);
 		}
+	}
+
+	public function withdraw_post()
+	{
+		$tokenData = $this->validateToken();
+
+		$this->Model->modData([
+			'withdraw_yn' => 'Y',
+			'withdraw_dt' => date('Y-m-d'),
+		], [
+			'user_id' => $tokenData->user_id,
+		]);
+
+		$this->Model_User_Autologin->delData([
+			'user_id' => $this->session->userdata('user_id'),
+		]);
+
+		delete_cookie('autologin');
+
+		$this->session->sess_destroy();
+		$this->session->unset_userdata('user_id');
+		$this->session->unset_userdata('token');
+
+		// 세션 쿠키 삭제
+		if (isset($_COOKIE[$this->config->item('sess_cookie_name')])) {
+			setcookie($this->config->item('sess_cookie_name'), '', time() - 3600, '/');
+		}
+
+		$this->response([
+			'code' => DATA_PROCESSED,
+		]);
 	}
 }
