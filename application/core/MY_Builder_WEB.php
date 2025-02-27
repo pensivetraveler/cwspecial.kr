@@ -98,8 +98,6 @@ class MY_Builder_WEB extends MY_Controller_WEB
 
 	public function view($key = 0)
 	{
-		if($this->sideForm) show_404();
-
 		if(!$key) alert('잘못된 접근입니다.');
 
 		$this->phptojs->append(['KEY' => $key]);
@@ -113,9 +111,11 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			$data['identifier'] = $data['viewData'][array_search('identifier', array_column($data['viewData'], 'view'))];
 		}
 
-		$this->addJS['tail'][] = [
-			base_url('public/assets/builder/js/app-page-comment.js')
-		];
+		if($this->pageConfig['viewProperties']['comments']) {
+			$this->addJS['tail'][] = [
+				base_url('public/assets/builder/js/app-page-comment.js')
+			];
+		}
 
 		$this->viewApp($data);
 	}
