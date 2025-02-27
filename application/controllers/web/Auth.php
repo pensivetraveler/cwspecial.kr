@@ -106,6 +106,42 @@ class Auth extends Common
 		$this->viewApp($data);
 	}
 
+	public function passwordCheck()
+	{
+		$this->formColumns = $this->setFormColumns('password_check');
+		$this->addJsVars([
+			'API_URI' => '/api/auth',
+			'API_URI_ADD' => 'passwordCheck',
+			'IDENTIFIER' => $this->setIdentifier(),
+			'FORM_DATA' => $this->setFormData(),
+			'FORM_REGEXP' => $this->config->item('regexp'),
+			'REDIRECT_URI' => $this->input->get('redirect_to'),
+		]);
+
+		$this->addCSS[] = [
+			base_url('public/assets/builder/vendor/css/pages/page-auth.css'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
+			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css'),
+		];
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/vendor/libs/@form-validation/popular.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/bootstrap5.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/auto-focus.js'),
+			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js'),
+		];
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/js/app-page-auth.js'),
+		];
+
+		$data['subPage'] = 'web/auth/password_check';
+		$data['backLink'] = WEB_HISTORY_BACK;
+		$data['formData'] = restructure_admin_form_data($this->jsVars['FORM_DATA'], $this->sideForm?'side':'page');
+
+		$this->viewApp($data);
+	}
+
 	public function logout()
 	{
 		if (!$this->session->userdata('user_id')) redirect('/auth');
