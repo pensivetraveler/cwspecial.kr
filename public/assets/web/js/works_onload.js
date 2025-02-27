@@ -122,20 +122,8 @@ $(function() {
 		});
 	};
 
-	$('.btn-work-edit').on('click', function (e) {
-		const isMine = checkMyData();
-		if(isMine) {
-			location.href = '/works/edit/'+common.KEY;
-		}else{
-			showAlert({
-				type: 'warning',
-				text: jqXHR.responseJSON.msg,
-			});
-		}
-	});
-
 	$('.btn-pref-001').on('click', function (e) {
-		const isMine = checkMyData();
+		const isMine = checkMyData(false);
 		if(!isMine) {
 			submitArticlePreference('PRF001');
 		}else{
@@ -147,7 +135,7 @@ $(function() {
 	});
 
 	$('.btn-pref-002').on('click', function (e) {
-		const isMine = checkMyData();
+		const isMine = checkMyData(false);
 		if(!isMine) {
 			submitArticlePreference('PRF002');
 		}else{
@@ -159,7 +147,7 @@ $(function() {
 	});
 
 	$('.btn-pref-003').on('click', function (e) {
-		const isMine = checkMyData();
+		const isMine = checkMyData(false);
 		if(!isMine) {
 			submitArticlePreference('PRF003');
 		}else{
