@@ -2,10 +2,16 @@
 $lang['Filters'] = 'Filters';
 $lang['Actions'] = 'Actions';
 $lang['Do you really want to delete?'] = 'Do you really want to delete?';
+$lang['Do you really want to withdraw?'] = 'Do you really want to withdraw?';
 $lang['You can\'t undo this action'] = 'You can\'t undo this action.';
+$lang['Yes'] = 'Yes';
+$lang['No'] = 'No';
 $lang['Cancel'] = 'Cancel';
 $lang['Delete'] = 'Delete';
+$lang['List'] = 'List';
+$lang['Add'] = 'Add';
 $lang['Edit'] = 'Edit';
+$lang['Withdraw'] = 'Withdraw';
 $lang['Add New Record'] = 'Add New Record';
 $lang['Upload Excel'] = 'Upload Excel';
 $lang['Search The Address'] = 'Search The Address';
