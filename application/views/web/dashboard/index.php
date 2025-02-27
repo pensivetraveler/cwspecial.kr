@@ -8,11 +8,12 @@
 		</div>
 		<div class="mt-8 text-center">
 			<h3><b>새로운 작업물</b></h3>
-			<ul class="list-group list-group-flush mb-8">
-				<a href="javascript:void(0);" class="fs-xlarge fw-bold list-group-item list-group-item-action waves-effect lh-1 py-8 border-0">Bear claw cake biscuit</a>
-				<a href="javascript:void(0);" class="fs-large fw-bold list-group-item list-group-item-action waves-effect lh-1 py-8 border-0">Bear claw cake biscuit</a>
-				<a href="javascript:void(0);" class="fs-big fw-bold list-group-item list-group-item-action waves-effect lh-1 py-8 border-0">Bear claw cake biscuit</a>
-				<a href="javascript:void(0);" class="fw-bold list-group-item list-group-item-action waves-effect lh-1 py-8 border-0">Bear claw cake biscuit</a>
+			<ul class="list-group list-group-flush mb-8" id="dashboard-article-list">
+				<?php foreach ($list as $item): ?>
+				<a href="/works/view/<?=$item->article_id?>" class="fw-bold list-group-item list-group-item-action waves-effect lh-1 py-8 border-0">
+					<?=$item->subject?>
+				</a>
+				<?php endforeach; ?>
 			</ul>
 		</div>
 	</div>
