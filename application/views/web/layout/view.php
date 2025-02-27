@@ -56,11 +56,19 @@ extract(trans_formdata_dit_type($viewData));
 					<div id="content" class="view-data"></div>
 				</div>
 			</div>
+			<div class="row mt-4 btn-view-wrap">
+				<div class="col-sm-6 text-start btn-view-wrap-left"></div>
+				<div class="col-sm-6 text-end btn-view-wrap-right">
+					<button type="button" class="btn btn-outline-primary w-px-150 btn-view-list"><?=lang('List')?></button>
+					<button type="button" class="btn btn-outline-primary w-px-150 btn-view-edit"><?=lang('Edit')?></button>
+				</div>
+			</div>
 		</div>
 		<?php
 			echo form_close();
 		?>
 	</div>
+	<?php if($isComments): ?>
 	<div class="card" id="comment-container">
 		<div class="card-header">
 			<?php
@@ -100,4 +108,5 @@ extract(trans_formdata_dit_type($viewData));
 			<ul class="border rounded-4 py-2 px-6 list-unstyled mb-0" id="comment-list"></ul>
 		</div>
 	</div>
+	<?php endif; ?>
 </div>
