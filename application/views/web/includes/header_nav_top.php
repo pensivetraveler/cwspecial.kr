@@ -50,7 +50,7 @@
 				</li>
 				<?php else: ?>
 				<li class="nav-item">
-					<a class="nav-link fw-medium" href="<?=base_url('/myInfo')?>">내 정보</a>
+					<a class="nav-link fw-medium" href="<?=base_url('/auth/passwordCheck?redirect_to=/myInfo')?>">내 정보</a>
 				</li>
 				<?php endif; ?>
 			</ul>
