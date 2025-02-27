@@ -30,7 +30,7 @@
 		<script>
 			$(function() {
 				if(
-						<?=$this->config->item('phptojs.namespace')?>.HOOK_PHPTOJS_VAR_DIALOG !== null
+					<?=$this->config->item('phptojs.namespace')?>.HOOK_PHPTOJS_VAR_DIALOG !== null
 					&&
 					Object.keys(<?=$this->config->item('phptojs.namespace')?>.HOOK_PHPTOJS_VAR_DIALOG).length > 0
 				) {
@@ -48,6 +48,8 @@
 							const uri = flashData.onclick.redirect;
 							<?=$this->config->item('phptojs.namespace')?>.HOOK_PHPTOJS_VAR_DIALOG = null;
 							location.href = uri;
+						}else{
+							history.back();
 						}
 					});
 				}
