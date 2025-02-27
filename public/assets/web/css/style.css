@@ -7,6 +7,29 @@ body {
 	border-color: orange;
 }
 
+#dashboard-article-list {
+}
+
+#dashboard-article-list a:first-child {
+	font-size: 170% !important;
+}
+
+#dashboard-article-list a:nth-child(2) {
+	font-size: 150% !important;
+}
+
+#dashboard-article-list a:nth-child(3) {
+	font-size: 140% !important;
+}
+
+#dashboard-article-list a:nth-child(4) {
+	font-size: 130% !important;
+}
+
+#dashboard-article-list a:nth-child(5) {
+	font-size: 120% !important;
+}
+
 #fullpage-dropzone {
 
 }
