@@ -111,7 +111,9 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			$data['identifier'] = $data['viewData'][array_search('identifier', array_column($data['viewData'], 'view'))];
 		}
 
+		$data['isComments'] = false;
 		if($this->pageConfig['viewProperties']['comments']) {
+			$data['isComments'] = true;
 			$this->addJS['tail'][] = [
 				base_url('public/assets/builder/js/app-page-comment.js')
 			];
