@@ -24,9 +24,7 @@ $config['page_config'] = [
 				'excel' => false,
 			],
 			'actions' => [
-				'edit' => true,
-				'view' => true,
-				'delete' => true,
+				'delete' => false,
 			],
 		],
 		'viewProperties' => [
@@ -56,7 +54,6 @@ $config['page_config'] = [
 			],
 			'actions' => [
 				'edit' => false,
-				'view' => true,
 				'delete' => false,
 			],
 		],
