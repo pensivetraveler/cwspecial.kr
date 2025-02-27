@@ -10,6 +10,7 @@ class Dashboard extends Common
 
 		$this->load->model('Model_User', 'Model');
 		$this->load->model('Model_Student', 'Model_Child');
+		$this->load->model('Model_Article');
 	}
 
 	public function index()
@@ -24,8 +25,13 @@ class Dashboard extends Common
 		}
 
 		if($userData->approve_yn === 'Y'){
+			$list = $this->Model_Article->getList([], [
+				'board_id' => 3,
+			], [], [0, 5], ['created_dt' => 'desc']);
+
 			$data['subPage'] = 'web/dashboard/index';
 			$data['backLink'] = WEB_HISTORY_BACK;
+			$data['list'] = $list;
 
 			$this->viewApp($data);
 		}else{
