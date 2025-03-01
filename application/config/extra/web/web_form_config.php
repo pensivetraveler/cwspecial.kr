@@ -38,6 +38,82 @@ $config['form_login_config'] = [
 	],
 ];
 
+$config['form_find_id_config'] = [
+	[
+		'field' => 'email',
+		'label' => 'lang:user.email',
+		'rules' => 'trim|required|is_unique[user.email.user_id]',
+		'category' => 'basic',
+		'type' => 'email',
+		'icon' => 'ri-font-family',
+		'attributes' => [
+			'autocapitalize' => 'none',
+			'autocomplete' => 'off',
+			'placeholder' => 'Enter The User Email',
+		],
+	],
+	[
+		'field' => 'tel',
+		'label' => 'lang:user.tel',
+		'form' => true,
+		'rules' => 'trim|required',
+		'errors' => [],
+		'category' => 'basic',
+		'type' => 'tel',
+		'subtype' => 'cleave-hp',
+		'icon' => null,
+		'form_text' => '',
+		'attributes' => [],
+		'default' => '',
+		'list' => true,
+		'list_attributes' => [],
+	],
+];
+
+$config['form_find_password_config'] = [
+	[
+		'field' => 'id',
+		'label' => 'lang:user.id',
+		'rules' => 'trim|required',
+		'category' => 'basic',
+		'icon' => 'ri-font-family',
+		'attributes' => [
+			'autocapitalize' => 'none',
+			'autocomplete' => 'off',
+			'placeholder' => 'Enter The User ID',
+		],
+	],
+	[
+		'field' => 'email',
+		'label' => 'lang:user.email',
+		'rules' => 'trim|required',
+		'category' => 'basic',
+		'type' => 'email',
+		'icon' => 'ri-font-family',
+		'attributes' => [
+			'autocapitalize' => 'none',
+			'autocomplete' => 'off',
+			'placeholder' => 'Enter The User Email',
+		],
+	],
+	[
+		'field' => 'tel',
+		'label' => 'lang:user.tel',
+		'form' => true,
+		'rules' => 'trim|required',
+		'errors' => [],
+		'category' => 'basic',
+		'type' => 'tel',
+		'subtype' => 'cleave-hp',
+		'icon' => null,
+		'form_text' => '',
+		'attributes' => [],
+		'default' => '',
+		'list' => true,
+		'list_attributes' => [],
+	],
+];
+
 $config['form_password_check_config'] = [
 	[
 		'field' => 'password',
@@ -283,6 +359,16 @@ $config['form_works_config'] = [
 		'errors' => [],
 		'type' => 'hidden',
 		'default' => 3,
+		'list' => false,
+	],
+	[
+		'field' => 'open_yn',
+		'label' => 'lang:article.open_yn',
+		'form' => true,
+		'rules' => 'trim|required',
+		'errors' => [],
+		'type' => 'hidden',
+		'default' => 'N',
 		'list' => false,
 	],
 	[

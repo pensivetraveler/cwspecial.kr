@@ -31,6 +31,35 @@ $config['page_config'] = [
 			'comments' => true,
 		],
 	],
+	'myworks' => [
+		'category' => 'page',
+		'type' => 'list',
+		'subType' => 'base',
+		'properties' => [
+			'baseMethod' => 'list',
+			'allows' => ['list','add','edit'],
+			'formExist' => true,
+			'listExist' => true,
+		],
+		'formProperties' => [
+			'formConfig' => 'works',
+			'formType' => 'page',
+		],
+		'listProperties' => [
+			'listConfig' => 'works',
+			'plugin' => 'datatable',
+			'buttons' => [
+				'add' => true,
+				'excel' => false,
+			],
+			'actions' => [
+				'delete' => false,
+			],
+		],
+		'viewProperties' => [
+			'comments' => true,
+		],
+	],
 	'notices' => [
 		'category' => 'page',
 		'type' => 'list',
