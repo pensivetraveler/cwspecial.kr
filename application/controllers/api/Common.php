@@ -20,12 +20,12 @@ class Common extends MY_Builder_API
 
 		if($this->input->get('format') === 'datatable') {
 			$extraFields['draw'] = (int)$this->input->get('draw');
-			// ��ü ���ڵ� ��
+			// 전체 레코드 수
 			$extraFields['recordsTotal'] = $this->Model->getCnt(
 				$data['where'] ?? [],
 				$data['like'] ?? [],
 			);
-			// �˻����Ͱ� ����� ���ڵ� ��
+			// 검색필터가 적용된 레코드 수
 			if( isset($data['filter']) ) {
 				$extraFields['recordsFiltered'] = $this->Model->getCnt(
 					$data['where'] ?? [],
@@ -143,5 +143,34 @@ class Common extends MY_Builder_API
 		$this->response([
 			'code' => $articleData?DATA_PROCESSED:NO_PERMISSION,
 		]);
+	}
+
+	public function message_read_patch($key)
+	{
+		$tokenData = $this->validateToken();
+
+		$this->load->model('Model_Message');
+		$this->Model_Message->modData([
+			'read_yn' => 'Y'
+		], [
+			'message_id' => $key,
+			'user_id' => $tokenData->user_id,
+		]);
+
+		$this->response([
+			'code' => DATA_PROCESSED,
+		]);
+	}
+
+	protected function isAdmin($dto)
+	{
+		if(!property_exists($this, 'Model_User')) {
+			$this->load->model('Model_User');
+		}
+
+		return $this->Model_User->getCnt([
+			'user_id' => $dto['user_id'],
+			'user_cd' => 'USR001',
+		]) > 0;
 	}
 }
