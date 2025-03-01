@@ -13,6 +13,7 @@ class Works extends Common
 			'API_URI' => '/api/articles',
 			'API_PARAMS' => [
 				'board_id' => 3,
+				'open_yn' => 'Y',
 			],
 		]);
 	}
@@ -33,7 +34,6 @@ class Works extends Common
 		$this->addJS['tail'][] = [
 			base_url('public/assets/builder/vendor/libs/dropzone/dropzone.js'),
 			base_url('public/assets/builder/vendor/libs/quill/quill.js'),
-			base_url('public/assets/builder/js/forms-file-upload.js'),
 		];
 
 		parent::add();
@@ -43,15 +43,12 @@ class Works extends Common
 	{
 		$tokenData = $this->validateToken();
 
-		if(property_exists($this, 'Model')) {
-			$articleData = $this->Model->getData([], [
-				$this->Model->identifier => $key,
-				'created_id' => $tokenData->user_id,
-			]);
-			if(!$articleData) {
-				parent::edit(0);
-			}
-		}
+		$this->load->model('Model_Article');
+		$articleData = $this->Model_Article->getData([], [
+			'article_id' => $key,
+			'created_id' => $tokenData->user_id,
+		]);
+		if(!$articleData) parent::edit(0);
 
 		$this->addCSS[] = [
 			base_url('public/assets/builder/vendor/libs/dropzone/dropzone.css'),
@@ -60,7 +57,6 @@ class Works extends Common
 		$this->addJS['tail'][] = [
 			base_url('public/assets/builder/vendor/libs/dropzone/dropzone.js'),
 			base_url('public/assets/builder/vendor/libs/quill/quill.js'),
-			base_url('public/assets/builder/js/forms-file-upload.js'),
 		];
 
 		parent::edit($key);
@@ -68,6 +64,15 @@ class Works extends Common
 
 	public function view($key = 0)
 	{
+		$tokenData = $this->validateToken();
+
+		$this->load->model('Model_Article');
+		$articleData = $this->Model_Article->getData([], [
+			'article_id' => $key,
+			'created_id' => $tokenData->user_id,
+		]);
+		if(!$articleData) parent::edit(0);
+
 		$this->addJS['tail'][] = [
 			base_url('public/assets/builder/js/app-page-article.js'),
 		];
