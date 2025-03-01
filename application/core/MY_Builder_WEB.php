@@ -208,6 +208,15 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			base_url(PLATFORM_ASSET_CSS_URI.'style.css'),
 		];
 
+		if(!file_exists(PLATFORM_ASSET_JS_PATH.'common.js')){
+			$file = fopen(PLATFORM_ASSET_JS_PATH.'common.js',"w");
+			if(!$file) trigger_error("viewApp : Unable to open file!", E_USER_ERROR);
+			fclose($file);
+		}
+		$this->addJS['tail'][] = [
+			base_url(PLATFORM_ASSET_JS_URI.'common.js'),
+		];
+
 		foreach (['_preset', '_onload'] as $filename) {
 			if(!file_exists(PLATFORM_ASSET_JS_PATH.strtolower($this->router->class).$filename.'.js')){
 				$file = fopen(PLATFORM_ASSET_JS_PATH.strtolower($this->router->class).$filename.'.js',"w");
@@ -228,8 +237,12 @@ class MY_Builder_WEB extends MY_Controller_WEB
 	protected function setProperties($data = [])
 	{
 		$pageConfig = [];
-		if(!is_empty($this->config->item("page_config"), strtolower($this->router->class))){
-			$pageConfig = $this->config->get("page_config")[strtolower($this->router->class)];
+		if(
+			!is_empty($this->config->item("page_config"), $this->router->class)
+			||
+			!is_empty($this->config->item("page_config"), strtolower($this->router->class))
+		){
+			$pageConfig = $this->config->get("page_config")[$this->router->class]??$this->config->get("page_config")[strtolower($this->router->class)];
 			if(is_empty($pageConfig, 'properties')) $pageConfig['properties'] = [];
 			if(is_empty($pageConfig['properties'], 'baseMethod')) $pageConfig['properties']['baseMethod'] = $pageConfig['type'];
 			if(array_key_exists( 'allows', $pageConfig['properties'])) $pageConfig['properties']['allows'] = [];
