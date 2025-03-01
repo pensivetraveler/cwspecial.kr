@@ -1,5 +1,7 @@
 <?php
 $lang['You can not vote to your data'] = 'You can not vot to your data.';
+$lang['You can not vote to your data'] = 'You can not vot to your data.';
+$lang['Temporary'] = 'Temporary Save';
 
 $lang['placeholder'] = [
 	'Select The Student' => 'Select The Student.',

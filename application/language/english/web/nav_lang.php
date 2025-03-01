@@ -12,4 +12,5 @@ $lang['nav']['Students'] = 'Students';
 $lang['nav']['Works'] = 'Works';
 $lang['nav']['Notices'] = 'Notices';
 $lang['nav']['Inquiries'] = 'Inquiries';
-$lang['nav']['MyInfo'] = 'MyInfo';
+$lang['nav']['MyInfo'] = 'My Info';
+$lang['nav']['MyWorks'] = 'My Works';
