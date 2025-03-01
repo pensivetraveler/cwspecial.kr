@@ -68,6 +68,8 @@ function submitArticlePreference(prefCd) {
 }
 
 $(function() {
+	const isMine = checkMyData(false);
+
 	const previewTemplate = `<div class="dz-preview dz-file-preview">
 <div class="dz-details">
   <div class="dz-thumbnail">
@@ -123,7 +125,6 @@ $(function() {
 	};
 
 	$('.btn-pref-001').on('click', function (e) {
-		const isMine = checkMyData(false);
 		if(!isMine) {
 			submitArticlePreference('PRF001');
 		}else{
@@ -135,7 +136,6 @@ $(function() {
 	});
 
 	$('.btn-pref-002').on('click', function (e) {
-		const isMine = checkMyData(false);
 		if(!isMine) {
 			submitArticlePreference('PRF002');
 		}else{
@@ -147,7 +147,6 @@ $(function() {
 	});
 
 	$('.btn-pref-003').on('click', function (e) {
-		const isMine = checkMyData(false);
 		if(!isMine) {
 			submitArticlePreference('PRF003');
 		}else{
@@ -159,4 +158,16 @@ $(function() {
 	});
 
 	setArticlePreference();
+
+	if($('body').data('method') === 'add' || $('body').data('method') === 'edit') {
+		if(!isMine || document.getElementById('formRecord').open_yn.value === 'Y') {
+			$('.btn-work-temporary').addClass('d-none');
+		}
+
+		$('.btn-work-temporary').on('click', function(e) {
+			e.preventDefault();
+			document.getElementById('formRecord').open_yn.value = 'N';
+			fv.validate();
+		});
+	}
 })
