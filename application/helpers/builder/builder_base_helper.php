@@ -7,3 +7,11 @@ function _view($path, $vars = array(), $return = false)
 	}
 	$CI->load->view($path, $vars, $return);
 }
+
+if ( ! function_exists('get_yn'))
+{
+	function get_yn($bool): string
+	{
+		return $bool?'Y':'N';
+	}
+}

@@ -114,3 +114,26 @@ function dow_to_str($data, $lang = 'en', $long = false)
 
 	return null;
 }
+
+/**
+ * DATE 함수의 약간 변형
+ */
+if ( ! function_exists('cdate')) {
+	function cdate($date, $timestamp = '')
+	{
+		defined('TIMESTAMP') or define('TIMESTAMP', time());
+		return $timestamp ? date($date, $timestamp) : date($date, TIMESTAMP);
+	}
+}
+
+
+/**
+ * TIMESTAMP 불러오기
+ */
+if ( ! function_exists('ctimestamp')) {
+	function ctimestamp()
+	{
+		defined('TIMESTAMP') or define('TIMESTAMP', time());
+		return TIMESTAMP;
+	}
+}

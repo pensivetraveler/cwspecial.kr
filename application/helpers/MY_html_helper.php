@@ -210,3 +210,12 @@ function modify_html_attributes($html, $changes, $type) {
     }
     return $html;
 }
+
+if ( ! function_exists('escstr'))
+{
+	function escstr($str): string
+	{
+		$str=str_replace("\r\n","",$str);
+		return trim($str);
+	}
+}

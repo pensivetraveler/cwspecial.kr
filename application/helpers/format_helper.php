@@ -27,3 +27,38 @@ if ( ! function_exists('format_date'))
         return date('Y-m-d', strtotime($birth));
     }
 }
+
+if ( ! function_exists('is_list_type'))
+{
+	function is_list_type($data): bool
+	{
+		if(!empty($data) && count($data) > 0) {
+			$keys = array_keys($data);
+			return array_reduce($keys, function($result, $key) {
+				return $result && is_numeric($key);
+			}, true);
+		}else{
+			return true;
+		}
+	}
+}
+
+if ( ! function_exists('array_to_brackets'))
+{
+	function array_to_brackets($array): string
+	{
+		$result = array_shift($array);
+		foreach ($array as $value) {
+			$result .= "[$value]";
+		}
+		return $result;
+	}
+}
+
+if ( ! function_exists('array_to_hyphens'))
+{
+	function array_to_hyphens($array): string
+	{
+		return implode('-', $array);
+	}
+}
