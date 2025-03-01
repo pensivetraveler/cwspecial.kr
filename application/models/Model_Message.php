@@ -10,9 +10,9 @@ class Model_Message extends Model_Common
 	public array   $primaryKeyList = ['message_id','user_id','article_id'];
 	public array   $uniqueKeyList = [];
 	public array   $notNullList = ['content','read_yn'];
-	public array   $nullList = ['reply_id'];
+	public array   $nullList = ['comment_id'];
 	public array   $strList = ['content','read_yn'];
-	public array   $intList = ['message_id','user_id','article_id','reply_id'];
+	public array   $intList = ['message_id','user_id','article_id','comment_id'];
 	public array   $fileList = [];
 
 	public bool    $isAutoincrement = true;
