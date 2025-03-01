@@ -33,7 +33,7 @@ class Common extends MY_Builder_WEB
 //			->select('admin.*')
 //			->join('admin', 'admin.user_id = user.user_id', 'right');
 //		$user = $this->Model_User->getData([], ['user_id' => $this->session->userdata('user_id')]);
-//		if(!$user) alert('Àß¸øµÈ Àü±ŞÀÔ´Ï´Ù.', base_url('admin/auth'));
+//		if(!$user) alert('ì˜ëª»ëœ ì „ê¸‰ì…ë‹ˆë‹¤.', base_url('admin/auth'));
 //
 //		if($this->session->userdata('token')) {
 //			$this->validateToken();
