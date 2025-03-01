@@ -5,9 +5,9 @@
 			<div class="card p-md-7 p-1">
 				<!-- Logo -->
 				<div class="app-brand justify-content-center mt-5">
-					<a href="/admin" class="app-brand-link gap-2">
+					<a href="/" class="app-brand-link gap-2">
 						<span class="app-brand-logo demo">
-							<img src="<?=base_url('/public/assets/builder/img/eduprime_logo.png')?>" alt="">
+							<img src="//placehold.co/400x200?text=Logo" alt="">
 						</span>
 					</a>
 				</div>
