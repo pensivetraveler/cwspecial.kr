@@ -9,6 +9,7 @@ class Common extends MY_Builder_WEB
 	public array $navAuth;
 	public bool $isLogin;
 	public bool $isAdmin;
+	public array $messages;
 
 	function __construct()
 	{
@@ -18,8 +19,13 @@ class Common extends MY_Builder_WEB
 
 		$this->load->model('Model_User', 'Model');
 		$this->load->model('Model_Student', 'Model_Child');
+		$this->load->model('Model_Message');
 
 		$this->defaultController = 'dashboard';
+
+		$this->addCSS[] = [
+			base_url('public/assets/builder/vendor/css/pages/front-page.css'),
+		];
 
 		$this->addJS['head'] = [
 			base_url('public/assets/builder/js/front-config.js'),
@@ -27,8 +33,18 @@ class Common extends MY_Builder_WEB
 			base_url('public/assets/builder/vendor/js/mega-dropdown.js'),
 		];
 
+		$this->addJS['tail'] = [
+			base_url('public/assets/builder/js/front-config.js'),
+			base_url('public/assets/builder/vendor/js/dropdown-hover.js'),
+			base_url('public/assets/builder/vendor/js/mega-dropdown.js'),
+		];
+
 		$this->isLogin = $this->session->userdata('user_id') && $this->session->userdata('token');
 		$this->isAdmin = is_null($this->session->userdata('is_admin'))?false:$this->session->userdata('is_admin');
+		$this->messages = $this->Model_Message->getList([], [
+			'user_id' => $this->session->userdata('user_id'),
+			'read_yn' => 'N',
+		]);
 	}
 
 	public function index()
@@ -44,6 +60,7 @@ class Common extends MY_Builder_WEB
 	{
 		$data['isLogin'] = $this->isLogin;
 		$data['isAdmin'] = $this->isAdmin;
+		$data['messages'] = $this->messages;
 
 		parent::viewApp($data);
 	}
