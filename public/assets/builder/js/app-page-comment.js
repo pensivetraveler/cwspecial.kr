@@ -1,3 +1,11 @@
+function resetCommentForm() {
+	const formComment = document.getElementById('formComment');
+	formComment.parent_id.value = 0;
+	formComment.comment_id.value = 0;
+	formComment.content.value = '';
+	formComment.depth.value = 0;
+}
+
 function getCommentBtns(comment, isReply = false) {
 	let btnHTML = '';
 	if(!isReply) btnHTML += `<button class="btn p-1 btn-outline-primary btn-comment btn-comment-reply">${getLocale('Reply', common.LOCALE)}</button>`;
@@ -29,24 +37,28 @@ function setCommentList(comments) {
 			replyList += `
 				<li class="ms-8 py-4" data-comment-id="${reply.comment_id}" data-mine-yn="${reply.mine_yn}" data-comment-depth="1">
 					<i class="ri-corner-down-right-line"></i>
-						<div class="d-flex">
+					<div class="d-flex comment-wrap">
+						<div class="comment-info">
 							<div class="w-px-200 me-4 comment-creater">${reply.creater.name} (${reply.creater.id})</div>
 							<div class="flex-fill me-8 comment-content">${reply.content}</div>
-							<div class="d-flex justify-content-end align-items-center">
-								<div class="btn-wrap">${replyBtns}</div>
-								<div class="text-end w-px-100 comment-time">${replyDate}<br>${replyTime}</div>
-							</div>
 						</div>
+						<div class="d-flex justify-content-end align-items-center comment-btns">
+							<div class="btn-wrap">${replyBtns}</div>
+							<div class="text-end w-px-100 comment-time">${replyDate}<br>${replyTime}</div>
+						</div>
+					</div>
 				</li>
 			`;
 		}
 
 		const commentHTML = `
 			<li class="py-6" data-comment-id="${comment.comment_id}" data-mine-yn="${comment.mine_yn}" data-commen-depth="0">
-				<div class="d-flex">
-					<div class="w-px-200 me-4 comment-creater">${comment.creater.name} (${comment.creater.id})</div>
-					<div class="flex-fill me-8 comment-content">${comment.content}</div>
-					<div class="d-flex justify-content-end align-items-center">
+				<div class="d-flex comment-wrap">
+					<div class="comment-info">
+						<div class="w-px-200 me-4 comment-creater">${comment.creater.name} (${comment.creater.id})</div>
+						<div class="flex-fill me-8 comment-content">${comment.content}</div>
+					</div>
+					<div class="d-flex justify-content-end align-items-center comment-btns">
 						<div class="btn-wrap">${btnHTML}</div>
 						<div class="text-end w-px-100 comment-time">${date}<br>${time}</div>
 					</div>
@@ -172,6 +184,7 @@ $(function() {
 					text: formComment['_mode'].value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
 					callback: getCommentList,
 				});
+				resetCommentForm();
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.warn(jqXHR.responseJSON)
@@ -198,10 +211,7 @@ $(function() {
 	$('#comment-list').on('click', '.btn-comment', function (e) {
 		const commentWrap = e.target.closest('li');
 		const commentId = commentWrap.getAttribute('data-comment-id');
-		formComment.parent_id.value = '';
-		formComment.comment_id.value = '';
-		formComment.content.value = '';
-		formComment.depth.value = '';
+		resetCommentForm();
 
 		if(e.target.classList.contains('btn-comment-reply')) {
 			formComment.parent_id.value = commentId;
