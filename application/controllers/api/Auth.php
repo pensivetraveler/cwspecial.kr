@@ -189,7 +189,7 @@ class Auth extends Common
 					'result' => [
 						'id' => $this->Model->getData(['id'], $params),
 					],
-					'redirect_to' => '/admin/auth/login',
+					'redirect_to' => '',
 				],
 			]);
 		}
@@ -219,7 +219,7 @@ class Auth extends Common
 					'result' => [
 						'password' => $password,
 					],
-					'redirect_to' => '/admin/auth/login',
+					'redirect_to' => '',
 				],
 			]);
 		}
