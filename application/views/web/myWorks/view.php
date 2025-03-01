@@ -27,6 +27,15 @@ extract(trans_formdata_dit_type($viewData));
 				set_admin_form_value($identifier['field'], $identifier['default'], null),
 				$identifier['attributes'],
 			);
+			echo form_input(
+				[
+					'type' => $open_yn['type'],
+					'name' => $open_yn['field'],
+					'id' => $open_yn['id'],
+				],
+				set_admin_form_value($open_yn['field'], $open_yn['default'], null),
+				$open_yn['attributes'],
+			);
 		?>
 		<div class="card-header">
 			<div class="mb-4">
@@ -61,9 +70,6 @@ extract(trans_formdata_dit_type($viewData));
 			</div>
 			<div class="row mt-4 btn-wrap">
 				<div class="col-sm-6 text-start btn-wrap-left">
-					<button type="button" class="btn btn-dribbble w-px-150 me-4 btn-pref-001">좋아요</button>
-					<button type="button" class="btn btn-linkedin w-px-150 me-4 btn-pref-002">그저 그래요</button>
-					<button type="button" class="btn btn-dark w-px-150 btn-pref-003">별로에요</button>
 				</div>
 				<div class="col-sm-6 text-end btn-wrap-right">
 					<button type="button" class="btn btn-outline-primary w-px-150 btn-article-list"><?=lang('List')?></button>

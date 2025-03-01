@@ -40,6 +40,15 @@ extract(trans_formdata_dit_type($formData));
                     set_admin_form_value($board_id['field'], $board_id['default'], null),
                     $board_id['attributes'],
                 );
+				echo form_input(
+						[
+								'type' => $open_yn['type'],
+								'name' => $open_yn['field'],
+								'id' => $open_yn['id'],
+						],
+						set_admin_form_value($open_yn['field'], $open_yn['default'], null),
+						$open_yn['attributes'],
+				);
             ?>
 			<div class="row mb-4">
 				<div class="col-lg-6">
@@ -89,10 +98,10 @@ extract(trans_formdata_dit_type($formData));
 			</div>
 			<div class="row">
 				<div class="col-sm-12 text-end">
-					<button type="button" class="btn btn-outline-dark waves-effect" onclick="<?=WEB_HISTORY_BACK?>">List</button>
-					<button type="button" class="btn btn-primary waves-effect waves-light">Temporary</button>
-					<button type="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
-					<button type="button" class="btn btn-outline-danger btn-delete-event btn-delete d-none">Delete</button>
+					<button type="button" class="btn btn-outline-dark waves-effect" onclick="<?=WEB_HISTORY_BACK?>"><?=lang('List')?></button>
+					<button type="button" class="btn btn-primary waves-effect waves-light btn-work-temporary"><?=lang('Temporary')?></button>
+					<button type="submit" class="btn btn-primary waves-effect waves-light"><?=lang('Submit')?></button>
+					<button type="button" class="btn btn-outline-danger btn-delete-event btn-delete d-none"><?=lang('Delete')?></button>
 				</div>
 			</div>
 			<?php
