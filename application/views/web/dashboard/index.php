@@ -8,6 +8,7 @@
 		</div>
 		<div class="mt-8 text-center">
 			<h3><b>새로운 작업물</b></h3>
+			<hr>
 			<ul class="list-group list-group-flush mb-8" id="dashboard-article-list">
 				<?php foreach ($list as $item): ?>
 				<a href="/works/view/<?=$item->article_id?>" class="fw-bold list-group-item list-group-item-action waves-effect lh-1 py-8 border-0">
