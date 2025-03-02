@@ -775,11 +775,14 @@ $config['form_notices_config'] = [
 		'errors' => [],
 		'category' => 'basic',
 		'type' => 'file',
-		'icon' => '',
+		'icon' => 'ri-file-image-line',
+		'attributes' => [
+			'accept' => 'image/jpeg,image/png',
+		],
 		'form_text' => [
-			'line' => 'Upload Attachment',
-			'replace' => '',
-			'icon' => 'ri-attachment-2',
+			'line' => 'Upload File Only',
+			'replace' => 'IMG',
+			'icon' => 'ri-file-image-fill',
 			'icon_size' => 16,
 		],
 		'form_attributes' => [
