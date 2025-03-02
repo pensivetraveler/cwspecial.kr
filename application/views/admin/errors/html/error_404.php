@@ -34,4 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</div>
 </div>
 <!-- /Error -->
-<?php include __DIR__.'/../../includes/tail.php'; ?>
+<?php
+include __DIR__.'/../../includes/tail.php';
+exit;
+?>

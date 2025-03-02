@@ -48,4 +48,5 @@ if(!in_array('modal_prepend', config_item('loaded_views'))) {
 <?php
 if(!in_array('tail', config_item('loaded_views'))) {
 	_view("builder/includes/tail");
+	exit;
 }
