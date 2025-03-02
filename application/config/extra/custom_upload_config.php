@@ -17,3 +17,7 @@ $config['base_upload_config'] = [
 $config['thumbnail_upload_config'] = array_merge($config['base_upload_config'], [
 	'allowed_types' => 'gif|jpg|jpeg|png',
 ]);
+
+$config['uploads_upload_config'] = array_merge($config['base_upload_config'], [
+	'allowed_types' => 'gif|jpg|jpeg|png',
+]);
