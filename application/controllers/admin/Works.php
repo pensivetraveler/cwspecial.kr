@@ -13,6 +13,7 @@ class Works extends Common
 			'API_URI' => '/api/articles',
 			'API_PARAMS' => [
 				'board_id' => 3,
+				'open_yn' => 'Y',
 			]
 		]);
 	}
