@@ -322,11 +322,11 @@ class MY_Builder_API extends MY_Controller_API
 
 	protected function modData($key, $dto, $bool)
 	{
-		$dto = $this->beforeModData($dto);
+		$dto = $this->beforeModData($key, $dto);
 
 		$this->Model->modData($dto, [$this->identifier => $key], $bool);
 
-		$dto = $this->afterModData($dto);
+		$dto = $this->afterModData($key, $dto);
 
 		$this->response([
 			'code' => DATA_EDITED,
@@ -334,12 +334,12 @@ class MY_Builder_API extends MY_Controller_API
 		]);
 	}
 
-	protected function beforeModData($dto)
+	protected function beforeModData($key, $dto)
 	{
 		return $dto;
 	}
 
-	protected function afterModData($dto)
+	protected function afterModData($key, $dto)
 	{
 		return $dto;
 	}
