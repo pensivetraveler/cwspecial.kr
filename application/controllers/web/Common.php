@@ -9,6 +9,7 @@ class Common extends MY_Builder_WEB
 	public array $navAuth;
 	public bool $isLogin;
 	public bool $isAdmin;
+	public bool $isApproved;
 	public array $messages;
 
 	function __construct()
@@ -41,10 +42,22 @@ class Common extends MY_Builder_WEB
 
 		$this->isLogin = $this->session->userdata('user_id') && $this->session->userdata('token');
 		$this->isAdmin = is_null($this->session->userdata('is_admin'))?false:$this->session->userdata('is_admin');
-		$this->messages = $this->Model_Message->getList([], [
-			'user_id' => $this->session->userdata('user_id'),
-			'read_yn' => 'N',
-		]);
+		$this->isApproved = $this->session->userdata('approve_yn')==='Y';
+		$this->messages = [];
+		if($this->isLogin) {
+			if($this->isApproved) {
+				$this->messages = $this->Model_Message->getList([], [
+					'user_id' => $this->session->userdata('user_id'),
+					'read_yn' => 'N',
+				]);
+			}else{
+				if(
+					!($this->router->class === 'dashboard' || $this->router->class === 'auth')
+				){
+					redirect('/auth/complete');
+				}
+			}
+		}
 	}
 
 	public function index()
@@ -60,6 +73,7 @@ class Common extends MY_Builder_WEB
 	{
 		$data['isLogin'] = $this->isLogin;
 		$data['isAdmin'] = $this->isAdmin;
+		$data['isApproved'] = $this->isApproved;
 		$data['messages'] = $this->messages;
 
 		parent::viewApp($data);

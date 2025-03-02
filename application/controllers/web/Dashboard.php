@@ -24,21 +24,14 @@ class Dashboard extends Common
 			redirect('/auth/login');
 		}
 
-		if($userData->approve_yn === 'Y'){
-			$list = $this->Model_Article->getList([], [
-				'board_id' => 3,
-			], [], [0, 5], ['created_dt' => 'desc']);
+		$list = $this->Model_Article->getList([], [
+			'board_id' => 3,
+		], [], [0, 5], ['created_dt' => 'desc']);
 
-			$data['subPage'] = 'web/dashboard/index';
-			$data['backLink'] = WEB_HISTORY_BACK;
-			$data['list'] = $list;
+		$data['subPage'] = 'web/dashboard/index';
+		$data['backLink'] = WEB_HISTORY_BACK;
+		$data['list'] = $list;
 
-			$this->viewApp($data);
-		}else{
-			$data['subPage'] = 'web/auth/complete';
-			$data['backLink'] = WEB_HISTORY_BACK;
-
-			$this->viewApp($data);
-		}
+		$this->viewApp($data);
 	}
 }
