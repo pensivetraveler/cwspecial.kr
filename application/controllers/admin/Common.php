@@ -27,42 +27,32 @@ class Common extends MY_Builder_WEB
 
 	protected function auth(): bool
 	{
-//		if(!$this->session->userdata('user_id')) redirect('admin/auth');
-//
-//		$this->db
-//			->select('admin.*')
-//			->join('admin', 'admin.user_id = user.user_id', 'right');
-//		$user = $this->Model_User->getData([], ['user_id' => $this->session->userdata('user_id')]);
-//		if(!$user) alert('잘못된 전급입니다.', base_url('admin/auth'));
-//
-//		if($this->session->userdata('token')) {
-//			$this->validateToken();
-//		}else{
-//			$this->session->set_userdata('token', $this->setToken([
-//				'user_id' => $user->user_id,
-//				'id' => $user->id,
-//				'name' => $user->name,
-//				'tel' => $user->tel,
-//				'through' => 'admin',
-//			]));
-//		}
-//
-//		$this->userData = $user;
-//
-//		$this->headerData = [
-//			'id' => $user->id,
-//			'user_id' => $user->user_id,
-//			'admin_id' => $user->admin_id,
-//			'name' => $user->name,
-//			'user_cd' => $user->user_cd,
-//			'admin_cd' => $user->admin_cd,
-//		];
-//
-//		$this->db
-//			->select('menu.*')
-//			->join('menu', 'menu.menu_id = admin_auth.menu_id');
-//		$this->navAuth = $this->Model_Admin_Auth->getList([], ['admin_id' => $user->admin_id]);
-//
+		if(!$this->session->userdata('user_id')) redirect('admin/auth');
+
+		$user = $this->Model_User->getData([], ['user_id' => $this->session->userdata('user_id')]);
+		if(!$user || $user->user_cd !== 'USR001') alert('잘못된 전급입니다.', '/');
+
+		if($this->session->userdata('token')) {
+			$this->validateToken();
+		}else{
+			$this->session->set_userdata('token', $this->setToken([
+				'user_id' => $user->user_id,
+				'id' => $user->id,
+				'name' => $user->name,
+				'tel' => $user->tel,
+				'through' => 'admin',
+			]));
+		}
+
+		$this->userData = $user;
+
+		$this->headerData = [
+			'id' => $user->id,
+			'user_id' => $user->user_id,
+			'name' => $user->name,
+			'user_cd' => $user->user_cd,
+		];
+
 		return true;
 	}
 
@@ -124,7 +114,7 @@ class Common extends MY_Builder_WEB
 			base_url('public/assets/builder/js/app-page-view.js'),
 		];
 
-		parent::view();
+		parent::view($key);
 	}
 
 	public function add()
