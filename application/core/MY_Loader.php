@@ -1,4 +1,5 @@
 <?php
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class MY_Loader extends CI_Loader
 {
@@ -14,7 +15,7 @@ class MY_Loader extends CI_Loader
 		$filename = end($array);
 
 		if(in_array($filename, $this->unique_views)) {
-			if(!in_array($view, $this->loaded_views)) {
+			if(!in_array($view, config_item('loaded_views'))) {
 				// 로드된 뷰를 기록
 				$this->loaded_views[] = $view;
 				// 로드된 뷰를 config에 기록
