@@ -50,8 +50,10 @@ $config['page_config'] = [
 			'listConfig' => 'administrators',
 			'plugin' => 'datatable',
 			'buttons' => [
-				'add' => true,
 				'excel' => false,
+			],
+			'actions' => [
+				'view' => false,
 			],
 		],
 	],
@@ -72,8 +74,12 @@ $config['page_config'] = [
 		'listProperties' => [
 			'listConfig' => 'students',
 			'plugin' => 'datatable',
-			'regist' => true,
-			'excel' => false,
+			'buttons' => [
+				'excel' => false,
+			],
+			'actions' => [
+				'view' => false,
+			],
 		],
 	],
 	'works' => [
@@ -94,8 +100,10 @@ $config['page_config'] = [
 			'listConfig' => 'works',
 			'plugin' => 'datatable',
 			'buttons' => [
-				'add' => true,
 				'excel' => false,
+			],
+			'actions' => [
+				'view' => false,
 			],
 		],
 	],
@@ -117,8 +125,10 @@ $config['page_config'] = [
 			'listConfig' => 'notices',
 			'plugin' => 'datatable',
 			'buttons' => [
-				'add' => true,
 				'excel' => false,
+			],
+			'actions' => [
+				'view' => false,
 			],
 		],
 	],
@@ -142,6 +152,9 @@ $config['page_config'] = [
 			'buttons' => [
 				'add' => false,
 				'excel' => false,
+			],
+			'actions' => [
+				'view' => false,
 			],
 		],
 	],
