@@ -8,6 +8,8 @@ class Dashboard extends Common
 	{
 		parent::__construct();
 
+		$this->load->model('Model_Article');
+
 		$this->titleList[] = 'Home';
 		$this->href = base_url('/admin/'.$this->router->class);
 		$this->viewPath = 'admin/'.$this->router->class;
@@ -15,8 +17,14 @@ class Dashboard extends Common
 
 	public function index()
 	{
+		$list = $this->Model_Article->getList([], [
+			'board_id' => 3,
+			'open_yn' => 'Y',
+		], [], [0, 5], ['created_dt' => 'desc']);
+
 		$data['subPage'] = $this->viewPath.'/index';
 		$data['backLink'] = WEB_HISTORY_BACK;
+		$data['list'] = $list;
 
 		$this->viewApp($data);
 	}
