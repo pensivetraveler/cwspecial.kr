@@ -7,7 +7,9 @@
 					<div class="app-brand demo">
 						<!-- Logo -->
 						<a href="/admin/dashboard?layout=side-menu" class="app-brand-link">
-							<span class="app-brand-text demo menu-text fw-semibold ms-2"><?=APP_NAME_KR?></span>
+							<span class="app-brand-logo demo">
+								<img src="<?=base_url('/public/assets/web/img/logo.png')?>" alt="" class="w-px-100">
+							</span>
 						</a>
 						<!-- / Logo -->
 
