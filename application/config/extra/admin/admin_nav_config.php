@@ -69,14 +69,14 @@ $config['admin_nav_side'] = [
 		'className' => [],
 		'subMenu' => [],
 	],
-//    'MyInfo' => [
-//        'icon' => 'ri-user-line',
-//        'title' => 'MyInfo Management',
-//        'route' => '/admin/MyInfo',
-//        'params' => [
-//            'layout' => 'side-menu',
-//        ],
-//        'className' => [],
-//        'subMenu' => [],
-//    ],
+    'MyInfo' => [
+        'icon' => 'ri-user-line',
+        'title' => 'MyInfo',
+        'route' => '/admin/myInfo',
+        'params' => [
+            'layout' => 'side-menu',
+        ],
+        'className' => [],
+        'subMenu' => [],
+    ],
 ];
