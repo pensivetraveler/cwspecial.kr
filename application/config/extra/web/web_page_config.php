@@ -20,7 +20,7 @@ $config['page_config'] = [
 			'listConfig' => 'works',
 			'plugin' => 'datatable',
 			'buttons' => [
-				'add' => true,
+				'add' => false,
 				'excel' => false,
 			],
 			'actions' => [
