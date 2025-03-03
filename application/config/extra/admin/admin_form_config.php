@@ -5,6 +5,16 @@ $config['admin_form_config_loaded'] = true;
 
 $config['form_login_config'] = [
 	[
+		'field' => 'user_cd',
+		'label' => 'lang:user.user_cd',
+		'form' => true,
+		'rules' => 'trim',
+		'category' => 'basic',
+		'type' => 'hidden',
+		'default' => 'USR001',
+		'list' => false,
+	],
+	[
 		'field' => 'id',
 		'label' => 'lang:user.id',
 		'rules' => 'trim|required',
@@ -45,6 +55,16 @@ $config['form_login_config'] = [
 
 $config['form_find_id_config'] = [
 	[
+		'field' => 'user_cd',
+		'label' => 'lang:user.user_cd',
+		'form' => true,
+		'rules' => 'trim',
+		'category' => 'basic',
+		'type' => 'hidden',
+		'default' => 'USR001',
+		'list' => false,
+	],
+	[
 		'field' => 'email',
 		'label' => 'lang:user.email',
 		'rules' => 'trim|required|is_unique[user.email.user_id]',
@@ -76,6 +96,16 @@ $config['form_find_id_config'] = [
 ];
 
 $config['form_find_password_config'] = [
+	[
+		'field' => 'user_cd',
+		'label' => 'lang:user.user_cd',
+		'form' => true,
+		'rules' => 'trim',
+		'category' => 'basic',
+		'type' => 'hidden',
+		'default' => 'USR001',
+		'list' => false,
+	],
 	[
 		'field' => 'id',
 		'label' => 'lang:user.id',
