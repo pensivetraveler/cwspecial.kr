@@ -110,9 +110,9 @@
 	endforeach;
 ?>
 <div class="col-sm-12">
-	<button type="submit" class="btn btn-primary data-submit me-sm-4 me-1">Submit</button>
-	<button type="reset" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="offcanvas">Cancel</button>
-	<button type="button" class="btn btn-outline-danger btn-delete d-none">Delete</button>
+	<button type="submit" class="btn btn-primary data-submit me-sm-4 me-1"><?=lang('Submit')?></button>
+	<button type="reset" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="offcanvas"><?=lang('Cancel')?></button>
+	<button type="button" class="btn btn-outline-danger btn-delete d-none"><?=lang('Delete')?></button>
 	<!--<button type="button" class="btn btn-outline-danger" onclick="sampling()">Sampling</button>-->
 </div>
 <?=form_close()?>
