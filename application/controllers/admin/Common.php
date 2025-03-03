@@ -110,6 +110,23 @@ class Common extends MY_Builder_WEB
 
 	public function view($key = 0)
 	{
+		if($this->pageConfig['viewProperties']['comments']) {
+			$this->addCSS[] = [
+				base_url('public/assets/builder/vendor/libs/tagify/tagify.css'),
+				base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
+				base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css'),
+			];
+
+			$this->addJS['tail'][] = [
+				base_url('public/assets/builder/vendor/libs/autosize/autosize.js'),
+				base_url('public/assets/builder/vendor/libs/tagify/tagify.js'),
+				base_url('public/assets/builder/vendor/libs/@form-validation/popular.js'),
+				base_url('public/assets/builder/vendor/libs/@form-validation/bootstrap5.js'),
+				base_url('public/assets/builder/vendor/libs/@form-validation/auto-focus.js'),
+				base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js'),
+			];
+		}
+
 		$this->addJS['tail'][] = [
 			base_url('public/assets/builder/js/app-page-view.js'),
 		];
@@ -150,5 +167,40 @@ class Common extends MY_Builder_WEB
 		];
 
 		parent::add();
+	}
+
+	public function edit($key = 0)
+	{
+		$this->addCSS[] = [
+			base_url('public/assets/builder/vendor/libs/tagify/tagify.css'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
+		];
+
+		// wysiwig
+		$this->addCSS[] = [
+			base_url('public/assets/builder/vendor/libs/quill/typography.css'),
+			base_url('public/assets/builder/vendor/libs/quill/katex.css'),
+			base_url('public/assets/builder/vendor/libs/quill/editor.css'),
+		];
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/vendor/libs/autosize/autosize.js'),
+			base_url('public/assets/builder/vendor/libs/tagify/tagify.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/popular.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/bootstrap5.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/auto-focus.js'),
+			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js'),
+			base_url('public/assets/builder/vendor/libs/jquery-repeater/jquery-repeater.js'),
+			base_url('public/assets/builder/vendor/libs/sortablejs/sortable.js'),
+			base_url('public/assets/builder/js/app-page-edit.js'),
+		];
+
+		// wysiwig
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/vendor/libs/quill/katex.js'),
+			base_url('public/assets/builder/vendor/libs/quill/quill.js'),
+		];
+
+		parent::edit($key);
 	}
 }
