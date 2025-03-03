@@ -17,7 +17,7 @@ extract(trans_formdata_dit_type($formData));
 				<!-- /Logo -->
 
 				<div class="card-body mt-1">
-					<p class="mb-5 text-center">아이디 찾기</p>
+					<p class="mb-5 text-center"><?=lang('Find ID')?></p>
 					<?php
 					echo form_open('', [
 						'id' => 'formAuth',
@@ -62,11 +62,25 @@ extract(trans_formdata_dit_type($formData));
 						</div>
 					</div>
 					<div>
-						<button class="btn btn-primary d-grid w-100" type="submit">확인</button>
+						<button class="btn btn-primary d-grid w-100" type="submit"><?=lang('Submit')?></button>
 					</div>
 					<?php
 					echo form_close();
 					?>
+					<hr>
+					<div class="col-sm-12">
+						<div class="d-flex justify-content-end">
+							<div>
+								<a href="<?=base_url('/admin/auth/login')?>" class="float-start mb-1 mt-2">
+									<span><?=lang('Login')?></span>
+								</a>
+								<span class="d-inline-block mb-1 mt-2 text-primary">&nbsp;|&nbsp;</span>
+								<a href="<?=base_url('/admin/auth/findPassword')?>" class="float-end mb-1 mt-2">
+									<span><?=lang('Find Password')?></span>
+								</a>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<!-- /Login -->

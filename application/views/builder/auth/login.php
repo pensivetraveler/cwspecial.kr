@@ -17,7 +17,7 @@ extract(trans_formdata_dit_type($formData));
 				<!-- /Logo -->
 
 				<div class="card-body mt-1">
-					<p class="mb-5 text-center">관리자 계정을 입력해주세요.</p>
+					<p class="mb-5 text-center"><?=lang('Login')?></p>
 					<?php
 						echo form_open('', [
 							'id' => 'formAuth',
@@ -77,17 +77,17 @@ extract(trans_formdata_dit_type($formData));
 								</div>
 								<div>
 									<a href="/builder/auth/findId" class="float-start mb-1 mt-2">
-										<span>아이디 찾기</span>
+										<span><?=lang('Find ID')?></span>
 									</a>
 									<span class="d-inline-block mb-1 mt-2 text-primary">&nbsp;|&nbsp;</span>
 									<a href="/builder/auth/findPassword" class="float-end mb-1 mt-2">
-										<span>비밀번호 찾기</span>
+										<span><?=lang('Find Password')?></span>
 									</a>
 								</div>
 							</div>
 						</div>
 						<div>
-							<button class="btn btn-primary d-grid w-100" type="submit">로그인</button>
+							<button class="btn btn-primary d-grid w-100" type="submit"><?=lang('Login')?></button>
 						</div>
 					<?php
 						echo form_close();
