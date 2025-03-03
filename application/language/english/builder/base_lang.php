@@ -54,3 +54,6 @@ $lang['h ago'] = 'h ago';
 $lang['m ago'] = 'm ago';
 $lang['just now'] = 'Just now';
 $lang['My Info'] = 'My Info';
+$lang['Find ID'] = 'Find ID';
+$lang['Find Password'] = 'Find Password';
+$lang['Administrator'] = 'Administrator';
