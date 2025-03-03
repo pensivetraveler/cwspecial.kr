@@ -27,7 +27,7 @@ class Dashboard extends Common
 		$list = $this->Model_Article->getList([], [
 			'board_id' => 3,
 			'open_yn' => 'Y',
-		], [], [0, 5], ['created_dt' => 'desc']);
+		], [], [5, 0], ['created_dt' => 'desc']);
 
 		$data['subPage'] = 'web/dashboard/index';
 		$data['backLink'] = WEB_HISTORY_BACK;
