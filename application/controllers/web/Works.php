@@ -66,14 +66,11 @@ class Works extends Common
 
 	public function view($key = 0)
 	{
-		$tokenData = $this->validateToken();
-
 		$this->load->model('Model_Article');
 		$articleData = $this->Model_Article->getData([], [
 			'article_id' => $key,
-			'created_id' => $tokenData->user_id,
 		]);
-		if(!$articleData) parent::edit(0);
+		if(!$articleData) parent::view(0);
 
 		$this->addJS['tail'][] = [
 			base_url('public/assets/builder/js/app-page-article.js'),

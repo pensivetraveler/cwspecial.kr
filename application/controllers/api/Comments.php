@@ -73,44 +73,15 @@ class Comments extends Common
 		]);
 		if((int)$article->board_id !== 3) return $dto;
 
-		$isAdmin = $this->isAdmin(['user_id' => $this->session->userdata('user_id')]);
-
 		if(!$dto['parent_id']) {
 			// 댓글
 			if((int)$article->created_id !== (int)$this->session->userdata('user_id')) {
-				// 댓글 작성자가, 글 작성자가 아닌 경우
-				if($isAdmin) {
-					// 관리자가 댓글 단 경우 -> 피드백
-					$this->db->group_by('created_id');
-					$commentList = $this->Model->getList(['created_id'], [
-						'article_id' => 11,
-						'depth' => 0,
-					]);
-					foreach ($commentList as $comment) {
-						if((int)$comment->created_id === (int)$this->session->userdata('user_id')) continue;
-						if((int)$comment->created_id === (int)$article->created_id) continue;
-						$this->Model_Message->addData([
-							'user_id' => $comment->created_id,
-							'article_id' => $dto['article_id'],
-							'comment_id' => $dto['comment_id'],
-							'content' => '내가 댓글을 단 게시글에 피드백이달렸어요.',
-						]);
-					}
-					$this->Model_Message->addData([
-						'user_id' => $article->created_id,
-						'article_id' => $dto['article_id'],
-						'comment_id' => $dto['comment_id'],
-						'content' => '내 게시글에 피드백이 달렸어요.',
-					]);
-				}else{
-					// 타 사용자가 댓글 단 경우 -> 댓글
-					$this->Model_Message->addData([
-						'user_id' => $article->created_id,
-						'article_id' => $dto['article_id'],
-						'comment_id' => $dto['comment_id'],
-						'content' => '내 게시글에 새 댓글이 달렸어요.',
-					]);
-				}
+				$this->Model_Message->addData([
+					'user_id' => $article->created_id,
+					'article_id' => $dto['article_id'],
+					'comment_id' => $dto['comment_id'],
+					'content' => '내 게시글에 새 댓글이 달렸어요.',
+				]);
 			}
 		}else{
 			$parentComment = $this->Model->getData([], [

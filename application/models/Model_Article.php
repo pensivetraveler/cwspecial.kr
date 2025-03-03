@@ -25,4 +25,17 @@ class Model_Article extends Model_Common
 	{
 		parent::__construct();
 	}
+
+	public function getDashboardArticleList($adminList)
+	{
+		if(count($adminList) > 0) {
+			$adminList = implode(',', $adminList);
+			$this->db->select("(SELECT COUNT(*) FROM tbl_comment WHERE tbl_comment.article_id = tbl_article.article_id AND del_yn = 'N' AND depth = 0 AND tbl_comment.created_id IN ($adminList)) AS feedback_cnt");
+			$this->db->having('feedback_cnt', 0);
+		}
+		return $this->Model_Article->getList([], [
+			'board_id' => 3,
+			'open_yn' => 'Y',
+		], [], [], ['created_dt' => 'desc']);
+	}
 }

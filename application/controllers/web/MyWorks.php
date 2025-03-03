@@ -73,7 +73,7 @@ class MyWorks extends Common
 			'article_id' => $key,
 			'created_id' => $tokenData->user_id,
 		]);
-		if(!$articleData) parent::edit(0);
+		if(!$articleData) parent::view(0);
 
 		$this->addJS['tail'][] = [
 			base_url('public/assets/builder/js/app-page-article.js'),
