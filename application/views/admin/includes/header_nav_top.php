@@ -94,13 +94,8 @@
 						<div class="dropdown-divider"></div>
 					</li>
 					<li>
-						<a class="dropdown-item" href="pages-profile-user.html">
-							<i class="ri-user-3-line ri-22px me-3"></i><span class="align-middle">My Profile</span>
-						</a>
-					</li>
-					<li>
-						<a class="dropdown-item" href="pages-account-settings-account.html">
-							<i class="ri-settings-4-line ri-22px me-3"></i><span class="align-middle">Settings</span>
+						<a class="dropdown-item" href="<?=base_url('/admin/myInfo')?>">
+							<i class="ri-user-3-line ri-22px me-3"></i><span class="align-middle"><?=lang('My Profile')?></span>
 						</a>
 					</li>
 					<li>
@@ -109,7 +104,7 @@
 					<li>
 						<div class="d-grid px-4 pt-2 pb-1">
 							<a class="btn btn-sm btn-danger d-flex" href="<?=base_url('admin/auth/logout')?>" target="_self">
-								<small class="align-middle">Logout</small>
+								<small class="align-middle"><?=lang('Logout')?></small>
 								<i class="ri-logout-box-r-line ms-2 ri-16px"></i>
 							</a>
 						</div>
