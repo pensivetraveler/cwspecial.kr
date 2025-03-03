@@ -35,23 +35,25 @@
 				<i class="tf-icons ri-close-fill"></i>
 			</button>
 			<ul class="navbar-nav me-auto p-4 p-lg-0">
+				<?php if(!$isAdmin): ?>
 				<li class="nav-item">
 					<a class="nav-link fw-medium" aria-current="page" href="<?=base_url('/myWorks')?>"><?=lang('nav.MyWorks')?></a>
 				</li>
+				<?php endif; ?>
 				<li class="nav-item">
 					<a class="nav-link fw-medium" aria-current="page" href="<?=base_url('/works')?>"><?=lang('nav.Works')?></a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link fw-medium" href="<?=base_url('/notices')?>"><?=lang('nav.Notices')?></a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link fw-medium" href="<?=base_url('/inquiries')?>"><?=lang('nav.Inquiries')?></a>
-				</li>
 				<?php if($isAdmin): ?>
 				<li class="nav-item">
 					<a class="nav-link fw-medium" href="<?=base_url('/admin/dashboard')?>" target="_blank">Admin</a>
 				</li>
 				<?php else: ?>
+				<li class="nav-item">
+					<a class="nav-link fw-medium" href="<?=base_url('/inquiries')?>"><?=lang('nav.Inquiries')?></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link fw-medium" href="<?=base_url('/auth/passwordCheck?redirect_to=/myInfo')?>"><?=lang('nav.MyInfo')?></a>
 				</li>
@@ -121,7 +123,7 @@
 			<li>
 				<a
 					href="<?=base_url('/auth/login')?>"
-					class="btn btn-primary px-2 px-sm-4 px-lg-2 px-xl-4"
+					class="btn btn-sm btn-primary px-2 px-sm-4 px-lg-2 px-xl-4"
 				><span class="tf-icons ri-login-box-line me-md-1"></span
 					><span class="d-none d-md-block"><?=lang('Login')?></span></a
 				>
@@ -130,7 +132,7 @@
 			<li>
 				<a
 					href="<?=base_url('/auth/logout')?>"
-					class="btn btn-primary px-2 px-sm-4 px-lg-2 px-xl-4"
+					class="btn btn-sm btn-danger px-2 px-sm-4 px-lg-2 px-xl-4"
 				><span class="tf-icons ri-logout-box-r-line me-md-1"></span
 					><span class="d-none d-md-block"><?=lang('Logout')?></span></a
 				>
