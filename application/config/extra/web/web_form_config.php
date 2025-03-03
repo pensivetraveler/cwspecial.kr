@@ -443,6 +443,16 @@ $config['form_notices_config'] = [
 		'list' => false,
 	],
 	[
+		'field' => 'open_yn',
+		'label' => 'lang:article.open_yn',
+		'form' => true,
+		'rules' => 'trim|required',
+		'errors' => [],
+		'type' => 'hidden',
+		'default' => 'Y',
+		'list' => false,
+	],
+	[
 		'field' => 'subject',
 		'label' => 'lang:article.subject',
 		'form' => true,
@@ -482,6 +492,16 @@ $config['form_inquiries_config'] = [
 		'errors' => [],
 		'type' => 'hidden',
 		'default' => 2,
+		'list' => false,
+	],
+	[
+		'field' => 'open_yn',
+		'label' => 'lang:article.open_yn',
+		'form' => true,
+		'rules' => 'trim|required',
+		'errors' => [],
+		'type' => 'hidden',
+		'default' => 'Y',
 		'list' => false,
 	],
 	[
