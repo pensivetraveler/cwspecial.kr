@@ -4,6 +4,8 @@ function resetCommentForm() {
 	formComment.comment_id.value = 0;
 	formComment.content.value = '';
 	formComment.depth.value = 0;
+	document.getElementById('target-comment-content').innerText = '';
+	document.querySelector('.target-comment-wrap').setAttribute('data-loaded', 'false');
 }
 
 function getCommentBtns(comment, isReply = false) {
@@ -272,10 +274,7 @@ $(function() {
 	});
 
 	$('.btn-write-cancel').on('click', function(e) {
-		formComment.comment_id.value = '';
-		formComment.content.value = '';
-		document.getElementById('target-comment-content').innerText = '';
-		document.querySelector('.target-comment-wrap').setAttribute('data-loaded', 'false');
+		resetCommentForm();
 	});
 
 	getCommentList();
