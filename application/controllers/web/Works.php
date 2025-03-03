@@ -34,6 +34,7 @@ class Works extends Common
 		$this->addJS['tail'][] = [
 			base_url('public/assets/builder/vendor/libs/dropzone/dropzone.js'),
 			base_url('public/assets/builder/vendor/libs/quill/quill.js'),
+			base_url('public/assets/builder/js/app-page-article.js'),
 		];
 
 		parent::add();
@@ -57,6 +58,7 @@ class Works extends Common
 		$this->addJS['tail'][] = [
 			base_url('public/assets/builder/vendor/libs/dropzone/dropzone.js'),
 			base_url('public/assets/builder/vendor/libs/quill/quill.js'),
+			base_url('public/assets/builder/js/app-page-article.js'),
 		];
 
 		parent::edit($key);
