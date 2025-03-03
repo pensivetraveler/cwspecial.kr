@@ -11,8 +11,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  *     }
  * }
  */
-
-define("PLATFORM_ASSET_URI", 'public/assets/' . basename(__DIR__) . '/');
+define('PLATFORM_NAME', basename(__DIR__));
+const PLATFORM_ASSET_URI = 'public/assets/'.PLATFORM_NAME.DIRECTORY_SEPARATOR;
 const PLATFORM_ASSET_PATH = FCPATH . PLATFORM_ASSET_URI;
 
 const PLATFORM_ASSET_AUDIO_URI = PLATFORM_ASSET_URI . 'audio/';
