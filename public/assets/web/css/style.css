@@ -54,6 +54,11 @@ body {
 	margin-top: 0;
 }
 
+[data-class="works"] #fullpage-dropzone .progress,
+[data-class="myWorks"] #fullpage-dropzone .progress {
+	display: none !important;
+}
+
 @media (min-width: 576px) {
 	[data-class="works"] #fullpage-dropzone .dz-preview,
 	[data-class="myWorks"] #fullpage-dropzone .dz-preview {
