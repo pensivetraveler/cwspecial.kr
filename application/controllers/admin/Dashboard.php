@@ -9,6 +9,7 @@ class Dashboard extends Common
 		parent::__construct();
 
 		$this->load->model('Model_Article');
+		$this->load->model('Model_User');
 
 		$this->titleList[] = 'Home';
 		$this->href = base_url('/admin/'.$this->router->class);
@@ -17,10 +18,13 @@ class Dashboard extends Common
 
 	public function index()
 	{
-		$list = $this->Model_Article->getList([], [
-			'board_id' => 3,
-			'open_yn' => 'Y',
-		], [], [0, 5], ['created_dt' => 'desc']);
+		$adminList = array_map(function ($curr) {
+			return $curr->user_id;
+		}, $this->Model_User->getList(['user_id'], [
+			'user_cd' => 'USR001'
+		]));
+
+		$list = $this->Model_Article->getDashboardArticleList($adminList);
 
 		$data['subPage'] = $this->viewPath.'/index';
 		$data['backLink'] = WEB_HISTORY_BACK;
