@@ -111,9 +111,9 @@ $bodyAttrs = implode(' ', array_map(
 			const appName = '<?=$this->config->config['phptojs']['namespace']?>';
 			window.<?=$this->config->config['phptojs']['namespace']?> = window.<?=$this->config->config['phptojs']['namespace']?> || {};
 			const appPlugins = {
-				list: null,
-				view: null,
-				form: null,
+				list: {},
+				view: {},
+				form: {},
 			};
 
 			if(!window.<?=$this->config->config['phptojs']['namespace']?>.hasOwnProperty('ERRORS'))
