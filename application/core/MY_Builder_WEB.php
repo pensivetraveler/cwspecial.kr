@@ -300,8 +300,9 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		}
 
 		if($this->pageConfig['properties']['formExist'] && $this->pageConfig['properties']['listExist']) {
+			$viewType = $this->pageConfig['viewProperties']['viewType'];
 			$this->addJsVars([
-				'PAGE_VIEW_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'view',
+				'PAGE_VIEW_URI' => $viewType==='page'?$this->href.DIRECTORY_SEPARATOR.'view':'',
 				'PAGE_ADD_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'add',
 				'PAGE_EDIT_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'edit',
 				'PAGE_EXCEL_URI' => $this->href.DIRECTORY_SEPARATOR.'excel',
