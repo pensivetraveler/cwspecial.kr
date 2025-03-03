@@ -27,14 +27,14 @@
 
 					<div class="menu-inner-shadow"></div>
 
-					<?php _view('admin/includes/header_nav_left'); ?>
+					<?php builder_view("$platformName/includes/header_nav_left"); ?>
 				</aside>
 				<!-- / Menu -->
 
 				<!-- Layout page -->
 				<div class="layout-page">
 					<!-- Navbar -->
-					<?php _view('admin/includes/header_nav_top'); ?>
+					<?php builder_view("$platformName/includes/header_nav_top"); ?>
 					<!-- / Navbar -->
 					<!-- Content wrapper -->
 					<main class="content-wrapper">

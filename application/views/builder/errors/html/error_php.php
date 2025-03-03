@@ -5,11 +5,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php
 if(!in_array('head', config_item('loaded_views'))) {
 	echo doctype('html5');
-	_view("builder/includes/head");
+	builder_view("$platformName/includes/head");
 }
 
 if(!in_array('modal_prepend', config_item('loaded_views'))) {
-	_view("builder/includes/modal_prepend");
+	builder_view("$platformName/includes/modal_prepend");
 }
 ?>
 
@@ -47,6 +47,6 @@ if(!in_array('modal_prepend', config_item('loaded_views'))) {
 
 <?php
 if(!in_array('tail', config_item('loaded_views'))) {
-	_view("builder/includes/tail");
+	builder_view("$platformName/includes/tail");
 	exit;
 }

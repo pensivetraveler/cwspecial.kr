@@ -53,7 +53,7 @@ extract(trans_formdata_dit_type($formData));
 			<div class="row mb-4">
 				<div class="col-lg-6">
 					<?php
-					_view("web/layout/form_{$formType}_custom_".$thumbnail['view'], ['item' => $thumbnail]);
+					builder_view("$platformName/layout/form_{$formType}_custom_".$thumbnail['view'], ['item' => $thumbnail]);
 					?>
 				</div>
 				<div class="col-lg-6">
