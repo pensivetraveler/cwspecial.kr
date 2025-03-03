@@ -100,7 +100,7 @@ extract(trans_formdata_dit_type($formData));
 				<div class="col-sm-12 text-end">
 					<button type="button" class="btn btn-outline-dark waves-effect" onclick="<?=WEB_HISTORY_BACK?>"><?=lang('List')?></button>
 					<button type="button" class="btn btn-primary waves-effect waves-light btn-work-temporary"><?=lang('Temporary')?></button>
-					<button type="submit" class="btn btn-primary waves-effect waves-light"><?=lang('Submit')?></button>
+					<button type="button" class="btn btn-primary waves-effect waves-light btn-work-share"><?=lang('Share')?></button>
 					<button type="button" class="btn btn-outline-danger btn-delete-event btn-delete d-none"><?=lang('Delete')?></button>
 				</div>
 			</div>
