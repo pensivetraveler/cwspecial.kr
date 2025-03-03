@@ -1,3 +1,6 @@
+<?php
+extract(trans_formdata_dit_type($formData));
+?>
 <div class="position-relative">
 	<div class="authentication-wrapper authentication-basic container-p-y p-4 p-sm-0">
 		<div class="authentication-inner py-6">
@@ -28,14 +31,14 @@
 								<?php
 								echo form_input(
 									[
-										'type' => $formData[0]['type'],
-										'name' => $formData[0]['field'],
-										'id' => $formData[0]['id'],
+										'type' => $id['type'],
+										'name' => $id['field'],
+										'id' => $id['id'],
 									],
-									set_admin_form_value($formData[0]['field'], $formData[0]['default'], null),
-									$formData[0]['attributes']
+									set_admin_form_value($id['field'], $id['default'], null),
+									$id['attributes']
 								);
-								echo form_label(lang($formData[0]['label']), $formData[0]['id']);
+								echo form_label(lang($id['label']), $id['id']);
 								?>
 							</div>
 						</div>
@@ -46,14 +49,14 @@
 								<?php
 								echo form_input(
 									[
-										'type' => $formData[1]['type'],
-										'name' => $formData[1]['field'],
-										'id' => $formData[1]['id'],
+										'type' => $email['type'],
+										'name' => $email['field'],
+										'id' => $email['id'],
 									],
-									set_admin_form_value($formData[1]['field'], $formData[1]['default'], null),
-									$formData[1]['attributes']
+									set_admin_form_value($email['field'], $email['default'], null),
+									$email['attributes']
 								);
-								echo form_label(lang($formData[1]['label']), $formData[1]['id']);
+								echo form_label(lang($email['label']), $email['id']);
 								?>
 							</div>
 						</div>
@@ -64,14 +67,14 @@
 								<?php
 								echo form_input(
 									[
-										'type' => $formData[2]['type'],
-										'name' => $formData[2]['field'],
-										'id' => $formData[2]['id'],
+										'type' => $tel['type'],
+										'name' => $tel['field'],
+										'id' => $tel['id'],
 									],
-									set_admin_form_value($formData[2]['field'], $formData[2]['default'], null),
-									$formData[2]['attributes']
+									set_admin_form_value($tel['field'], $tel['default'], null),
+									$tel['attributes']
 								);
-								echo form_label(lang($formData[2]['label']), $formData[2]['id']);
+								echo form_label(lang($tel['label']), $tel['id']);
 								?>
 							</div>
 						</div>
