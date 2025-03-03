@@ -9,9 +9,9 @@
     ]);
 	foreach ($formData as $item):
 		if($item['category'] === 'group'):
-			_view("admin/layout/form_{$formType}_group_".$item['view'], ['item' => $item]);
+			_view("builder/layout/form_{$formType}_group_".$item['view'], ['item' => $item]);
 		elseif($item['category'] === 'custom'):
-			_view("admin/layout/form_{$formType}_custom_".$item['view'], ['item' => $item]);
+			_view("builder/layout/form_{$formType}_custom_".$item['view'], ['item' => $item]);
 		elseif($item['type'] === 'hidden'):
 			echo form_input(
 				[
@@ -112,9 +112,9 @@
 ?>
 <div class="row">
 	<div class="col-sm-12 text-end">
-		<button type="button" class="btn btn-outline-dark waves-effect" onclick="<?=WEB_HISTORY_BACK?>">List</button>
-		<button type="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
-		<button type="button" class="btn btn-outline-danger btn-delete-event btn-delete d-none">Delete</button>
+		<button type="button" class="btn btn-outline-dark waves-effect" onclick="<?=WEB_HISTORY_BACK?>"><?=lang('List')?></button>
+		<button type="submit" class="btn btn-primary waves-effect waves-light"><?=lang('Submit')?></button>
+		<button type="button" class="btn btn-outline-danger btn-delete-event btn-delete d-none"><?=lang('Delete')?></button>
 	</div>
 </div>
 <?=form_close();?>

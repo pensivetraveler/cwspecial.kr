@@ -10,9 +10,9 @@
 	]);
 	foreach ($formData as $item):
 		if($item['category'] === 'group'):
-			_view("admin/layout/form_{$formType}_group_".$item['view'], ['item' => $item]);
+			_view("builder/layout/form_{$formType}_group_".$item['view'], ['item' => $item]);
 		elseif($item['category'] === 'custom'):
-			_view("admin/layout/form_{$formType}_custom_".$item['view'], ['item' => $item]);
+			_view("builder/layout/form_{$formType}_custom_".$item['view'], ['item' => $item]);
 		elseif($item['type'] === 'hidden'):
 			echo form_input(
 				[
