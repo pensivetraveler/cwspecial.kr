@@ -46,39 +46,11 @@
 			</li>
 			<!--/ Error -->
 
-			<!-- Style Switcher -->
-			<li class="nav-item dropdown-style-switcher dropdown me-1 me-xl-0">
-				<a
-						class="nav-link btn btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow"
-						href="javascript:void(0);"
-						data-bs-toggle="dropdown">
-					<i class="ri-22px"></i>
-				</a>
-				<ul class="dropdown-menu dropdown-menu-end dropdown-styles">
-					<li>
-						<a class="dropdown-item" href="javascript:void(0);" data-theme="light">
-							<span class="align-middle"><i class="ri-sun-line ri-22px me-3"></i>Light</span>
-						</a>
-					</li>
-					<li>
-						<a class="dropdown-item" href="javascript:void(0);" data-theme="dark">
-							<span class="align-middle"><i class="ri-moon-clear-line ri-22px me-3"></i>Dark</span>
-						</a>
-					</li>
-					<li>
-						<a class="dropdown-item" href="javascript:void(0);" data-theme="system">
-							<span class="align-middle"><i class="ri-computer-line ri-22px me-3"></i>System</span>
-						</a>
-					</li>
-				</ul>
-			</li>
-			<!-- / Style Switcher-->
-
 			<!-- User -->
 			<li class="nav-item navbar-dropdown dropdown-user dropdown">
 				<a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-					<div class="avatar avatar-online">
-						<img src="<?php echo base_url('public/assets/builder/img/avatars/1.png');?>" alt class="rounded-circle" />
+					<div class="avatar avatar-online bg-primary rounded-circle d-flex justify-content-center align-items-center">
+						<span class="text-white"><?=mb_substr($headerData['name'],0,1)?></span>
 					</div>
 				</a>
 				<ul class="dropdown-menu dropdown-menu-end">
