@@ -133,20 +133,22 @@ class Common extends MY_Builder_WEB
 
 	public function view($key = 0)
 	{
-		$this->addCSS[] = [
-			base_url('public/assets/builder/vendor/libs/tagify/tagify.css'),
-			base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
-			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css'),
-		];
+		if($this->pageConfig['viewProperties']['comments']) {
+			$this->addCSS[] = [
+				base_url('public/assets/builder/vendor/libs/tagify/tagify.css'),
+				base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
+				base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css'),
+			];
 
-		$this->addJS['tail'][] = [
-			base_url('public/assets/builder/vendor/libs/autosize/autosize.js'),
-			base_url('public/assets/builder/vendor/libs/tagify/tagify.js'),
-			base_url('public/assets/builder/vendor/libs/@form-validation/popular.js'),
-			base_url('public/assets/builder/vendor/libs/@form-validation/bootstrap5.js'),
-			base_url('public/assets/builder/vendor/libs/@form-validation/auto-focus.js'),
-			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js'),
-		];
+			$this->addJS['tail'][] = [
+				base_url('public/assets/builder/vendor/libs/autosize/autosize.js'),
+				base_url('public/assets/builder/vendor/libs/tagify/tagify.js'),
+				base_url('public/assets/builder/vendor/libs/@form-validation/popular.js'),
+				base_url('public/assets/builder/vendor/libs/@form-validation/bootstrap5.js'),
+				base_url('public/assets/builder/vendor/libs/@form-validation/auto-focus.js'),
+				base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js'),
+			];
+		}
 
 		$this->addJS['tail'][] = [
 			base_url('public/assets/builder/js/app-page-view.js'),
