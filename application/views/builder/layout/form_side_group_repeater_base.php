@@ -8,7 +8,7 @@
 		data-repeater-id="<?=$item['attr']['repeater_id']?>">
 		<div class="row">
 			<div class="col-sm-12 align-content-center text-primary">
-				<span><?=lang($item['label'])?> 등록</span>
+				<span><?=lang($item['label'])?> <?=lang('Registration')?></span>
 			</div>
 		</div>
 		<div data-repeater-list="<?=$item['group']?>">
