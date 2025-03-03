@@ -85,8 +85,8 @@
 					<li>
 						<a class="dropdown-item" href="pages-account-settings-account.html">
 							<div class="d-flex justify-content-between">
-								<span class="fw-medium d-block small">Name</span>
-								<small class="text-muted">ID</small>
+								<span class="fw-medium d-block small"><?=$this->userData->name?></span>
+								<small class="text-muted"><?=$this->userData->id?></small>
 							</div>
 						</a>
 					</li>
@@ -95,7 +95,7 @@
 					</li>
 					<li>
 						<a class="dropdown-item" href="<?=base_url('/admin/myInfo')?>">
-							<i class="ri-user-3-line ri-22px me-3"></i><span class="align-middle"><?=lang('My Profile')?></span>
+							<i class="ri-user-3-line ri-22px me-3"></i><span class="align-middle"><?=lang('My Info')?></span>
 						</a>
 					</li>
 					<li>
