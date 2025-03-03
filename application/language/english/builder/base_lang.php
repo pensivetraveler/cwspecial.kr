@@ -53,3 +53,4 @@ $lang['days ago'] = 'days ago';
 $lang['h ago'] = 'h ago';
 $lang['m ago'] = 'm ago';
 $lang['just now'] = 'Just now';
+$lang['My Info'] = 'My Info';

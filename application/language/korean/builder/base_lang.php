@@ -53,3 +53,4 @@ $lang['days ago'] = '일 전';
 $lang['h ago'] = '시간 전';
 $lang['m ago'] = '분 전';
 $lang['just now'] = '방금 전';
+$lang['My Info'] = '내 정보';
