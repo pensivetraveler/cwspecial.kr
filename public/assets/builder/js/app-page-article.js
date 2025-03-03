@@ -47,7 +47,7 @@ function checkMyData(showError = true) {
 }
 
 $(function() {
-	setViewCount();
+	if($('body').data('method') === 'view') setViewCount();
 
 	$('.btn-article-list').on('click', function(e) {
 		location.href = common.PAGE_LIST_URI;
