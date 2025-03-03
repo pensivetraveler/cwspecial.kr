@@ -1,3 +1,6 @@
+<?php
+extract(trans_formdata_dit_type($formData));
+?>
 <div class="position-relative">
 	<div class="authentication-wrapper authentication-basic container-p-y p-4 p-sm-0">
 		<div class="authentication-inner py-6">
@@ -7,7 +10,7 @@
 				<div class="app-brand justify-content-center mt-5">
 					<a href="/admin" class="app-brand-link gap-2">
 						<span class="app-brand-logo demo">
-							<!--<img src="<?=base_url('/public/assets/builder/img/eduprime_logo.png')?>" alt="">-->
+							<img src="<?=base_url('/public/assets/web/img/logo.png')?>" alt="" class="w-px-200">
 						</span>
 					</a>
 				</div>
@@ -28,14 +31,14 @@
 									<?php
 										echo form_input(
 											[
-												'type' => $formData[0]['type'],
-												'name' => $formData[0]['field'],
-												'id' => $formData[0]['id'],
+												'type' => $id['type'],
+												'name' => $id['field'],
+												'id' => $id['id'],
 											],
-											set_admin_form_value($formData[0]['field'], $formData[0]['default'], null),
-											$formData[0]['attributes']
+											set_admin_form_value($id['field'], $id['default'], null),
+											$id['attributes']
 										);
-										echo form_label(lang($formData[0]['label']), $formData[0]['id']);
+										echo form_label(lang($id['label']), $id['id']);
 									?>
 								</div>
 							</div>
@@ -46,13 +49,13 @@
 									<?php
 										echo form_password(
 											[
-												'name' => $formData[1]['field'],
-												'id' => $formData[1]['id'],
+												'name' => $password['field'],
+												'id' => $password['id'],
 											],
-											set_admin_form_value($formData[1]['field'], $formData[1]['default'], null),
-											$formData[1]['attributes']
+											set_admin_form_value($password['field'], $password['default'], null),
+											$password['attributes']
 										);
-										echo form_label(lang($formData[1]['label']), $formData[1]['id']);
+										echo form_label(lang($password['label']), $password['id']);
 									?>
 								</div>
 								<span class="input-group-text cursor-pointer">
@@ -60,17 +63,16 @@
 								</span>
 							</div>
 						</div>
-						<!--
 						<div class="col-sm-12 form-validation-unit">
 							<div class="mb-5 d-flex justify-content-between mt-5">
 								<div class="form-check mt-2">q
 									<?php
 										echo form_checkbox([
-											'name' => $formData[2]['field'],
-											'id' => $formData[2]['id'],
+											'name' => $autologin['field'],
+											'id' => $autologin['id'],
 											'class' => 'form-check-input',
-										], '1', false, $formData[2]['attributes']);
-										echo form_label(lang($formData[2]['label']), $formData[2]['id']);
+										], '1', false, $autologin['attributes']);
+										echo form_label(lang($autologin['label']), $autologin['id']);
 									?>
 								</div>
 								<div>
@@ -84,7 +86,6 @@
 								</div>
 							</div>
 						</div>
-						-->
 						<div>
 							<button class="btn btn-primary d-grid w-100" type="submit">로그인</button>
 						</div>
