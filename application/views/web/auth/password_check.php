@@ -3,7 +3,7 @@
 	<div class="h-px-800 d-flex flex-column justify-content-center">
 		<div class="card w-50 mx-auto py-10">
 			<div class="w-px-600 mt-1 mx-auto">
-				<h3 class="mb-5 text-center">내 정보에 접근하기 전<br>비밀번호를 입력해주세요.</h3>
+				<h3 class="mb-5 text-center font-santteutdotum">내 정보에 접근하기 전<br>비밀번호를 입력해주세요.</h3>
 				<?php
 				echo form_open('', [
 					'id' => 'formAuth',

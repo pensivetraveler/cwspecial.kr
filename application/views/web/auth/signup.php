@@ -4,8 +4,8 @@
 <div class="row mt-12">
 	<div class="col-md-12 mb-6">
 		<div class="hero-text-box text-center">
-			<h2 class="text-primary hero-title fs-2">SIGN-UP</h2>
-			<h3 class="mb-5 text-center">로그인</h3>
+			<h2 class="text-primary hero-title fs-2 font-SFssaraknoon">SIGN-UP</h2>
+			<h3 class="mb-5 text-center font-santteutdotum-m">회원정보 입력</h3>
 		</div>
 	</div>
 	<div class="col-md-12">
@@ -29,7 +29,7 @@
 			);
 		?>
 		<div class="card mb-6">
-			<h5 class="card-header">1. 기본 인적 사항</h5>
+			<h5 class="card-header font-santteutdotum-l">1. 기본 인적 사항</h5>
 			<div class="card-body">
 				<?php builder_view("admin/layout/form_{$formType}_custom_unique", ['item' => $code]); ?>
 				<div class="row mb-4 form-validation-unit">
@@ -118,7 +118,7 @@
 			</div>
 		</div>
 		<div class="card mb-6">
-			<h5 class="card-header">2. 사이트 이용 정보</h5>
+			<h5 class="card-header font-santteutdotum-l">2. 사이트 이용 정보</h5>
 			<div class="card-body">
 				<?php builder_view("$platformName/layout/form_{$formType}_custom_unique", ['item' => $id]); ?>
 				<?php builder_view("$platformName/layout/form_{$formType}_custom_unique", ['item' => $email]); ?>

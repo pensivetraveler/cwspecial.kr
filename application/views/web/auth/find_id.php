@@ -27,7 +27,7 @@
 					</div>
 					<!-- /Logo -->
 
-					<p class="mb-5 text-center">아이디 찾기</p>
+					<p class="mb-5 text-center font-SFssaraknoon">아이디 찾기</p>
 					<?php
 					echo form_open('', [
 						'id' => 'formAuth',

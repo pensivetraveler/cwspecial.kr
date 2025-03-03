@@ -1,14 +1,14 @@
 <div class="position-relative">
 	<div class="h-px-800 d-flex flex-column justify-content-center">
 		<div class="hero-text-box text-center">
-			<h2 class="text-primary hero-title fs-2">우리의 작업물을 사용할<br>그 누군가를 상상하며</h2>
-			<h5 class="mb-8">
+			<h2 class="text-primary hero-title fs-2 font-gaeulsopung-b">우리의 작업물을 사용할<br>그 누군가를 상상하며</h2>
+			<h5 class="mb-8 font-santteutdotum-m">
 				창원대학교 특수교육과 AAC 제작팀
 			</h5>
 		</div>
 
 		<div class="w-px-600 mt-1 mx-auto">
-			<h3 class="mb-5 text-center">로그인</h3>
+			<h3 class="mb-5 text-center font-SFssaraknoon">로그인</h3>
 			<?php
 			echo form_open('', [
 					'id' => 'formAuth',
