@@ -36,7 +36,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		foreach (glob(APPPATH . "config/extra/{$this->flag}/*_constants.php") as $file) {
 			require_once $file;
 		}
-		$this->baseViewPath = "builder/layout/index";
+		$this->baseViewPath = BUILDER_FLAGNAME."/layout/index";
 		$this->noLoginRedirect = "{$this->flag}/auth/login";
 		$this->lang->load("{$this->flag}/custom", $this->config->item('language'));
 		$this->lang->load("{$this->flag}/nav", $this->config->item('language'));
