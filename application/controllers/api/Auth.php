@@ -94,14 +94,16 @@ class Auth extends Common
 
 		$params = [
 			'id' => $this->input->post('id'),
-			'password' => $this->input->post('password'),
 		];
+		if($this->input->post('user_cd')) $params['user_cd'] = $this->input->post('user_cd');
 
-		$count = $this->Model->getCnt(['id' => $params['id']]);
+		$password = $this->input->post('password');
+
+		$count = $this->Model->getCnt($params);
 		if(!$count) $this->response(['code' => USER_NOT_EXIST,]);
 
-		$userData = $this->Model->getData([], ['id' => $params['id']]);
-		if(!custom_password_verify($userData->password, $params['password'], true)) $this->response(['code' => PASSWORD_IS_NOT_MATCHED, 'data' => []]);
+		$userData = $this->Model->getData([], $params);
+		if(!custom_password_verify($userData->password, $password, true)) $this->response(['code' => PASSWORD_IS_NOT_MATCHED, 'data' => []]);
 
 		if ($this->input->post('autologin')) {
 			$vericode = array('$', '/', '.');
@@ -130,8 +132,8 @@ class Auth extends Common
 				'user_id' => $userData->user_id,
 				'id' => $userData->id,
 				'name' => $userData->name,
-				'is_admin' => in_array($userData->user_cd, ['USR000', 'USR001']),
 			]),
+			'is_admin' => in_array($userData->user_cd, ['USR000', 'USR001']),
 			'approve_yn' => in_array($userData->user_cd, ['USR000', 'USR001'])?'Y':$userData->approve_yn,
 		]);
 
@@ -178,6 +180,7 @@ class Auth extends Common
 			'email' => $this->input->post('email'),
 			'tel' => $this->input->post('tel'),
 		];
+		if($this->input->post('user_cd')) $params['user_cd'] = $this->input->post('user_cd');
 
 		$count = $this->Model->getCnt($params);
 
@@ -205,6 +208,7 @@ class Auth extends Common
 			'email' => $this->input->post('email'),
 			'tel' => $this->input->post('tel'),
 		];
+		if($this->input->post('user_cd')) $params['user_cd'] = $this->input->post('user_cd');
 
 		$count = $this->Model->getCnt($params);
 
