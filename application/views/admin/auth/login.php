@@ -63,35 +63,26 @@ extract(trans_formdata_dit_type($formData));
 								</span>
 							</div>
 						</div>
-						<div class="col-sm-12 form-validation-unit">
-							<div class="mb-5 d-flex justify-content-between mt-5">
-								<div class="form-check mt-2">q
-									<?php
-										echo form_checkbox([
-											'name' => $autologin['field'],
-											'id' => $autologin['id'],
-											'class' => 'form-check-input',
-										], '1', false, $autologin['attributes']);
-										echo form_label(lang($autologin['label']), $autologin['id']);
-									?>
-								</div>
-								<div>
-									<a href="/admin/auth/findId" class="float-start mb-1 mt-2">
-										<span>아이디 찾기</span>
-									</a>
-									<span class="d-inline-block mb-1 mt-2 text-primary">&nbsp;|&nbsp;</span>
-									<a href="/admin/auth/findPassword" class="float-end mb-1 mt-2">
-										<span>비밀번호 찾기</span>
-									</a>
-								</div>
-							</div>
-						</div>
 						<div>
 							<button class="btn btn-primary d-grid w-100" type="submit">로그인</button>
 						</div>
 					<?php
 						echo form_close();
 					?>
+					<hr>
+					<div class="col-sm-12">
+						<div class="d-flex justify-content-end">
+							<div>
+								<a href="/admin/auth/findId" class="float-start mb-1 mt-2">
+									<span>아이디 찾기</span>
+								</a>
+								<span class="d-inline-block mb-1 mt-2 text-primary">&nbsp;|&nbsp;</span>
+								<a href="/admin/auth/findPassword" class="float-end mb-1 mt-2">
+									<span>비밀번호 찾기</span>
+								</a>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<!-- /Login -->
