@@ -100,6 +100,7 @@ $config['page_config'] = [
 			'listConfig' => 'works',
 			'plugin' => 'datatable',
 			'buttons' => [
+				'add' => false,
 				'excel' => false,
 			],
 			'actions' => [
@@ -157,6 +158,9 @@ $config['page_config'] = [
 				'edit' => false,
 			],
 		],
+		'viewProperties' => [
+			'comments' => true,
+		]
 	],
 	'myinfo' => [
 		'category' => 'page',
