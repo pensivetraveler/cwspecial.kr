@@ -46,7 +46,7 @@ $config['page_config'] = [
 			'formType' => 'page',
 		],
 		'listProperties' => [
-			'listConfig' => 'works',
+			'listConfig' => 'myworks',
 			'plugin' => 'datatable',
 			'buttons' => [
 				'add' => true,
