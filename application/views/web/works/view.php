@@ -61,13 +61,13 @@ extract(trans_formdata_dit_type($viewData));
 			</div>
 			<div class="row mt-4 btn-wrap">
 				<div class="col-sm-6 text-start btn-wrap-left">
-					<button type="button" class="btn btn-dribbble w-px-150 me-4 btn-pref-001">좋아요</button>
-					<button type="button" class="btn btn-linkedin w-px-150 me-4 btn-pref-002">그저 그래요</button>
-					<button type="button" class="btn btn-dark w-px-150 btn-pref-003">별로에요</button>
+					<button type="button" class="btn btn-sm btn-dribbble w-px-150 me-4 btn-pref-001">좋아요 <span class="ms-4 d-inline-block bg-white rounded-circle w-px-18 h-px-18 text-black" id="pref001Cnt">0</span></button>
+					<button type="button" class="btn btn-sm btn-linkedin w-px-150 me-4 btn-pref-002">그저 그래요 <span class="ms-4 d-inline-block bg-white rounded-circle w-px-18 h-px-18 text-black" id="pref002Cnt">0</span></button>
+					<button type="button" class="btn btn-sm btn-dark w-px-150 btn-pref-003">별로에요 <span class="ms-4 d-inline-block bg-white rounded-circle w-px-18 h-px-18 text-black" id="pref003Cnt">0</span></button>
 				</div>
 				<div class="col-sm-6 text-end btn-wrap-right">
-					<button type="button" class="btn btn-outline-primary w-px-150 btn-article-list"><?=lang('List')?></button>
-					<button type="button" class="btn btn-outline-primary w-px-150 btn-article-edit"><?=lang('Edit')?></button>
+					<button type="button" class="btn btn-sm btn-outline-primary w-px-150 btn-article-list"><?=lang('List')?></button>
+					<button type="button" class="btn btn-sm btn-outline-primary w-px-150 btn-article-edit"><?=lang('Edit')?></button>
 				</div>
 			</div>
 		</div>

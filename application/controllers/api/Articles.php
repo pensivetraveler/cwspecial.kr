@@ -13,6 +13,7 @@ class Articles extends Common
 		$this->load->model('Model_User');
 		$this->load->model('Model_Board');
 		$this->load->model('Model_Article_Attachment');
+		$this->load->model('Model_Article_Prefer');
 
 		$this->setProperties($this->Model);
 
@@ -25,6 +26,19 @@ class Articles extends Common
 	protected function viewAfter($data)
 	{
 		$data->uploads = $this->getArticleFileList(['article_id' => $data->article_id]);
+
+		$data->pref001Cnt = $this->Model_Article_Prefer->getCnt([
+			'article_id' => $data->article_id,
+			'prefer_cd' => 'PRF001',
+		]);
+		$data->pref002Cnt = $this->Model_Article_Prefer->getCnt([
+			'article_id' => $data->article_id,
+			'prefer_cd' => 'PRF002',
+		]);
+		$data->pref003Cnt = $this->Model_Article_Prefer->getCnt([
+			'article_id' => $data->article_id,
+			'prefer_cd' => 'PRF003',
+		]);
 
 		return parent::viewAfter($data);
 	}
