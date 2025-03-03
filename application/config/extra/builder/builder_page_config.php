@@ -48,6 +48,7 @@ $config['page_base_config'] = [
 	],
 	'viewProperties' => [
 		'viewConfig' => '',
+		'viewType' => 'page',
 		'extraFormConfig' => '',
 		'comments' => false,
 	],
