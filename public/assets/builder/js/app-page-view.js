@@ -1,27 +1,3 @@
-function checkMyData(showError = true) {
-	let result = false;
-	$.ajax({
-		async: false,
-		url: '/api/articles/isMyData/' + common.KEY,
-		headers: {
-			'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
-		},
-		dataType: 'json',
-		success: function (response, textStatus, jqXHR) {
-			result = true;
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			if(showError) {
-				showAlert({
-					type: 'warning',
-					text: jqXHR.responseJSON.msg,
-				});
-			}
-		},
-	});
-	return result;
-}
-
 function applyViewData(data) {
 	const container = document.getElementById('view-container');
 	if(!container) return;
