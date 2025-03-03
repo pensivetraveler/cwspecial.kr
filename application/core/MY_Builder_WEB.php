@@ -36,7 +36,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		foreach (glob(APPPATH . "config/extra/{$this->flag}/*_constants.php") as $file) {
 			require_once $file;
 		}
-		$this->baseViewPath = "{$this->flag}/layout/index";
+		$this->baseViewPath = "builder/layout/index";
 		$this->noLoginRedirect = "{$this->flag}/auth/login";
 		$this->lang->load("{$this->flag}/custom", $this->config->item('language'));
 		$this->lang->load("{$this->flag}/nav", $this->config->item('language'));
@@ -230,6 +230,8 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		$this->addJS['tail'][] = [
 			base_url(PLATFORM_ASSET_JS_URI.strtolower($this->router->class).'_onload.js'),
 		];
+
+		$data['platformName'] = PLATFORM_NAME??'builder';
 
 		parent::viewApp($data);
 	}
