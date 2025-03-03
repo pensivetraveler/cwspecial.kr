@@ -232,7 +232,9 @@ class MY_Model extends CI_Model
             if(array_key_exists('limit', $data)){
                 $offset = (array_key_exists('offset', $data))?$data['offset']:0;
                 $this->db->limit($data['limit'], $offset);
-            }
+			}else{
+				$this->db->limit($data[0], $data[1]);
+			}
         }
     }
 

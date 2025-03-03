@@ -11,6 +11,7 @@ class Model_Common extends MY_Model
 	function getList($select = [], $where = [], $like = [], $limit = [], $orderBy = [], $filter = [])
 	{
 		$this->setFilter($filter);
+		$this->limit($limit);
 		$this->orderBy($orderBy);
 		$this->where($this->table, $where, $like);
 		if(empty($select)) $this->db->select($this->getSelectList());
