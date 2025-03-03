@@ -19,22 +19,27 @@ body[data-class="auth"] {
 
 [data-class="dashboard"] #dashboard-article-list a:first-child {
 	font-size: 170% !important;
+	color: rgb(70 11 10);
 }
 
 [data-class="dashboard"] #dashboard-article-list a:nth-child(2) {
 	font-size: 150% !important;
+	color: rgb(155 77 77);
 }
 
 [data-class="dashboard"] #dashboard-article-list a:nth-child(3) {
 	font-size: 140% !important;
+	color: rgb(199 132 132);
 }
 
 [data-class="dashboard"] #dashboard-article-list a:nth-child(4) {
 	font-size: 130% !important;
+	color: rgb(199 132 132);
 }
 
 [data-class="dashboard"] #dashboard-article-list a:nth-child(5) {
 	font-size: 120% !important;
+	color: rgb(199 132 132);
 }
 
 /********************************************
