@@ -57,3 +57,4 @@ $lang['My Info'] = 'My Info';
 $lang['Find ID'] = 'Find ID';
 $lang['Find Password'] = 'Find Password';
 $lang['Administrator'] = 'Administrator';
+$lang['Registration'] = 'Registration';
