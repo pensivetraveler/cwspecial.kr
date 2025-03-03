@@ -107,6 +107,9 @@ $config['page_config'] = [
 				'edit' => false,
 			],
 		],
+		'viewProperties' => [
+			'comments' => true,
+		],
 	],
 	'notices' => [
 		'category' => 'page',
