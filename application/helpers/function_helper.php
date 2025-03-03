@@ -24,3 +24,23 @@ function get_message_time($datetime) {
 		}
 	}
 }
+
+function getStarredId($id) {
+	$len = strlen($id);
+	$res = substr($id, 0, 2);
+	$res .= substr($id, 2, min($len-2,3));
+	if(strlen($id) > 5) {
+		$res .= substr($id, 5);
+	}
+	return $res;
+}
+
+function getStarredPassword($password) {
+	$len = strlen($password);
+	$res = substr($password, 0, 2);
+	$res .= substr($password, 2, min($len-2,5));
+	if(strlen($password) > 7) {
+		$res .= substr($password, 7);
+	}
+	return $res;
+}

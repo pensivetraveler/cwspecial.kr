@@ -191,7 +191,7 @@ class Auth extends Common
 				'code' => DATA_RETRIEVED,
 				'data' => [
 					'result' => [
-						'id' => $this->Model->getData(['id'], $params),
+						'id' => getStarredId($this->Model->getData(['id'], $params)),
 					],
 					'redirect_to' => '',
 				],
@@ -222,7 +222,7 @@ class Auth extends Common
 				'code' => DATA_RETRIEVED,
 				'data' => [
 					'result' => [
-						'password' => $password,
+						'password' => getStarredPassword($password),
 					],
 					'redirect_to' => '',
 				],
