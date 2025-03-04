@@ -148,14 +148,16 @@ function submitArticlePreference(prefCd) {
 }
 
 $(function() {
-	$('.btn-pref').on('click', function(e) {
-		const prefCd = $(this).data('pref-cd');
-		if(this.classList.contains('clicked')) {
-			removeArticlePreference(prefCd);
-		}else{
-			submitArticlePreference('PRF'+prefCd);
-		}
-	});
+	if($('body').data('method') === 'view') {
+		$('.btn-pref').on('click', function (e) {
+			const prefCd = $(this).data('pref-cd');
+			if (this.classList.contains('clicked')) {
+				removeArticlePreference(prefCd);
+			} else {
+				submitArticlePreference('PRF' + prefCd);
+			}
+		});
 
-	setArticlePreference();
+		setArticlePreference();
+	}
 })
