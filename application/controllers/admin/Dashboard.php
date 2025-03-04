@@ -18,11 +18,9 @@ class Dashboard extends Common
 
 	public function index()
 	{
-		$adminList = array_map(function ($curr) {
-			return $curr->user_id;
-		}, $this->Model_User->getList(['user_id'], [
+		$adminList = $this->Model_User->getList(['user_id'], [
 			'user_cd' => 'USR001'
-		]));
+		]);
 
 		$list = $this->Model_Article->getDashboardArticleList($adminList);
 

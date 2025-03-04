@@ -115,7 +115,16 @@ class MY_Model extends CI_Model
     {
         $this->db->where($where);
         if(count($select) > 0) $this->db->select($select);
-        return $this->db->get($table)->result();
+
+		$result = $this->db->get($table)->result();
+
+		if(count($select) === 1) {
+			return array_map(function ($curr) use ($select) {
+				return $curr->{$select[0]};
+			}, $result);
+		}else{
+			return $result;
+		}
     }
 
     public function getCntPDO($table, $where = [])

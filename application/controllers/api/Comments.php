@@ -34,13 +34,18 @@ class Comments extends Common
 			$data['filter'] ?? [],
 		);
 
+		$adminList = $this->Model_User->getList(['user_id'], [
+			'user_cd' => 'USR001'
+		]);
+
 		foreach ($list as $item) {
 			$item->creater = $this->Model_User->getData([
 				'name', 'id'
 			], [
 				'user_id' => $item->created_id,
-			]);;
+			]);
 
+			$item->is_admin = in_array($item->created_id, $adminList);
 			$item->mine_yn = (int)$this->session->userdata('user_id') === (int)$item->created_id;
 			$replyList = $this->Model->getList([], [
 				'parent_id' => $item->comment_id,
@@ -50,6 +55,7 @@ class Comments extends Common
 			]);
 			foreach ($replyList as $reply) {
 				$reply->mine_yn = (int)$this->session->userdata('user_id') === (int)$reply->created_id;
+				$reply->is_admin = in_array($reply->created_id, $adminList);
 				$reply->creater = $this->Model_User->getData([
 					'name', 'id'
 				], [
