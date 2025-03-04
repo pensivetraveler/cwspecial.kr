@@ -49,13 +49,9 @@ class MY_Controller_API extends RestController
 
     public function index_delete($key = 0)
     {
-        if($key === 0) {
-            $this->keyNotExist();
-        }else{
-            $this->beforeDelete($key);
+		$this->beforeDelete($key);
 
-            $this->afterDelete($key);
-        }
+		$this->afterDelete($key);
     }
 
     /* --------------------------------------------------------------- */
