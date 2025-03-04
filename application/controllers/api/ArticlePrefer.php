@@ -75,11 +75,11 @@ class ArticlePrefer extends Common
 				'article_id' => 11,
 				'depth' => 0,
 			]);
-			foreach ($commentList as $comment) {
-				if((int)$comment->created_id === (int)$dto['user_id']) continue;
-				if((int)$comment->created_id === (int)$articleData->created_id) continue;
+			foreach ($commentList as $userId) {
+				if((int)$userId === (int)$dto['user_id']) continue;
+				if((int)$userId === (int)$articleData->created_id) continue;
 				$this->Model_Message->addData([
-					'user_id' => $comment->created_id,
+					'user_id' => $userId,
 					'article_id' => $dto['article_id'],
 					'comment_id' => '',
 					'content' => '내가 댓글을 단 게시글에 피드백이 달렸어요.',
