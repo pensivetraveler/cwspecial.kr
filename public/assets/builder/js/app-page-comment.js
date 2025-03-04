@@ -54,7 +54,7 @@ function setCommentList(comments) {
 		}
 
 		const commentHTML = `
-			<li class="py-6" data-comment-id="${comment.comment_id}" data-mine-yn="${comment.mine_yn}" data-commen-depth="0">
+			<li class="py-6" data-comment-id="${comment.comment_id}" data-mine-yn="${comment.mine_yn}" data-commen-depth="0" data-is-admin="${comment.is_admin}">
 				<div class="d-flex comment-wrap">
 					<div class="comment-info">
 						<div class="w-px-200 me-4 comment-creater">${comment.creater.name} (${comment.creater.id})</div>
