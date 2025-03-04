@@ -278,7 +278,7 @@ $(function () {
 	});
 
 	$('.dataTables_wrapper').on('click', '.view-record', function() {
-		if(!common.IDENTIFIER.length) throw new Error(`Identifier is not defined`);
+		if(!common.IDENTIFIER) throw new Error(`Identifier is not defined`);
 		location.href = common.PAGE_VIEW_URI + '/' + $(this).data('id');
 	});
 
@@ -508,7 +508,7 @@ function renderColumn(data, type, full, meta, column) {
 	switch (column.format) {
 		case 'button':
 			wrap = document.createElement('button');
-			wrap.classList.add('btn', 'btn-info', 'waves-effect', 'waves-light', 'pe-3', 'ps-3');
+			wrap.classList.add('btn', 'btn-sm', 'btn-info', 'waves-effect', 'waves-light', 'pe-3', 'ps-3');
 			break;
 		case 'text':
 		case 'icon':
@@ -541,8 +541,7 @@ function renderColumn(data, type, full, meta, column) {
 				inner = column.text?getLocale(column.text, common.LOCALE):data;
 				break;
 			case 'button':
-				if(['popup', 'redirect', 'download'].includes(column.onclick.kind) && (data === null || data.length === 0))
-					return '-';
+				if(['popup', 'redirect', 'download'].includes(column.onclick.kind) && (data === null || data.length === 0)) return '-';
 				inner = column.text?getLocale(column.text, common.LOCALE):getLocale(column.field, common.LOCALE);
 				break;
 			case 'icon':
@@ -592,7 +591,7 @@ function renderColumnHTML(data, full, column, wrap, inner) {
 	if(Object.keys(column.onclick).length) {
 		wrap.classList.add('cursor-pointer');
 		attrs.onclick = getColumnOnclick(data, full, column);
-		if(value === '') inner = '';
+		// if(value === '') inner = '';
 		if(column.onclick.kind === 'bs' && value !== '') {
 			if(Object.keys(column.onclick.attrs).length) {
 				Object.entries(column.onclick.attrs).map(([key, value]) => attrs[`data-bs-${key}`] = value )
