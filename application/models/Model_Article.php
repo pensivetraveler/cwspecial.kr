@@ -28,14 +28,31 @@ class Model_Article extends Model_Common
 
 	public function getDashboardArticleList($adminList)
 	{
+		$myId = $this->session->userdata('user_id');
+		$adminList = array_diff($adminList, [$myId]);
+
+		$this->db->select("(SELECT COUNT(*) FROM tbl_article_prefer WHERE tbl_article_prefer.article_id = tbl_article.article_id AND tbl_article_prefer.user_id IN ($myId)) AS my_feedback");
 		if(count($adminList) > 0) {
 			$adminList = implode(',', $adminList);
 			$this->db->select("(SELECT COUNT(*) FROM tbl_article_prefer WHERE tbl_article_prefer.article_id = tbl_article.article_id AND tbl_article_prefer.user_id IN ($adminList)) AS feedback_cnt");
-			$this->db->having('feedback_cnt', 0);
 		}
-		return $this->Model_Article->getList([], [
+
+		$articleList = $this->Model_Article->getList([], [
 			'board_id' => 3,
 			'open_yn' => 'Y',
-		], [], [5, 0], ['created_dt' => 'desc']);
+		], [], [], ['created_dt' => 'desc']);
+
+		$list = [];
+		$cnt = 0;
+		foreach ($articleList as $i=>$item) {
+			if($cnt === 5) break;
+			if(!property_exists($item, 'feedback_cnt')) $item->feedback_cnt = 0;
+			if((int)$item->my_feedback > 0) continue;
+			if((int)$item->feedback_cnt > 3) continue;
+			$list[] = $item;
+			$cnt++;
+		}
+
+		return $list;
 	}
 }
