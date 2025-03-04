@@ -589,12 +589,22 @@ function renderColumnHTML(data, full, column, wrap, inner) {
 	};
 
 	if(Object.keys(column.onclick).length) {
+		console.log(column)
 		wrap.classList.add('cursor-pointer');
 		attrs.onclick = getColumnOnclick(data, full, column);
-		// if(value === '') inner = '';
-		if(column.onclick.kind === 'bs' && value !== '') {
-			if(Object.keys(column.onclick.attrs).length) {
-				Object.entries(column.onclick.attrs).map(([key, value]) => attrs[`data-bs-${key}`] = value )
+
+		if(!column.onclick.hasOwnProperty('noValue')) {
+			column.onclick.noValue = false;
+		}
+
+		if(!column.onclick.noValue && value === '') inner = '';
+
+		if(column.onclick.kind === 'bs') {
+			if(column.onclick.noValue || value !== '') {
+				if(!column.onclick.hasOwnProperty('attrs')) column.onclick.attrs = {};
+				if(Object.keys(column.onclick.attrs).length) {
+					Object.entries(column.onclick.attrs).map(([key, value]) => attrs[`data-bs-${key}`] = value )
+				}
 			}
 		}
 	}
