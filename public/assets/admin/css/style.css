@@ -45,39 +45,6 @@ body[data-class="auth"] {
 /********************************************
 * #comment-list
 ********************************************/
-#comment-list .comment-info {
-	flex: 1 1 auto !important;
-	display: flex;
-}
-
-@media (max-width: 576px) {
-	#comment-list {
-		padding: .5rem 1rem !important;
-	}
-	#comment-list li {
-		padding: .5rem 0 !important;
-	}
-	#comment-list .comment-info>div {
-		width: 100% !important;
-		margin-right: 0 !important;
-	}
-	#comment-list .comment-info>div {
-		margin-bottom: .5rem;
-	}
-	#comment-list .comment-wrap {
-		flex-direction: column;
-	}
-	#comment-list .comment-info {
-		flex-direction: column;
-	}
-	#comment-list .comment-btns  {
-		justify-content: space-between !important;
-	}
-	/*#comment-list .comment-btns>div:first-child {*/
-	/*	width: 100%;*/
-	/*	margin-top: 1rem;*/
-	/*	display: flex;*/
-	/*	justify-content: flex-end;*/
-	/*	align-items: center;*/
-	/*}*/
+#comment-list li[data-is-admin="true"] {
+	background-color: rgb(247 222 222);
 }
