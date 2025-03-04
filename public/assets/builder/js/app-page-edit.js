@@ -154,4 +154,6 @@ $(function () {
         // if fields are invalid
         console.log('core.form.invalid')
     });
+
+	if(common.PAGE_LIST_URI === undefined) $('.btn-list').addClass('d-none');
 });

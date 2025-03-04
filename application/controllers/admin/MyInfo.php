@@ -17,10 +17,6 @@ class MyInfo extends Common
 	public function index()
 	{
 		$tokenData = $this->validateToken();
-		$this->load->model('Model_User');
-		$user_id = $this->Model_User->getData(['user_id'], [
-			'user_id' => $tokenData->user_id,
-		]);
-		$this->edit($user_id);
+		$this->edit($tokenData->user_id);
 	}
 }
