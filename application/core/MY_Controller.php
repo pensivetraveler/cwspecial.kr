@@ -367,17 +367,22 @@ class MY_Controller extends CI_Controller
 
 	protected function getOptionsFromDBList($list, $render)
 	{
-		return array_reduce($list, function ($carry, $item) use ($render) {
-			$item = (array)$item;
-			$id = $item[$render['id']] ?? '';
-			$text = $item[$render['text']] ?? '';
-			$carry[$id] = $text;
-			if(!is_empty($render, 'add')) {
-				$add = $item[$render['add']] ?? '';
-				if($add) $carry[$id] .= " ($add)";
-			}
-			return $carry;
-		}, []);
+		if(count($list) === 0) return [];
+		if(is_object($list[0]) || is_array($list[0])) {
+			return array_reduce($list, function ($carry, $item) use ($render) {
+				$item = (array)$item;
+				$id = $item[$render['id']] ?? '';
+				$text = $item[$render['text']] ?? '';
+				$carry[$id] = $text;
+				if(!is_empty($render, 'add')) {
+					$add = $item[$render['add']] ?? '';
+					if($add) $carry[$id] .= " ($add)";
+				}
+				return $carry;
+			}, []);
+		}else{
+			return array_combine(array_values($list),array_values($list));
+		}
 	}
 
 	public function logger($message, $errorLevel = E_USER_ERROR, $triggerError = true)
@@ -425,5 +430,5 @@ class MY_Controller extends CI_Controller
 include_once __DIR__.'/MY_Controller_API.php';
 include_once __DIR__.'/MY_Controller_WEB.php';
 include_once __DIR__.'/MY_Controller_APP.php';
-include_once __DIR__.'/MY_Builder_API.php';
 include_once __DIR__.'/MY_Builder_WEB.php';
+include_once __DIR__.'/MY_Builder_API.php';
