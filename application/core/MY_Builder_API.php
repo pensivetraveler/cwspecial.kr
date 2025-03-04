@@ -738,7 +738,7 @@ class MY_Builder_API extends MY_Controller_API
 
 	protected function checkIdentifierExist($key, $model = null)
 	{
-		if(!$key && $this->input->method === 'put') return;
+		if(!$key) return;
 		if(!$model) $model = $this->Model;
 		$this->checkCnt([$model->identifier => $key], $model);
 	}
