@@ -133,7 +133,7 @@ class Common extends MY_Builder_WEB
 
 	public function view($key = 0)
 	{
-		if($this->pageConfig['viewProperties']['comments']) {
+		if($this->pageConfig['viewProperties']['isComments']) {
 			$this->addCSS[] = [
 				base_url('public/assets/builder/vendor/libs/tagify/tagify.css'),
 				base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
