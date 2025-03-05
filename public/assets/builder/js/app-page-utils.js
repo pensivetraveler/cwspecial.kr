@@ -9,8 +9,8 @@
  */
 function getLocale(key, locale = []) {
 	try {
-		if(locale.length === 0 && window.LOCALE === undefined) throw new ReferenceError('getLocale : LOCALE is not defined.');
-		if(locale.length === 0) locale = window.LOCALE;
+		if(locale.length === 0 && common.LOCALE === undefined) throw new ReferenceError('getLocale : LOCALE is not defined.');
+		if(locale.length === 0) locale = common.LOCALE;
 		if(key === undefined) throw new ReferenceError('getLocale : key is not defined.');
 
 		let exist = false;
@@ -201,240 +201,6 @@ function showSwalAlert(obj) {
 	});
 }
 
-function getAjaxOptions(obj = {}) {
-	try {
-		if(obj.url === undefined) throw new Error(`getAjaxOptions : url is not valid !`);
-
-		let url = obj.url;
-		let method = 'get';
-		['method', 'type'].forEach(function(key) {
-			if(obj[key] !== undefined) {
-				if(typeof obj[key] !== 'string') throw new Error(`getAjaxOptions : method is not valid !`);
-				if(!isEmpty(obj[key]) && !['get', 'post', 'delete', 'put', 'patch'].includes(obj[key].toLowerCase()))
-					throw new Error(`getAjaxOptions : method is not valid !`);
-				method = obj[key];
-			}
-		})
-
-		let dataType = 'json';
-		if(obj.dataType !== undefined) {
-			if(typeof obj.dataType !== 'string') throw new Error(`getAjaxOptions : dataType is not valid !`);
-			dataType = obj.dataType.toLowerCase();
-		}
-
-		let data = {};
-		if(obj.data !== undefined) {
-			if(!isObject(obj.data) && typeof obj.data !== 'function' && typeof obj.data !== 'string')
-				throw new Error(`getAjaxOptions : data is not valid type !`);
-			data = obj.data;
-		}
-
-		const async = obj.async === undefined?false:obj.async;
-
-		const ajaxOption = {
-			async: false,
-			url: url,
-			method: method,
-			data: data,
-			dataType: dataType,
-		};
-
-		for(const key of ['headers', 'complete', 'contentType', 'processData']){
-			if(obj.hasOwnProperty(key)) ajaxOption[key] = obj[key];
-		}
-
-		return ajaxOption;
-	} catch (error) {
-		customErrorHandler(error);
-	}
-}
-
-function executeAjax(obj = {}, test = false) {
-	const options = getAjaxOptions(obj);
-
-	if(obj.success !== undefined) {
-		options.success = obj.success;
-	}else{
-		options.success = function(response, textStatus, jqXHR) {
-			console.log(response)
-			if (Math.floor(response.code/10) === 200) {
-				if(obj.after !== undefined && obj.after.callback !== undefined) {
-					if(obj.after.callback.name === 'showAlert'){
-						if(obj.after.params.text === undefined) obj.after.params.text = response.msg;
-						showAlert(obj.after.params);
-					}else{
-						callUserFunc(obj.after.callback, obj.after.params);
-					}
-				}else{
-					showAlert({
-						type: 'success',
-						text: response.msg,
-					});
-				}
-			} else {
-				console.warn(jqXHR.responseJSON)
-				showAlert({
-					type: 'warning',
-					text: jqXHR.responseJSON.msg,
-				});
-			}
-		}
-	}
-
-	if(obj.error !== undefined) {
-		options.error = obj.error;
-	}else{
-		options.error = function(jqXHR, textStatus, errorThrown) {
-			console.warn(jqXHR.responseJSON)
-			showAlert({
-				type: 'error',
-				text: jqXHR.responseJSON.msg,
-			});
-		}
-	}
-
-	if(test) {
-		const form = document.createElement('form');
-		if(obj.data !== undefined) {
-			for(const [name, value] of Object.entries(obj.data)) {
-				const input = document.createElement('input');
-				input.name = name;
-				input.value = value;
-				form.appendChild(input);
-			}
-		}
-		form.target = '_blank';
-		form.action = obj.url;
-		form.method = obj.method;
-		document.body.appendChild(form);
-		form.submit();
-		form.remove();
-	}else{
-		$.ajax(options);
-	}
-}
-
-function submitAjax(selector, options = {}, test = false) {
-	const form = document.querySelector(selector);
-	const formData = options.hasOwnProperty('data') ? options.data : getFormData(form);
-
-	let url;
-	if(!options.hasOwnProperty('url')) {
-		url = common.API_URI;
-		if(common.hasOwnProperty('API_URI_ADD')&&common.API_URI_ADD.length>0) url += '/'+common.API_URI_ADD;
-		if(form[common.IDENTIFIER]) url += '/' + form[common.IDENTIFIER].value;
-		if(common.API_PARAMS.length) url += '?' + new URLSearchParams(common.API_PARAMS).toString();
-	}else{
-		url = options.url;
-	}
-
-	options = Object.assign({
-		url : url,
-		method: 'post',
-		headers: {
-			'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
-		},
-		contentType: false, // jQuery가 contentType을 자동으로 설정하지 않도록 함
-		processData: false, // jQuery가 데이터를 처리하지 않도록 함
-		data: formData,
-		success: function(response) {
-			console.log(response)
-			showAlert({
-				type: 'success',
-				title: 'Complete',
-				text: form['_mode'].value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
-			});
-		},
-	}, options);
-
-	if(test) {
-		form.querySelectorAll('input, textarea, select').forEach(function(node) {
-			if(!node.name) return;
-			if(!checkInputSubmittable(node, form)) node.setAttribute('disabled', 'disabled');
-		});
-
-		form.action = options.url;
-		form.method = options.method ?? 'post';
-		form.target = '_blank';
-		form.submit();
-
-		form.querySelectorAll('[disabled]').forEach(function(node) {
-			node.removeAttribute('disabled');
-		});
-	}else{
-		executeAjax(options);
-	}
-}
-
-function getFormData(form = null) {
-	if(!form) form = document.getElementById('formRecord');
-
-	const formData = new FormData();
-	form.querySelectorAll('input, textarea, select').forEach(function(node) {
-		if(!node.name) return;
-		if(checkInputSubmittable(node, form)){
-			if(node.type === 'file') {
-				let fileCnt = node.files.length;
-				if(fileCnt > 0) {
-					if(fileCnt === 1) {
-						formData.append(node.name, node.files[0]);
-					}else{
-						if(node.hasAttribute('max') && !isNaN(node.getAttribute('max'))) {
-							fileCnt = parseInt(node.hasAttribute('max'));
-						}
-						for(let i = 0; i < fileCnt; i++) {
-							formData.append(node.name+'[]', node.files[i]);
-						}
-					}
-				}
-			}else{
-				formData.append(node.name, node.value);
-			}
-		}
-	});
-
-	if(window['Dropzone'] !== undefined) {
-		for(const inst of Dropzone.instances){
-			let field = inst.element.getAttribute('data-field');
-			if(inst.files.length > 0) {
-				if(inst.files.length === 1) {
-					formData.append(`${field}`, inst.files[0]);
-				} else {
-					inst.files.forEach((file, index) => {
-						formData.append(`${field}[${index}]`, file);
-					});
-				}
-			}
-		}
-	}
-
-	logFormData(formData);
-
-	return formData;
-}
-
-function checkInputSubmittable(node, form) {
-	if(node.type === 'file') {
-		if(node.files.length > 0) return true;
-	}else{
-		if(node.hasAttribute('data-detect-changed') && !isAttributeValueTrue(node, 'data-detect-changed')) {
-			return true;
-		}else if(node.type === 'hidden') {
-			return true;
-		}else if(node.type === 'checkbox') {
-			if(node.checked === true) return true;
-		}else if(node.getAttribute('required') === 'required') {
-			return true;
-		}else if(isAttributeValueTrue(node, 'data-input-changed')) {
-			return true;
-		}else if(node.hasAttribute('required-mod')) {
-			const requireMod = node.getAttribute('required-mod').split('|');
-			if (requireMod.includes(form['_mode'].value)) return true;
-		}
-	}
-	return false;
-}
-
 function reformatFormData(form, data, regexp = {}, side = false) {
 	return data.reduce((acc, curr, i) => {
 		if(curr.type === 'hidden') return acc;
@@ -501,7 +267,8 @@ function reformatFormData(form, data, regexp = {}, side = false) {
 				// }
 				return;
 			}else{
-				if (validatorName = customValidatorsPreset.inflector(rule)) {
+				if (customValidatorsPreset.inflector(rule)) {
+					const validatorName = customValidatorsPreset.inflector(rule)
 					const { regex, options: getOptions, message: getMessage } = customValidatorsPreset.rules[rule];
 
 					let message;
@@ -517,10 +284,10 @@ function reformatFormData(form, data, regexp = {}, side = false) {
 							...(message && { message: message })
 						};
 					}else{
-						if(matches = customValidatorsPreset.extractor(regex, raw)){
+						if(customValidatorsPreset.extractor(regex, raw)){
 							item.validators[validatorName] = {
 								...item.validators[validatorName],
-								...getOptions(form, item, matches),
+								...getOptions(form, item, customValidatorsPreset.extractor(regex, raw)),
 								...(message && { message: message })
 							};
 						}
@@ -541,149 +308,6 @@ function reformatFormData(form, data, regexp = {}, side = false) {
 		acc[curr.field] = item;
 		return acc; // 항상 acc를 반환
 	}, {});
-}
-
-function setFormListItem(selector, data, field) {
-	if(!isValidSelector(selector) || document.querySelector(selector) === null) return;
-
-	let html = '';
-	const key = field.form_attributes.list_field ?? field.field;
-	if(!isEmpty(data[key])) {
-		let list = [];
-		isArray(data[key]) ? list = data[key] : list.push(data[key]);
-		list.forEach((item) => {
-			if(common.IDENTIFIER && data.hasOwnProperty(common.IDENTIFIER)) item[common.IDENTIFIER] = data[common.IDENTIFIER];
-			const identifier = common.IDENTIFIER?data[common.IDENTIFIER]:null;
-			switch (field.form_attributes.list_type ?? field.subtype) {
-				case 'thumbnail' :
-					html += setFormListItemThumbnail(field, item, identifier);
-					break;
-				case 'youtube' :
-					html += setFormListItemYoutube(field, item, identifier);
-					break;
-				case 'reply_list' :
-					html += setFormListItemReplyList(field, item, identifier);
-					break;
-				default :
-					html += setFormListItemFile(field, item, identifier);
-					break;
-			}
-		});
-		document.querySelector(selector).classList.remove('d-none');
-		if(field.subtype === 'readonly') document.querySelector(selector).closest('.form-validation-unit').classList.remove('d-none');
-	}else{
-		document.querySelector(selector).classList.add('d-none');
-		if(field.subtype === 'readonly') document.querySelector(selector).closest('.form-validation-unit').classList.add('d-none');
-	}
-
-	document.querySelector(selector).innerHTML = html;
-}
-
-function setFormListItemFile(field, item, identifier = '') {
-	const url = location.origin+location.pathname;
-	const fullItem = JSON.stringify(item).replace(/"/g, "'");
-	const articleId = item.article_id ?? '';
-	const fileId = item.file_id;
-	if(field.form_attributes.hasOwnProperty('list_sorter') && field.form_attributes.list_sorter) {
-		let output = `
-            <li class="form-list-item list-group-item d-flex justify-content-between align-items-center px-2" data-identifier-val="${identifier}" data-full-item="${fullItem}" data-article-id="${articleId}" data-file-id="${fileId}">
-                <div class="d-flex justify-content-between align-items-center">
-                    <i class="drag-handle cursor-move ri-menu-line align-text-bottom me-2"></i>
-                    <span class="not-draggable">${item.orig_name}</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                    <button class="btn btn-primary waves-effect p-1" type="button" onclick="downloadFile(${fileId})">
-                        <i class="ri-file-download-line ri-16px align-middle"></i>
-                    </button>
-        `;
-		if(field.form_attributes.list_delete.length > 0){
-			output += `
-                    <button class="btn btn-danger waves-effect p-1 ms-1" type="button" onclick="deleteFile(this, '${field.form_attributes.list_delete}')">
-                        <i class="ri-close-line ri-16px align-middle"></i>
-                    </button>
-            `;
-		}
-		output += `
-                </div>
-            </li>
-        `;
-		return output;
-	}else{
-		return `
-        <div class="form-list-item d-flex align-items-center" data-identifier-val="${identifier}" data-full-item="${fullItem}">
-            <div class="badge text-body text-truncate">
-                <a href="${url}/downloader/${fileId}">
-                    <i class="ri-file-download-fill ri-16px align-middle"></i>
-                    <span class="h6 mb-0 align-middle">${item.orig_name}</span>
-                </a>
-            </div>
-        </div>
-    `;
-	}
-}
-
-function setFormListItemThumbnail(field, item, identifier = '') {
-	const url = location.origin+location.pathname;
-	const fullItem = JSON.stringify(item).replace(/"/g, "'");
-	return `
-        <div class="form-list-item d-flex align-items-start flex-column justify-content-center" data-identifier-val="${identifier}" data-full-item="${fullItem}">
-            <div class="d-flex align-items-center justify-content-between w-100 mb-2">
-                <div class="badge text-body text-truncate">
-                    <a href="${url}/downloader/${item.file_id}">
-                        <i class="ri-file-download-fill ri-16px align-middle"></i>
-                        <span class="h6 mb-0 align-middle">${item.orig_name}</span>
-                    </a>
-                </div>
-                <button class="btn btn-danger waves-effect p-1" type="button" onclick="deleteFile(this, 'thumbnail')">
-                    <i class="ri-close-line ri-16px align-middle"></i>
-                </button>
-            </div>
-            <div class="border rounded-3 overflow-hidden">
-                <img src="${item.file_link}" alt="${item.orig_name}" class="mw-100 not-draggable" draggable="false">
-            </div>
-        </div>
-    `;
-}
-
-function setFormListItemPreview(field, item, identifier = '') {
-	const url = location.origin+location.pathname;
-	const fullItem = JSON.stringify(item).replace(/"/g, "'");
-	return `
-        <div class="form-list-item d-flex align-items-center" data-identifier-val="${identifier}" data-full-item="${fullItem}">
-            <div class="badge text-body text-truncate">
-                <a href="${url}/downloader/${item.file_id}">
-                    <i class="ri-file-download-fill ri-16px align-middle"></i>
-                    <span class="h6 mb-0 align-middle">${item.orig_name}</span>
-                </a>
-            </div>
-        </div>
-    `;
-}
-
-function setFormListItemYoutube(field, item, identifier = '') {
-	const url = location.origin+location.pathname;
-	const fullItem = JSON.stringify(item).replace(/"/g, "'");
-	return `
-        <div class="d-flex align-items-center" data-identifier-val="${identifier}" data-full-item="${fullItem}">
-            <div class="badge text-body text-truncate">
-                <a href="#" role="button" data-bs-toggle="modal" data-bs-target="#youTubeModal" data-value="${item}">
-                    <i class="ri-link mt-0 ri-16px align-middle"></i>
-                    <span class="h6 mb-0 align-middle">https://youtu.be/${item}</span>
-                </a>
-            </div>
-        </div>
-    `;
-}
-
-function setFormListItemReplyList(field, item, identifier = '') {
-	const url = location.origin+location.pathname;
-	const fullItem = JSON.stringify(item).replace(/"/g, "'");
-	return `
-        <li class="form-list-item mb-1 ps-0 p-2" data-identifier-val="${identifier}" data-full-item="${fullItem}">
-            <p class="h6 mb-1">${item.content}</p>
-            <p class="text-end mb-0">${item.created_id} ${item.created_dt}</p>
-        </li>
-    `;
 }
 
 function setFlatpickr(node) {
