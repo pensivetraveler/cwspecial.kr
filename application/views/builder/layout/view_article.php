@@ -48,8 +48,8 @@ echo form_input(
 	<div class="row mt-4 btn-view-wrap">
 		<div class="col-sm-6 text-start btn-view-wrap-left"></div>
 		<div class="col-sm-6 text-end btn-view-wrap-right">
-			<?php foreach ($buttons as $button): ?>
-			<button type="button" class="btn btn-outline-primary w-px-150 btn-view-<?=$button?>"><?=lang(ucfirst($button))?></button>
+			<?php foreach ($actions as $action): ?>
+			<button type="button" class="btn btn-outline-primary w-px-150 btn-view-<?=$action?>"><?=lang(ucfirst($action))?></button>
 			<?php endforeach; ?>
 		</div>
 	</div>
