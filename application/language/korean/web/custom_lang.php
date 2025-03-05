@@ -1,4 +1,11 @@
 <?php
+$lang['status_code'][DATA_CREATED] = '등록되었습니다.';
+$lang['status_code'][DATA_EDITED] = '수정되었습니다.';
+$lang['status_code'][DATA_DELETED] = '삭제되었습니다.';
+$lang['Registered Successfully'] = '등록되었습니다.';
+$lang['Your Data Is Updated'] = '수정되었습니다.';
+$lang['Delete Completed'] = '삭제되었습니다.';
+
 $lang['You can not vote to your data'] = '자신의 글에 투표할 수 없습니다.';
 $lang['Notification'] = '알림';
 $lang['Temporary'] = '임시저장';

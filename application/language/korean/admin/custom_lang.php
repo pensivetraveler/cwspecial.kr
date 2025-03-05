@@ -1,4 +1,11 @@
 <?php
+$lang['status_code'][DATA_CREATED] = '반영되었습니다.';
+$lang['status_code'][DATA_EDITED] = '수정되었습니다.';
+$lang['status_code'][DATA_DELETED] = '삭제되었습니다.';
+$lang['Registered Successfully'] = '반영되었습니다.';
+$lang['Your Data Is Updated'] = '수정되었습니다.';
+$lang['Delete Completed'] = '삭제되었습니다.';
+
 $lang['placeholder'] = [
 	'Select The Student' => '학생을 선택하세요.',
 	'Select The Program' => '프로그램을 선택하세요.',
