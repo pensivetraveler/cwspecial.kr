@@ -48,9 +48,13 @@ $config['page_base_config'] = [
 	],
 	'viewProperties' => [
 		'viewConfig' => '',
-		'viewType' => 'page',
+		'viewType' => 'base',
 		'extraFormConfig' => '',
-		'comments' => false,
+		'isComments' => false,
+		'buttons' => [
+			'edit' => true,
+			'list' => true,
+		],
 	],
 	'tabProperties' => [
 		'tabGroup' => '',
