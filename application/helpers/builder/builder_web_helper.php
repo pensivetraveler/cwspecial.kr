@@ -68,3 +68,18 @@ function get_icon_classname_by_type($type): string
 			return '';
 	}
 }
+
+function unravel_list($list) : array
+{
+	$result = [];
+	foreach ($list as $item) {
+		if(is_array($item)) {
+			foreach ($item as $subitem) {
+				$result[] = $subitem;
+			}
+		}else{
+			$result[] = $item;
+		}
+	}
+	return array_values(array_unique($result));
+}
