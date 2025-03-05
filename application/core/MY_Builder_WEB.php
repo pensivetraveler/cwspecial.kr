@@ -111,13 +111,21 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			$data['identifier'] = $data['viewData'][array_search('identifier', array_column($data['viewData'], 'view'))];
 		}
 
-		$data['isComments'] = false;
-		if($this->pageConfig['viewProperties']['comments']) {
-			$data['isComments'] = true;
+		$data['isComments'] = $this->pageConfig['viewProperties']['isComments'];
+		if($data['isComments']) {
 			$this->addJS['tail'][] = [
 				base_url('public/assets/builder/js/app-page-comment.js')
 			];
 		}
+
+		$data['buttons'] = [];
+		foreach ($this->pageConfig['properties']['allows'] as $method) {
+			if(in_array($method, ['list','edit'])){
+				$data['buttons'][] = $method;
+			}
+		}
+
+		$data['viewType'] = $this->pageConfig['viewProperties']['viewType'];
 
 		$this->viewApp($data);
 	}
@@ -131,6 +139,9 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		$data['backLink'] = WEB_HISTORY_BACK;
 		$data['formData'] = restructure_admin_form_data($this->jsVars['FORM_DATA'], $this->sideForm?'side':'page');
 		$data['formType'] = 'page';
+
+		$data['buttons'] = [];
+		if($this->pageConfig['properties']['listExist']) $data['buttons'][] = 'list';
 
 		$this->viewApp($data);
 	}
@@ -148,6 +159,9 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		$data['backLink'] = WEB_HISTORY_BACK;
 		$data['formData'] = restructure_admin_form_data($this->jsVars['FORM_DATA'], $this->sideForm?'side':'page');
 		$data['formType'] = 'page';
+
+		$data['buttons'] = [];
+		if($this->pageConfig['properties']['listExist']) $data['buttons'][] = 'list';
 
 		$this->viewApp($data);
 	}
@@ -175,19 +189,19 @@ class MY_Builder_WEB extends MY_Controller_WEB
 	{
 		if(!array_key_exists('subPage', $data)) {
 			$view = null;
+			$method = $this->router->method === 'index'?$this->pageConfig['properties']['baseMethod']:$this->router->method;
+
 			foreach ([get_path(), BUILDER_FLAGNAME] as $firstPath) {
 				if(!file_exists(VIEWPATH.$firstPath)) continue;
 				foreach ([$this->router->class, 'layout'] as $secondPath) {
 					$path = $firstPath.DIRECTORY_SEPARATOR.$secondPath.DIRECTORY_SEPARATOR;
-					$method = $this->router->method === 'index'?$this->pageConfig['properties']['baseMethod']:$this->router->method;
-					if(file_exists(VIEWPATH.$path.$method.'.php')) {
-						$view = $path.$method;
-					}
+					if(file_exists(VIEWPATH.$path.$method.'.php')) $view = $path.$method;
 					if($view) break;
 				}
 			}
+
 			if(is_null($view) || !file_exists(VIEWPATH.$view.'.php')){
-				trigger_error("viewApp : View file for {$this->router->class}:{$this->router->method} does not exist.", E_USER_ERROR);
+				trigger_error("viewApp : View file for {$this->router->class}:{$method} does not exist.", E_USER_ERROR);
 			}else{
 				$data['subPage'] = $view;
 			}
@@ -304,7 +318,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		if($this->pageConfig['properties']['formExist'] && $this->pageConfig['properties']['listExist']) {
 			$viewType = $this->pageConfig['viewProperties']['viewType'];
 			$this->addJsVars([
-				'PAGE_VIEW_URI' => $viewType==='page'?$this->href.DIRECTORY_SEPARATOR.'view':'',
+				'PAGE_VIEW_URI' => $viewType!=='modal'?$this->href.DIRECTORY_SEPARATOR.'view':'',
 				'PAGE_ADD_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'add',
 				'PAGE_EDIT_URI' => $this->sideForm?'':$this->href.DIRECTORY_SEPARATOR.'edit',
 				'PAGE_EXCEL_URI' => $this->href.DIRECTORY_SEPARATOR.'excel',
