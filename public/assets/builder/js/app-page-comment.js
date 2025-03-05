@@ -70,6 +70,8 @@ function setCommentList(comments) {
 		`;
 		commentListWrap.innerHTML += commentHTML;
 	}
+
+	resetCommentForm();
 }
 
 function getCommentList() {
@@ -186,7 +188,6 @@ $(function() {
 					text: formComment['_mode'].value === 'edit' ? 'Your Data Is Updated' : 'Registered Successfully',
 					callback: getCommentList,
 				});
-				resetCommentForm();
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.warn(jqXHR.responseJSON)
