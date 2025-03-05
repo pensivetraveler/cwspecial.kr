@@ -92,6 +92,9 @@ $config['page_config'] = [
 		'viewProperties' => [
 			'viewType' => 'article',
 			'isComments' => false,
+			'actions' => [
+				'delete' => false,
+			],
 		],
 	],
 	'inquiries' => [
