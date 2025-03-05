@@ -119,9 +119,9 @@ $config['page_config'] = [
 				'excel' => false,
 			],
 			'actions' => [
-				'edit' => false,
+				'edit' => true,
 				'view' => true,
-				'delete' => false,
+				'delete' => true,
 			],
 		],
 		'viewProperties' => [
