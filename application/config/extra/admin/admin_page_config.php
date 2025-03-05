@@ -108,7 +108,8 @@ $config['page_config'] = [
 			],
 		],
 		'viewProperties' => [
-			'comments' => true,
+			'viewType' => 'article',
+			'isComments' => true,
 		],
 	],
 	'notices' => [
@@ -134,6 +135,9 @@ $config['page_config'] = [
 			'actions' => [
 				'view' => false,
 			],
+		],
+		'viewProperties' => [
+			'viewType' => 'article',
 		],
 	],
 	'inquiries' => [
@@ -162,7 +166,8 @@ $config['page_config'] = [
 			],
 		],
 		'viewProperties' => [
-			'comments' => true,
+			'viewType' => 'article',
+			'isComments' => true,
 		]
 	],
 	'myinfo' => [

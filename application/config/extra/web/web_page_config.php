@@ -24,11 +24,13 @@ $config['page_config'] = [
 				'excel' => false,
 			],
 			'actions' => [
+				'edit' => false,
 				'delete' => false,
 			],
 		],
 		'viewProperties' => [
-			'comments' => true,
+			'viewType' => 'article',
+			'isComments' => true,
 		],
 	],
 	'myworks' => [
@@ -57,7 +59,8 @@ $config['page_config'] = [
 			],
 		],
 		'viewProperties' => [
-			'comments' => true,
+			'viewType' => 'article',
+			'isComments' => true,
 		],
 	],
 	'notices' => [
@@ -87,7 +90,8 @@ $config['page_config'] = [
 			],
 		],
 		'viewProperties' => [
-			'comments' => false,
+			'viewType' => 'article',
+			'isComments' => false,
 		],
 	],
 	'inquiries' => [
@@ -118,7 +122,8 @@ $config['page_config'] = [
 			],
 		],
 		'viewProperties' => [
-			'comments' => true,
+			'viewType' => 'article',
+			'isComments' => true,
 		],
 	],
 	'myinfo' => [
