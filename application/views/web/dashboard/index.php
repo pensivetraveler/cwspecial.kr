@@ -1,7 +1,7 @@
 <div class="position-relative">
 	<div class="h-px-800 d-flex flex-column justify-content-center">
 		<div class="hero-text-box text-center">
-			<h2 class="text-primary hero-title fs-2 font-gaeulsopung-b">우리의 작업물을 사용할<br>그 누군가를 상상하며</h2>
+			<h2 class="text-primary hero-title fs-1 font-gaeulsopung-b">우리의 작업물을 사용할<br>그 누군가를 상상하며</h2>
 			<h5 class="mb-8 font-santteutdotum-m">
 				창원대학교 특수교육과 AAC 제작팀
 			</h5>
