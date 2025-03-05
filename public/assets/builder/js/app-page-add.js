@@ -126,7 +126,7 @@ $(function () {
 							};
 						} else {
 							return {
-								callback: 'reload',
+								callback: reload,
 							};
 						}
 					})(),

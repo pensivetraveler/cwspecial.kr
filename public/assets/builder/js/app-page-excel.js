@@ -123,7 +123,7 @@ async function submitData(dataArray, chunkSize = 50) {
 		showAlert({
 			type: 'success',
 			text: 'Registered Successfully',
-			callback: 'reload',
+			callback: reload,
 		});
 	}
 

@@ -57,4 +57,9 @@ $(function() {
 		const isMine = checkMyData();
 		if(isMine) location.href = common.PAGE_EDIT_URI + '/' + common.KEY;
 	});
+
+	$('.btn-article-delete').on('click', function(e) {
+		const isMine = checkMyData();
+		if(isMine) location.href = common.PAGE_EDIT_URI + '/' + common.KEY;
+	});
 });

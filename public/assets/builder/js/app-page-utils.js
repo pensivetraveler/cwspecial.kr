@@ -190,14 +190,10 @@ function showSwalAlert(obj) {
 		},
 	}).then(function (result) {
 		if(obj.callback !== undefined) {
-			if(typeof obj.callback === 'string' && obj.callback.toLowerCase() === 'reload') {
-				location.reload();
+			if(obj.hasOwnProperty('params') && obj.params !== null){
+				callUserFunc(obj.callback, obj.params);
 			}else{
-				if(obj.hasOwnProperty('params') && obj.params !== null){
-					callUserFunc(obj.callback, obj.params);
-				}else{
-					obj.callback();
-				}
+				obj.callback();
 			}
 		}else{
 			// if(obj.type === 'error') location.reload();

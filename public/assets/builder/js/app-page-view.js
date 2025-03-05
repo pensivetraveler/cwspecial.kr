@@ -47,4 +47,42 @@ $(function() {
 	$('.btn-view-list').on('click', function(e) {
 		location.href = common.PAGE_LIST_URI;
 	});
+
+	$('.btn-view-edit').on('click', function(e) {
+		if(common.PAGE_EDIT_URI) location.href = common.PAGE_EDIT_URI + '/' + common.KEY;
+	});
+
+	$('.btn-view-delete').on('click', function(e) {
+		if(!common.KEY) throw new Error(`KEY is not defined`);
+		Swal.fire({
+			title: getLocale('Do you really want to delete?', common.LOCALE),
+			text: getLocale('You can\'t undo this action', common.LOCALE),
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: getLocale('Delete', common.LOCALE),
+			cancelButtonText: getLocale('Cancel', common.LOCALE),
+			customClass: {
+				confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+				cancelButton: 'btn btn-outline-secondary waves-effect'
+			},
+			buttonsStyling: false
+		}).then(function (result) {
+			if (result.isConfirmed) {
+				executeAjax({
+					url: common.API_URI + '/' + common.KEY + (Object.keys(common.API_PARAMS).length > 0 ? '?' + new URLSearchParams(common.API_PARAMS).toString() : ''),
+					method: 'delete',
+					after : {
+						callback: showAlert,
+						params: {
+							type: 'success',
+							title: 'Complete',
+							text: 'Delete Completed',
+							callback: redirect,
+							params: common.PAGE_LIST_URI,
+						},
+					}
+				});
+			}
+		});
+	});
 });
