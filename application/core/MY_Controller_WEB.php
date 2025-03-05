@@ -130,6 +130,11 @@ class MY_Controller_WEB extends MY_Controller
 
     protected function viewApp($data)
     {
+		// css, script 중복 호출 방지
+		$this->addCSS = unravel_list($this->addCSS);
+		$this->addJS['head'] = unravel_list($this->addJS['head']);
+		$this->addJS['tail'] = unravel_list($this->addJS['tail']);
+
         $data['title'] = get_site_title(APP_NAME_EN, $this->titleList);
         $data['addCSS'] = $this->addCSS;
         $data['addJS'] = $this->addJS;
