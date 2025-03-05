@@ -49,7 +49,7 @@ echo form_input(
 		<div class="col-sm-6 text-start btn-view-wrap-left"></div>
 		<div class="col-sm-6 text-end btn-view-wrap-right">
 			<?php foreach ($actions as $action): ?>
-			<button type="button" class="btn btn-outline-primary w-px-150 btn-view-<?=$action?>"><?=lang(ucfirst($action))?></button>
+			<button type="button" class="btn btn-outline-dark btn-view-<?=$action?>"><?=lang(ucfirst($action))?></button>
 			<?php endforeach; ?>
 		</div>
 	</div>

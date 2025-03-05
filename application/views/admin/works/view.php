@@ -66,7 +66,9 @@ extract(trans_formdata_dit_type($viewData));
 					<button type="button" class="btn btn-sm btn-dark w-px-150 btn-pref btn-pref-003" data-pref-cd="003">별로에요 <span class="ms-4 d-inline-block bg-white rounded-circle w-px-18 h-px-18 text-black" id="pref003Cnt">0</span></button>
 				</div>
 				<div class="col-sm-6 text-end btn-wrap-right">
-					<button type="button" class="btn btn-outline-primary w-px-150 btn-view-list"><?=lang('List')?></button>
+					<?php foreach ($actions as $action): ?>
+					<button type="button" class="btn btn-outline-dark btn-view-<?=$action?>"><?=lang(ucfirst($action))?></button>
+					<?php endforeach; ?>
 				</div>
 			</div>
 		</div>
