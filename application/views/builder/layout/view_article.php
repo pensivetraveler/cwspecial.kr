@@ -18,8 +18,24 @@ echo form_input(
 );
 ?>
 <div class="card-header">
-	<div class="mb-4">
+	<div class="mb-4 d-flex align-items-center justify-content-between">
 		<h5 id="subject" class="mb-0 w-100 view-data"><span></span></h5>
+		<div class="dropdown">
+			<button
+					class="btn btn-text-secondary rounded-pill text-muted border-0 p-1"
+					type="button"
+					id="actionBtns"
+					data-bs-toggle="dropdown"
+					aria-haspopup="true"
+					aria-expanded="false">
+				<i class="ri-more-2-line ri-20px"></i>
+			</button>
+			<div class="dropdown-menu dropdown-menu-end" aria-labelledby="actionBtns">
+				<?php foreach ($actions as $action): ?>
+					<a class="dropdown-item text-center btn-view-<?=$action?>" href="javascript:void(0);"><?=lang(ucfirst($action))?></a>
+				<?php endforeach; ?>
+			</div>
+		</div>
 	</div>
 	<div class="d-flex justify-content-between align-items-center">
 		<div class="d-flex align-items-center text-muted">
@@ -43,14 +59,6 @@ echo form_input(
 		<?php endif; ?>
 		<div class="card-body pt-3">
 			<div id="content" class="view-data"></div>
-		</div>
-	</div>
-	<div class="row mt-4 btn-view-wrap">
-		<div class="col-sm-6 text-start btn-view-wrap-left"></div>
-		<div class="col-sm-6 text-end btn-view-wrap-right">
-			<?php foreach ($actions as $action): ?>
-			<button type="button" class="btn btn-outline-dark btn-view-<?=$action?>"><?=lang(ucfirst($action))?></button>
-			<?php endforeach; ?>
 		</div>
 	</div>
 </div>

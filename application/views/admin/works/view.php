@@ -29,8 +29,24 @@ extract(trans_formdata_dit_type($viewData));
 			);
 		?>
 		<div class="card-header">
-			<div class="mb-4">
+			<div class="mb-4 d-flex align-items-center justify-content-between">
 				<h5 id="subject" class="mb-0 w-100 view-data"><span></span></h5>
+				<div class="dropdown">
+					<button
+							class="btn btn-text-secondary rounded-pill text-muted border-0 p-1"
+							type="button"
+							id="actionBtns"
+							data-bs-toggle="dropdown"
+							aria-haspopup="true"
+							aria-expanded="false">
+						<i class="ri-more-2-line ri-20px"></i>
+					</button>
+					<div class="dropdown-menu dropdown-menu-end" aria-labelledby="actionBtns">
+						<?php foreach ($actions as $action): ?>
+							<a class="dropdown-item text-center btn-view-<?=$action?>" href="javascript:void(0);"><?=lang(ucfirst($action))?></a>
+						<?php endforeach; ?>
+					</div>
+				</div>
 			</div>
 			<div class="d-flex justify-content-between align-items-center">
 				<div class="d-flex align-items-center text-muted">
@@ -60,15 +76,10 @@ extract(trans_formdata_dit_type($viewData));
 				</div>
 			</div>
 			<div class="row mt-4 btn-wrap">
-				<div class="col-sm-6 text-start btn-wrap-left">
+				<div class="col-sm-12 text-end btn-wrap-left">
 					<button type="button" class="btn btn-sm btn-dribbble w-px-150 me-4 btn-pref btn-pref-001" data-pref-cd="001">좋아요 <span class="ms-4 d-inline-block bg-white rounded-circle w-px-18 h-px-18 text-black" id="pref001Cnt">0</span></button>
 					<button type="button" class="btn btn-sm btn-linkedin w-px-150 me-4 btn-pref btn-pref-002" data-pref-cd="002">그저 그래요 <span class="ms-4 d-inline-block bg-white rounded-circle w-px-18 h-px-18 text-black" id="pref002Cnt">0</span></button>
 					<button type="button" class="btn btn-sm btn-dark w-px-150 btn-pref btn-pref-003" data-pref-cd="003">별로에요 <span class="ms-4 d-inline-block bg-white rounded-circle w-px-18 h-px-18 text-black" id="pref003Cnt">0</span></button>
-				</div>
-				<div class="col-sm-6 text-end btn-wrap-right">
-					<?php foreach ($actions as $action): ?>
-					<button type="button" class="btn btn-outline-dark btn-view-<?=$action?>"><?=lang(ucfirst($action))?></button>
-					<?php endforeach; ?>
 				</div>
 			</div>
 		</div>
