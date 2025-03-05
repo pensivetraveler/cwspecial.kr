@@ -72,8 +72,9 @@ extract(trans_formdata_dit_type($viewData));
 				<div class="col-sm-6 text-start btn-wrap-left">
 				</div>
 				<div class="col-sm-6 text-end btn-wrap-right">
-					<button type="button" class="btn btn-outline-primary w-px-150 btn-article-list"><?=lang('List')?></button>
-					<button type="button" class="btn btn-outline-primary w-px-150 btn-article-edit"><?=lang('Edit')?></button>
+					<?php foreach ($actions as $action): ?>
+					<button type="button" class="btn btn-outline-dark btn-view-<?=$action?>"><?=lang(ucfirst($action))?></button>
+					<?php endforeach; ?>
 				</div>
 			</div>
 		</div>
