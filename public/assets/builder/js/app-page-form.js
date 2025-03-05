@@ -733,112 +733,145 @@ function refreshPlugins() {
 	updateFormLifeCycle('refreshPlugins');
 }
 
-function checkDuplicate(button) {
-	try {
-		const fieldName = button.getAttribute('data-rel-field');
-		if(!fieldName) throw new Error(`checkDuplicate : fieldName is not defined !`);
+function setFormListItem(selector, data, field) {
+	if(!isValidSelector(selector) || document.querySelector(selector) === null) return;
 
-		const form = button.closest('form');
-		if(!form.hasOwnProperty(fieldName)) throw new Error(`checkDuplicate : fieldName is not valid !`);
-
-		const input = form[fieldName];
-		const hidden = form.querySelector(`[name="${input.name}_unique"]`);
-		const value = input.value;
-		const originalValue = input.getAttribute('data-original-value');
-
-		// 같은 값인 경우 중복 체크 하지 않음.
-		if(originalValue && originalValue === value) return;
-
-		// checked val 임시 처리
-		if(form['_event'] !== undefined) form['_event'].value = 'dup_check';
-		fv.revalidateField(input.name).then((status) => {
-			if(status === 'Valid') {
-				executeAjax({
-					url: common.API_URI + '/checkDuplicate',
-					headers: {
-						'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
-					},
-					data: {
-						field: fieldName,
-						value: input.value,
-					},
-					success: function(response, textStatus, jqXHR) {
-						console.log(response)
-						hidden.value = 1;
-						button.setAttribute('disabled', 'disabled');
-						showAlert({
-							type: 'success',
-							text: response.msg,
-						});
-					},
-				});
-			}else{
-				hidden.value = '';
+	let html = '';
+	const key = field.form_attributes.list_field ?? field.field;
+	if(!isEmpty(data[key])) {
+		let list = [];
+		isArray(data[key]) ? list = data[key] : list.push(data[key]);
+		list.forEach((item) => {
+			if(common.IDENTIFIER && data.hasOwnProperty(common.IDENTIFIER)) item[common.IDENTIFIER] = data[common.IDENTIFIER];
+			const identifier = common.IDENTIFIER?data[common.IDENTIFIER]:null;
+			switch (field.form_attributes.list_type ?? field.subtype) {
+				case 'thumbnail' :
+					html += setFormListItemThumbnail(field, item, identifier);
+					break;
+				case 'youtube' :
+					html += setFormListItemYoutube(field, item, identifier);
+					break;
+				case 'reply_list' :
+					html += setFormListItemReplyList(field, item, identifier);
+					break;
+				default :
+					html += setFormListItemFile(field, item, identifier);
+					break;
 			}
 		});
-	} catch (error) {
-		customErrorHandler(error);
+		document.querySelector(selector).classList.remove('d-none');
+		if(field.subtype === 'readonly') document.querySelector(selector).closest('.form-validation-unit').classList.remove('d-none');
+	}else{
+		document.querySelector(selector).classList.add('d-none');
+		if(field.subtype === 'readonly') document.querySelector(selector).closest('.form-validation-unit').classList.add('d-none');
+	}
+
+	document.querySelector(selector).innerHTML = html;
+}
+
+function setFormListItemFile(field, item, identifier = '') {
+	const url = location.origin+location.pathname;
+	const fullItem = JSON.stringify(item).replace(/"/g, "'");
+	const articleId = item.article_id ?? '';
+	const fileId = item.file_id;
+	if(field.form_attributes.hasOwnProperty('list_sorter') && field.form_attributes.list_sorter) {
+		let output = `
+            <li class="form-list-item list-group-item d-flex justify-content-between align-items-center px-2" data-identifier-val="${identifier}" data-full-item="${fullItem}" data-article-id="${articleId}" data-file-id="${fileId}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <i class="drag-handle cursor-move ri-menu-line align-text-bottom me-2"></i>
+                    <span class="not-draggable">${item.orig_name}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-primary waves-effect p-1" type="button" onclick="downloadFile(${fileId})">
+                        <i class="ri-file-download-line ri-16px align-middle"></i>
+                    </button>
+        `;
+		if(field.form_attributes.list_delete.length > 0){
+			output += `
+                    <button class="btn btn-danger waves-effect p-1 ms-1" type="button" onclick="deleteFile(this, '${field.form_attributes.list_delete}')">
+                        <i class="ri-close-line ri-16px align-middle"></i>
+                    </button>
+            `;
+		}
+		output += `
+                </div>
+            </li>
+        `;
+		return output;
+	}else{
+		return `
+        <div class="form-list-item d-flex align-items-center" data-identifier-val="${identifier}" data-full-item="${fullItem}">
+            <div class="badge text-body text-truncate">
+                <a href="${url}/downloader/${fileId}">
+                    <i class="ri-file-download-fill ri-16px align-middle"></i>
+                    <span class="h6 mb-0 align-middle">${item.orig_name}</span>
+                </a>
+            </div>
+        </div>
+    `;
 	}
 }
 
-function downloadFile(fileId) {
+function setFormListItemThumbnail(field, item, identifier = '') {
 	const url = location.origin+location.pathname;
-	location.href = url+'/downloader/'+fileId;
+	const fullItem = JSON.stringify(item).replace(/"/g, "'");
+	return `
+        <div class="form-list-item d-flex align-items-start flex-column justify-content-center" data-identifier-val="${identifier}" data-full-item="${fullItem}">
+            <div class="d-flex align-items-center justify-content-between w-100 mb-2">
+                <div class="badge text-body text-truncate">
+                    <a href="${url}/downloader/${item.file_id}">
+                        <i class="ri-file-download-fill ri-16px align-middle"></i>
+                        <span class="h6 mb-0 align-middle">${item.orig_name}</span>
+                    </a>
+                </div>
+                <button class="btn btn-danger waves-effect p-1" type="button" onclick="deleteFile(this, 'thumbnail')">
+                    <i class="ri-close-line ri-16px align-middle"></i>
+                </button>
+            </div>
+            <div class="border rounded-3 overflow-hidden">
+                <img src="${item.file_link}" alt="${item.orig_name}" class="mw-100 not-draggable" draggable="false">
+            </div>
+        </div>
+    `;
 }
 
-function deleteFile(btn, type = '') {
-	const form = btn.closest('form');
-	const identifier = form[common.IDENTIFIER].value;
-
-	const listWrap = btn.closest('ul');
-	const itemWrap = btn.closest('.form-list-item');
-	if(!itemWrap.hasAttribute('data-full-item')) return;
-	const item = JSON.parse(itemWrap.getAttribute('data-full-item').replace(/'/g, '"'));
-
-	executeAjax({
-		url : common.API_URI + '/deleteFile/' + identifier + (type ? '?type='+type : ''),
-		headers : {
-			'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
-		},
-		method : 'patch',
-		data : item,
-		success: function(response) {
-			console.log(response)
-			showAlert({
-				type: 'success',
-				title: 'Complete',
-				text: response.msg,
-				callback: reload,
-			});
-			itemWrap.remove();
-			if(!listWrap.children.length) listWrap.classList.add('d-none');
-		},
-	});
+function setFormListItemPreview(field, item, identifier = '') {
+	const url = location.origin+location.pathname;
+	const fullItem = JSON.stringify(item).replace(/"/g, "'");
+	return `
+        <div class="form-list-item d-flex align-items-center" data-identifier-val="${identifier}" data-full-item="${fullItem}">
+            <div class="badge text-body text-truncate">
+                <a href="${url}/downloader/${item.file_id}">
+                    <i class="ri-file-download-fill ri-16px align-middle"></i>
+                    <span class="h6 mb-0 align-middle">${item.orig_name}</span>
+                </a>
+            </div>
+        </div>
+    `;
 }
 
-function deleteRepeater(repeater, deleteElement) {
-	const data = {};
-	$(repeater).find('input, select, textarea').each(function(i , item) {
-		if(item.type === 'file') return;
-		data[item.getAttribute('data-group-field')] = item.value;
-	});
+function setFormListItemYoutube(field, item, identifier = '') {
+	const url = location.origin+location.pathname;
+	const fullItem = JSON.stringify(item).replace(/"/g, "'");
+	return `
+        <div class="d-flex align-items-center" data-identifier-val="${identifier}" data-full-item="${fullItem}">
+            <div class="badge text-body text-truncate">
+                <a href="#" role="button" data-bs-toggle="modal" data-bs-target="#youTubeModal" data-value="${item}">
+                    <i class="ri-link mt-0 ri-16px align-middle"></i>
+                    <span class="h6 mb-0 align-middle">https://youtu.be/${item}</span>
+                </a>
+            </div>
+        </div>
+    `;
+}
 
-	executeAjax({
-		url : common.API_URI + '/deleteRepeater/' + identifier,
-		headers : {
-			'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
-		},
-		method : 'patch',
-		data : data,
-		success: function(response) {
-			console.log(response)
-			showAlert({
-				type: 'success',
-				title: 'Complete',
-				text: response.msg,
-			});
-
-			$(repeater).slideUp(deleteElement)
-		},
-	});
+function setFormListItemReplyList(field, item, identifier = '') {
+	const url = location.origin+location.pathname;
+	const fullItem = JSON.stringify(item).replace(/"/g, "'");
+	return `
+        <li class="form-list-item mb-1 ps-0 p-2" data-identifier-val="${identifier}" data-full-item="${fullItem}">
+            <p class="h6 mb-1">${item.content}</p>
+            <p class="text-end mb-0">${item.created_id} ${item.created_dt}</p>
+        </li>
+    `;
 }

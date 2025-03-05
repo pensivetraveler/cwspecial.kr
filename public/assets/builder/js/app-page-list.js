@@ -607,6 +607,8 @@ function renderColumnHTML(data, full, column, wrap, inner) {
 				}
 			}
 		}
+
+		if(column.onclick.kind === 'view') wrap.classList.add('text-primary', 'text-decoration-underline')
 	}
 
 	Object.entries(attrs).map(([key, value]) => wrap.setAttribute(key, value));
@@ -657,6 +659,13 @@ function getColumnOnclick(data, full, column) {
 		if(!column[key].kind) throw new Error(`getColumnOnclick : onclick kind is not defined. (${column.field})`);
 
 		switch (column[key].kind) {
+			case 'view' :
+				if(common.PAGE_VIEW_URI) {
+					return `location.href="${common.PAGE_VIEW_URI}/${full[common.IDENTIFIER]}"`;
+				}else{
+					return `openViewModal(${full[common.IDENTIFIER]})`;
+				}
+				break;
 			case 'popup' :
 				break;
 			case 'redirect' :
@@ -912,4 +921,21 @@ function getListActions(btns, dataId) {
 	btnHtml += '</div>';
 
 	return btnHtml;
+}
+
+function openViewModal(dataId) {
+	$.ajax({
+		url : common.API_URI + '/' + dataId + '?' + new URLSearchParams(common.API_PARAMS).toString(),
+		headers: {
+			'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
+		},
+		dataType: 'json',
+		success: function (response, textStatus, jqXHR) {
+			console.log(response)
+			applyViewData(response.data[0]);
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			console.log(jqXHR)
+		}
+	});
 }

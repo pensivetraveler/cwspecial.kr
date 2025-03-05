@@ -20,6 +20,7 @@
 		<script src="<?php echo base_url('public/assets/builder/js/front-main.js');?>"></script>
 
 		<!-- Page JS -->
+		<script src="<?php echo base_url('public/assets/builder/js/app-page-ajax.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/js/app-page-form.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/js/app-page-event.js');?>"></script>
 		<script src="<?php echo base_url('public/assets/builder/js/app-page-validators.js');?>"></script>
