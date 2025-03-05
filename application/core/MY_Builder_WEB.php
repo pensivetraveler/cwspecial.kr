@@ -118,12 +118,12 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			];
 		}
 
-		$data['buttons'] = [];
-		foreach ($this->pageConfig['properties']['allows'] as $method) {
-			if(in_array($method, ['list','edit'])){
-				$data['buttons'][] = $method;
-			}
+		$data['actions'] = reformat_bool_type_list($this->pageConfig['viewProperties']['actions']);
+		foreach ($data['actions'] as $i=>$action) {
+			if($action === 'delete') continue;
+			if(!in_array($action, $this->pageConfig['properties']['allows'])) unset($data['actions'][$i]);
 		}
+		$data['actions'] = array_values($data['actions']);
 
 		$data['viewType'] = $this->pageConfig['viewProperties']['viewType'];
 
@@ -261,7 +261,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			$pageConfig = $this->config->get("page_config")[$this->router->class]??$this->config->get("page_config")[strtolower($this->router->class)];
 			if(is_empty($pageConfig, 'properties')) $pageConfig['properties'] = [];
 			if(is_empty($pageConfig['properties'], 'baseMethod')) $pageConfig['properties']['baseMethod'] = $pageConfig['type'];
-			if(array_key_exists( 'allows', $pageConfig['properties'])) $pageConfig['properties']['allows'] = [];
+			if(!array_key_exists( 'allows', $pageConfig['properties'])) $pageConfig['properties']['allows'] = [];
 			if(empty($pageConfig['properties']['allows'])) $pageConfig['properties']['allows'][] = $pageConfig['properties']['baseMethod'];
 		}
 		foreach ($this->config->get("page_base_config", []) as $key=>$val) {
@@ -306,12 +306,8 @@ class MY_Builder_WEB extends MY_Controller_WEB
 				'LIST_PLUGIN' => $this->pageConfig['listProperties']['plugin'],
 				'LIST_FILTERS' => $this->setListFilters(),
 				'LIST_BUTTONS' => $this->pageConfig['listProperties']['buttons'],
-				'LIST_ACTIONS' => array_keys(array_filter($this->pageConfig['listProperties']['actions'], function ($value) {
-					return $value === true || $value === 1;
-				})),
-				'LIST_EXPORTS' => array_keys(array_filter($this->pageConfig['listProperties']['exports'], function ($value) {
-					return $value === true || $value === 1;
-				})),
+				'LIST_ACTIONS' => reformat_bool_type_list($this->pageConfig['listProperties']['actions']),
+				'LIST_EXPORTS' => reformat_bool_type_list($this->pageConfig['listProperties']['exports']),
 			]);
 		}
 
