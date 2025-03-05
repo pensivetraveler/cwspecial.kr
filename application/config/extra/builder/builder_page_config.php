@@ -51,9 +51,10 @@ $config['page_base_config'] = [
 		'viewType' => 'base',
 		'extraFormConfig' => '',
 		'isComments' => false,
-		'buttons' => [
-			'edit' => true,
+		'actions' => [
 			'list' => true,
+			'edit' => true,
+			'delete' => true,
 		],
 	],
 	'tabProperties' => [
