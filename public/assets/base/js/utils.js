@@ -356,8 +356,20 @@ function elementToSelector(element) {
 	return selector;
 }
 
-function redirect(uri) {
-	location.href = uri;
+function redirect(uri = null) {
+	if(uri === null) {
+		back();
+	}else{
+		location.href = uri;
+	}
+}
+
+function reload() {
+	location.reload();
+}
+
+function back() {
+	history.back();
 }
 
 function logFormData(formData) {
