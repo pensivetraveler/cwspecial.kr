@@ -126,6 +126,8 @@ function showAlert(obj = {}) {
 		if(!['success', 'warning', 'error'].includes(obj.type)) throw new Error(`showAlert : Type is not allowed. ${obj.type}`);
 		if(obj.title !== undefined) title = getLocale(obj.title, common.LOCALE);
 		if(obj.text !== undefined || obj.html !== undefined) text = getLocale(obj.text, common.LOCALE);
+		console.log(text)
+		console.log(obj.text)
 
 		switch (obj.type) {
 			case 'success' :
@@ -262,7 +264,7 @@ function executeAjax(obj = {}, test = false) {
 			if (Math.floor(response.code/10) === 200) {
 				if(obj.after !== undefined && obj.after.callback !== undefined) {
 					if(obj.after.callback.name === 'showAlert'){
-						obj.after.params.text = response.msg;
+						if(obj.after.params.text === undefined) obj.after.params.text = response.msg;
 						showAlert(obj.after.params);
 					}else{
 						callUserFunc(obj.after.callback, obj.after.params);
