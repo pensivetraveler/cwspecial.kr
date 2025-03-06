@@ -42,4 +42,4 @@ $config['kakao_login']['callback_url'] = 'kakao/callback';
 $config['kakao_login']['cliend_id'] = '';
 $config['kakao_login']['secret'] = '';
 
-include './custom_options.php';
+require_once __DIR__.'/custom_options.php';
