@@ -168,7 +168,6 @@ class Auth extends Common
 			'code' => DATA_CREATED,
 			'data' => [
 				$this->Model_Child->identifier => $dto[$this->Model_Child->identifier],
-				'redirectTo' => '/auth/complete',
 			],
 		], RestController::HTTP_CREATED);
 	}

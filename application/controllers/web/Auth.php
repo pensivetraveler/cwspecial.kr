@@ -71,6 +71,7 @@ class Auth extends Common
 			'IDENTIFIER' => $this->setIdentifier(),
 			'FORM_DATA' => $this->setFormData(),
 			'FORM_REGEXP' => $this->config->item('regexp'),
+			'REDIRECT_URI' => '/auth/complete',
 		]);
 
 		$this->addCSS[] = [
