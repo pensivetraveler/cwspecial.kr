@@ -203,7 +203,7 @@ $(function() {
 			});
 		};
 
-		const isMine = checkMyData(false);
+		const isMine = isMyData(common.KEY, false);
 		if(!isMine || document.getElementById('formRecord').open_yn.value === 'Y') {
 			$('.btn-work-temporary').addClass('d-none');
 		}
@@ -224,7 +224,7 @@ $(function() {
 	if($('body').data('method') === 'view') {
 		$('.btn-pref').on('click', function(e) {
 			const prefCd = $(this).data('pref-cd');
-			const isMine = checkMyData(false);
+			const isMine = isMyData(common.KEY, false);
 			if(!isMine) {
 				if(this.classList.contains('clicked')) {
 					removeArticlePreference(prefCd);

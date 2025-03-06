@@ -67,7 +67,7 @@ $(function() {
 		});
 
 		if($('body').data('method') === 'edit') {
-			const isMine = checkMyData(false);
+			const isMine = isMyData(common.KEY, false);
 			if(!isMine || document.getElementById('formRecord').open_yn.value === 'Y') {
 				$('.btn-work-temporary').addClass('d-none');
 			}
