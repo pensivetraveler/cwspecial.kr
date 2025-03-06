@@ -90,8 +90,8 @@ $config['list_inquiries_config'] = [
 		'label' => 'lang:common.recent_dt',
 	],
 	[
-		'field' => 'view_count',
-		'label' => 'lang:article.view_count',
+		'field' => 'reply_yn',
+		'label' => 'lang:article.reply_yn',
 	],
 ];
 
