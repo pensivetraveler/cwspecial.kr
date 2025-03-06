@@ -29,6 +29,7 @@ $config['page_base_config'] = [
 	'listProperties' => [
 		'listConfig' => '',
 		'plugin' => 'datatable',
+		'isCheckbox' => false,
 		'exports' => [
 			'print' => false,
 			'csv' => false,
