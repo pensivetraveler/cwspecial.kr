@@ -118,7 +118,7 @@ $config['page_config'] = [
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
-			'allows' => ['list','add','edit'],
+			'allows' => ['list','view'],
 			'formExist' => true,
 			'listExist' => true,
 		],
@@ -133,7 +133,6 @@ $config['page_config'] = [
 				'excel' => false,
 			],
 			'actions' => [
-				'view' => false,
 			],
 		],
 		'viewProperties' => [

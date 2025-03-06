@@ -7,6 +7,9 @@ $config['list_myworks_config'] = [
 	[
 		'field' => 'subject',
 		'label' => 'lang:article.subject',
+		'onclick' => [
+			'kind' => 'view',
+		],
 	],
 	[
 		'field' => 'open_yn',
@@ -30,6 +33,9 @@ $config['list_works_config'] = [
 	[
 		'field' => 'subject',
 		'label' => 'lang:article.subject',
+		'onclick' => [
+			'kind' => 'view',
+		],
 	],
 	[
 		'field' => 'created_id',
@@ -49,6 +55,9 @@ $config['list_notices_config'] = [
 	[
 		'field' => 'subject',
 		'label' => 'lang:article.subject',
+		'onclick' => [
+			'kind' => 'view',
+		],
 	],
 	[
 		'field' => 'created_id',
@@ -68,6 +77,9 @@ $config['list_inquiries_config'] = [
 	[
 		'field' => 'subject',
 		'label' => 'lang:article.subject',
+		'onclick' => [
+			'kind' => 'view',
+		],
 	],
 	[
 		'field' => 'created_id',
