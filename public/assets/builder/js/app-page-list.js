@@ -247,11 +247,17 @@ $(function () {
 		preDrawCallback: function(settings) {
 			// console.log('preDrawCallback', settings)
 			// $('<div class="loading">Loading</div>').appendTo('body');
+			if(appPlugins.list.datatable.preDrawCallback !== null && typeof appPlugins.list.datatable.preDrawCallback === 'function'){
+				appPlugins.list.datatable.preDrawCallback(settings)
+			}
 		},
 		initComplete: function (settings, json) {
 			// ajax 옵션을 사용해서 테이블이 완전히 초기화되고 데이터가 로드되고 그려지는 시점
 			// console.log('initComplete', settings);
 			// $('div.loading').remove();
+			if(appPlugins.list.datatable.initComplete !== null && typeof appPlugins.list.datatable.initComplete === 'function'){
+				appPlugins.list.datatable.initComplete(settings, json)
+			}
 
 			if($('#formFilter').length > 0) {
 				$('#formFilter').on('preparePlugins', (e) => {
@@ -280,6 +286,15 @@ $(function () {
 		drawCallback: function(settings) {
 			// console.log('drawCallback', settings)
 			// 테이블의 draw 이벤트가 발생할 때마다 취해야 하는 action 을 실행
+			if(appPlugins.list.datatable.drawCallback !== null && typeof appPlugins.list.datatable.drawCallback === 'function'){
+				appPlugins.list.datatable.drawCallback(settings)
+			}
+		},
+		rowCallback: function (row, data, displayNum, displayIndex, dataIndex) {
+			// data[3] -> Age 컬럼 값이 40 이상이면 행 색깔 변경
+			if(appPlugins.list.datatable.rowCallback !== null && typeof appPlugins.list.datatable.rowCallback === 'function'){
+				appPlugins.list.datatable.rowCallback(row, data, displayNum, displayIndex, dataIndex)
+			}
 		}
 	});
 
