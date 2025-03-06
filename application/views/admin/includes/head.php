@@ -107,47 +107,14 @@ $bodyAttrs = implode(' ', array_map(
 	<script src="<?php echo base_url('public/assets/builder/js/app-page-errors.js');?>"></script>
 
 	<?php if(!isset($status_code) || !in_array($status_code, [404, 500])): ?>
-		<script>
-			const appName = '<?=$this->config->config['phptojs']['namespace']?>';
-			window.<?=$this->config->config['phptojs']['namespace']?> = window.<?=$this->config->config['phptojs']['namespace']?> || {};
-			const appPlugins = {
-				list: {},
-				view: {},
-				form: {},
-			};
+	<script>
+		const appName = '<?=$this->config->config['phptojs']['namespace']?>';
+		window.<?=$this->config->config['phptojs']['namespace']?> = window.<?=$this->config->config['phptojs']['namespace']?> || {};
+	</script>
+	<script src="<?php echo base_url('public/assets/builder/js/builder-common.js');?>"></script>
 
-			if(!window.<?=$this->config->config['phptojs']['namespace']?>.hasOwnProperty('ERRORS'))
-				window.<?=$this->config->config['phptojs']['namespace']?>.ERRORS = [];
-
-			window.onerror = function(event, source, lineno, colno, error) {
-				let message, stack = [];
-
-				if(event instanceof jQuery.Event) {
-					console.log(source);
-					message = colno;
-					source = elementToSelector(event.target);
-					lineno = colno = null;
-				}else{
-					message = event;
-				}
-				if(error !== undefined && error.hasOwnProperty('stack')) stack = error.stack;
-
-				// setJavascriptErrorModal(message, source, lineno, colno, stack);
-				<?=$this->config->config['phptojs']['namespace']?>.ERRORS.push(getJavascriptErrorObject(message, source, lineno, colno, stack));
-
-				// 후킹 작업 후 true를 리턴하면 기본 동작을 막을 수 있음
-				return false;
-			};
-
-			window.onload = function(){
-				setTimeout(function() {
-					showErrorModal(document.getElementById('errorModal'), <?=$this->config->config['phptojs']['namespace']?>.ERRORS);
-				}, 500)
-			};
-		</script>
-
-		<?php if(isset($addJS['head'])) add_javascript($addJS['head']); ?>
-		<?php if(property_exists($this, 'phptojs')) echo $this->phptojs->getJsVars(); ?>
+	<?php if(isset($addJS['head'])) add_javascript($addJS['head']); ?>
+	<?php if(property_exists($this, 'phptojs')) echo $this->phptojs->getJsVars(); ?>
 	<?php endif; ?>
 
 	<?php if(ENVIRONMENT === 'production'): ?>
