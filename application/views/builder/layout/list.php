@@ -118,7 +118,9 @@
 					<thead>
 						<tr>
 							<th></th>
+							<?php if($isCheckbox): ?>
 							<th></th>
+							<?php endif; ?>
 							<?php foreach ($columns as $column): ?>
 							<th><?=lang($column['label'])?></th>
 							<?php endforeach; ?>

@@ -27,7 +27,7 @@ $(function () {
 	// Datatable
 	if(!dt_table.length) throw new Error(`dt_table is not defined!`);
 	if(!common.LIST_COLUMNS.length) throw new Error(`check common LIST_COLUMNS.`);
-	if(dt_table.find('thead th').length !== common.LIST_COLUMNS.length+2)
+	if(dt_table.find('thead th').length !== 1+common.LIST_CHEKBOX+common.LIST_COLUMNS.length)
 		throw new Error(`th and LIST_COLUMNS length are not matched.`);
 
 	var dt = dt_table.DataTable({
@@ -97,7 +97,9 @@ $(function () {
 		columns: [
 			// columns according to JSON
 			{ data: null },
-			{ data: null },
+			...(common.LIST_CHEKBOX
+				? [{ data: null }]
+				: []),
 			...common.LIST_COLUMNS.map(function (column) {
 				return {
 					data : column.field,
@@ -117,23 +119,27 @@ $(function () {
 					return '';
 				}
 			},
-			{
-				// For Checkboxes
-				targets: 1,
-				orderable: false,
-				render: function () {
-					return '<input type="checkbox" class="dt-checkboxes form-check-input">';
-				},
-				checkboxes: {
-					selectAllRender: '<input type="checkbox" class="form-check-input">'
-				}
-			},
+			...(common.LIST_CHEKBOX
+				? [
+					{
+						// For Checkboxes
+						targets: 1,
+						orderable: false,
+						render: function () {
+							return '<input type="checkbox" class="dt-checkboxes form-check-input">';
+						},
+						checkboxes: {
+							selectAllRender: '<input type="checkbox" class="form-check-input">'
+						}
+					},
+				]
+			: []),
 			// ...fields,
 			...common.LIST_COLUMNS.map(function (column, index) {
 				switch (column.format) {
 					case 'row_num' : // Row Num
 						return {
-							targets: 2,
+							targets: 1+common.LIST_CHEKBOX,
 							searchable: false,
 							orderable: false,
 							render: function (data, type, full, meta) {
@@ -142,7 +148,7 @@ $(function () {
 						};
 					case 'actions' : // Actions
 						return {
-							targets: 2+common.LIST_COLUMNS.length-1,
+							targets: 1+common.LIST_CHEKBOX+common.LIST_COLUMNS.length-1,
 							searchable: false,
 							orderable: false,
 							render: function (data, type, full, meta) {
@@ -151,7 +157,7 @@ $(function () {
 						}
 					case 'select' :
 						return {
-							targets: 2+index,
+							targets: 1+common.LIST_CHEKBOX+index,
 							searchable: false,
 							orderable: false,
 							render: renderSelectColumn,
@@ -160,7 +166,7 @@ $(function () {
 						return {
 							searchable: true,
 							orderable: false,
-							targets: 2+index,
+							targets: 1+common.LIST_CHEKBOX+index,
 							render: function (data, type, full, meta) {
 								if(column.render && column.render.callback && typeof window[`${column.render.callback}`] !== 'function'){
 									console.warn(`DataTable : '${column.render.callback}' render function is not defined.`);
@@ -187,7 +193,7 @@ $(function () {
 				}
 			}),
 		],
-		order: [[2, 'desc']],
+		order: [[1+common.LIST_CHEKBOX, 'desc']],
 		dom:
 			'<"card-header d-flex border-top rounded-0 flex-wrap pb-md-0 pt-0 justify-content-end"' +
 			// '<"d-flex justify-content-start align-items-center me-5 ms-n2"<"search-category-wrap me-2">f>' +

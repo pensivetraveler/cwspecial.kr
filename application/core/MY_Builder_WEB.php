@@ -93,6 +93,8 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		}
 		$data['formData'] = $formData;
 
+		$data['isCheckbox'] = $this->pageConfig['listProperties']['isCheckbox'];
+
 		$this->viewApp($data);
 	}
 
@@ -308,6 +310,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 				'LIST_BUTTONS' => $this->pageConfig['listProperties']['buttons'],
 				'LIST_ACTIONS' => reformat_bool_type_list($this->pageConfig['listProperties']['actions']),
 				'LIST_EXPORTS' => reformat_bool_type_list($this->pageConfig['listProperties']['exports']),
+				'LIST_CHEKBOX' => $this->pageConfig['listProperties']['isCheckbox'],
 			]);
 		}
 
