@@ -103,6 +103,7 @@ class Auth extends Common
 		if(!$count) $this->response(['code' => USER_NOT_EXIST,]);
 
 		$userData = $this->Model->getData([], $params);
+		if($userData->withdraw_yn === 'Y') $this->response(['code' => WITHDRWAN_USER]);
 		if(!custom_password_verify($userData->password, $password, true)) $this->response(['code' => PASSWORD_IS_NOT_MATCHED, 'data' => []]);
 
 		if ($this->input->post('autologin')) {
