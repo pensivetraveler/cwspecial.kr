@@ -279,7 +279,11 @@ $(function () {
 
 	$('.dataTables_wrapper').on('click', '.view-record', function() {
 		if(!common.IDENTIFIER) throw new Error(`Identifier is not defined`);
-		location.href = common.PAGE_VIEW_URI + '/' + $(this).data('id');
+		if(common.PAGE_VIEW_URI) {
+			location.href = common.PAGE_VIEW_URI + '/' + $(this).data('id');
+		}else{
+			openViewModal($(this).data('id'));
+		}
 	});
 
 	$('.dataTables_wrapper tbody').on('click', '.delete-record', function () {
