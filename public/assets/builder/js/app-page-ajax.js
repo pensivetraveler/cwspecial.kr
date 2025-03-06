@@ -403,5 +403,28 @@ function deleteData(dataId = null, callback = {}) {
 			});
 		}
 	});
+}
 
+function isMyData(dataId, showError = true) {
+	let result = false;
+	$.ajax({
+		async: false,
+		url: common.API_URI + '/isMyData/' + dataId,
+		headers: {
+			'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
+		},
+		dataType: 'json',
+		success: function (response, textStatus, jqXHR) {
+			result = true;
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			if(showError) {
+				showAlert({
+					type: 'warning',
+					text: jqXHR.responseJSON.msg,
+				});
+			}
+		},
+	});
+	return result;
 }

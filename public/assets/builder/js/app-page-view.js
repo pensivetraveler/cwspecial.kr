@@ -25,8 +25,18 @@ function applyViewData(dataId) {
 	document.body.setAttribute('data-onload', true);
 }
 
+function setButtonsDisplay() {
+	const isMine = isMyData(common.KEY);
+	if(!isMine) {
+		$('.btn-view-edit').remove();
+		$('.btn-view-delete').remove();
+	}
+}
+
 $(function() {
 	applyViewData(common.KEY);
+
+	setButtonsDisplay();
 
 	$('.btn-view-list').on('click', function(e) {
 		location.href = common.PAGE_LIST_URI;
@@ -39,8 +49,8 @@ $(function() {
 	$('.btn-view-delete').on('click', function(e) {
 		if(!common.KEY) throw new Error(`KEY is not defined`);
 		deleteData(common.KEY, {
-			callback: dt.ajax.reload,
-			params: [null, false]
+			callback: redirect,
+			params: common.PAGE_LIST_URI,
 		});
 	});
 });
