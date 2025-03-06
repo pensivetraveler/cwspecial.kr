@@ -284,37 +284,10 @@ $(function () {
 
 	$('.dataTables_wrapper tbody').on('click', '.delete-record', function () {
 		if(!common.IDENTIFIER) throw new Error(`Identifier is not defined`);
-
 		const id = $(this).data('id');
-		Swal.fire({
-			title: getLocale('Do you really want to delete?', common.LOCALE),
-			text: getLocale('You can\'t undo this action', common.LOCALE),
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonText: getLocale('Delete', common.LOCALE),
-			cancelButtonText: getLocale('Cancel', common.LOCALE),
-			customClass: {
-				confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
-				cancelButton: 'btn btn-outline-secondary waves-effect'
-			},
-			buttonsStyling: false
-		}).then(function (result) {
-			if (result.isConfirmed) {
-				executeAjax({
-					url: common.API_URI + '/' + id + (Object.keys(common.API_PARAMS).length > 0 ? '?' + new URLSearchParams(common.API_PARAMS).toString() : ''),
-					method: 'delete',
-					after : {
-						callback: showAlert,
-						params: {
-							type: 'success',
-							title: 'Complete',
-							text: 'Delete Completed',
-							callback: dt.ajax.reload,
-							params: [null, false]
-						},
-					}
-				});
-			}
+		deleteData(id, {
+			callback: dt.ajax.reload,
+			params: [null, false]
 		});
 	});
 
@@ -924,18 +897,6 @@ function getListActions(btns, dataId) {
 }
 
 function openViewModal(dataId) {
-	$.ajax({
-		url : common.API_URI + '/' + dataId + '?' + new URLSearchParams(common.API_PARAMS).toString(),
-		headers: {
-			'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
-		},
-		dataType: 'json',
-		success: function (response, textStatus, jqXHR) {
-			console.log(response)
-			applyViewData(response.data[0]);
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			console.log(jqXHR)
-		}
-	});
+	const data = getData(dataId);
+	console.log(data)
 }

@@ -341,3 +341,67 @@ function deleteRepeater(repeater, deleteElement) {
 		},
 	});
 }
+
+function getData(dataId = null) {
+	if(!dataId) throw new Error(`dataId is not defined`);
+	let data = null;
+	$.ajax({
+		async: false,
+		url : common.API_URI + '/' + dataId + '?' + new URLSearchParams(common.API_PARAMS).toString(),
+		headers: {
+			'Authorization' : common.HOOK_PHPTOJS_VAR_TOKEN,
+		},
+		dataType: 'json',
+		success: function (response, textStatus, jqXHR) {
+			data = response.data[0];
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			console.log(jqXHR)
+		}
+	});
+	return data;
+}
+
+function deleteData(dataId = null, callback = {}) {
+	if(!dataId) throw new Error(`dataId is not defined`);
+
+	Swal.fire({
+		title: getLocale('Do you really want to delete?', common.LOCALE),
+		text: getLocale('You can\'t undo this action', common.LOCALE),
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonText: getLocale('Delete', common.LOCALE),
+		cancelButtonText: getLocale('Cancel', common.LOCALE),
+		customClass: {
+			confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+			cancelButton: 'btn btn-outline-secondary waves-effect'
+		},
+		buttonsStyling: false
+	}).then(function (result) {
+		if (result.isConfirmed) {
+			if(Object.keys(callback).length === 0) {
+				if(location.origin+location.pathname === common.PAGE_LIST_URI) {
+					callback.callback = reload;
+				}else{
+					callback.callback = redirect;
+					callback.params = common.PAGE_LIST_URI;
+				}
+			}
+
+			executeAjax({
+				url: common.API_URI + '/' + dataId + (Object.keys(common.API_PARAMS).length > 0 ? '?' + new URLSearchParams(common.API_PARAMS).toString() : ''),
+				method: 'delete',
+				after : {
+					callback: showAlert,
+					params: {
+						type: 'success',
+						title: 'Complete',
+						text: 'Delete Completed',
+						...callback,
+					},
+				}
+			});
+		}
+	});
+
+}
