@@ -114,7 +114,7 @@ $config['list_inquiries_config'] = [
 		'label' => 'lang:common.created_id',
 	],
 	[
-		'field' => 'recent_dt',
-		'label' => 'lang:common.recent_dt',
+		'field' => 'reply_yn',
+		'label' => 'lang:article.reply_yn',
 	],
 ];

@@ -40,6 +40,13 @@ class Articles extends Common
 			'prefer_cd' => 'PRF003',
 		]);
 
+		$this->db->where_in('created_id', $this->Model_User->getList(['user_id'], [
+			'user_cd' => 'USR001'
+		]));
+		$data->reply_yn = $this->Model_Comment->getCnt([
+			'article_id' => $data->article_id,
+		]) > 0;
+
 		return parent::viewAfter($data);
 	}
 
