@@ -45,21 +45,29 @@ class MY_Builder_API extends MY_Controller_API
 	protected function loadConfigs()
 	{
 		if($this->uri->segment(1) === 'api'){
-			$flag = 'web';
+			$this->flag = 'web';
 		}else{
-			$flag = $this->flag??$this->uri->segment(1);
+			$this->flag = $this->flag??$this->uri->segment(1);
 		}
 
-		$this->config->load('extra/builder/builder_base_config', false);
-		$this->config->load('extra/builder/builder_form_config', false);
+		foreach (['builder_base_config', 'builder_form_config'] as $config) {
+			$this->config->load('extra/builder/'.$config, false);
+		}
+
 		require_once APPPATH . 'config/extra/builder/builder_base_constants.php';
 		$this->load->helper(["builder/builder_web","builder/builder_base","builder/builder_form",]);
+		$this->lang->load("builder/base", $this->config->item('language'));
+		$this->lang->load('builder/form_validation', $this->config->item('language'));
 
-		foreach (glob(APPPATH . "config/extra/{$flag}/*_config.php") as $file) {
-			$this->config->load("extra/{$flag}/" . substr(basename($file),0,strpos(basename($file),'.')));
+		if(!$this->flag) show_error("Platform flag is not set.");
+
+		$this->lang->load("{$this->flag}/custom", $this->config->item('language'));
+		$this->lang->load("{$this->flag}/nav", $this->config->item('language'));
+		$this->lang->load("{$this->flag}/form", $this->config->item('language'));
+		foreach (glob(APPPATH . "config/extra/{$this->flag}/*_config.php") as $file) {
+			$this->config->load("extra/{$this->flag}/" . substr(basename($file),0,strpos(basename($file),'.')));
 		}
-
-		foreach (glob(APPPATH . "config/extra/{$flag}/*_constants.php") as $file) {
+		foreach (glob(APPPATH . "config/extra/{$this->flag}/*_constants.php") as $file) {
 			require_once $file;
 		}
 	}
@@ -410,19 +418,41 @@ class MY_Builder_API extends MY_Controller_API
 			$groupConfig = array_filter($config, function($item) use ($group) {
 				return $item['group'] === $group;
 			});
+			$this->form_validation->set_rules($groupConfig);
 
 			if($group === 'base') {
-				if($this->form_validation->run($groupConfig) === false) {
+				if($this->form_validation->run() === false) {
 					$errors = array_merge(
 						$errors,
 						$this->setValidateFormErrors(validation_errors_array(), $method),
 					);
 				}
 			}else{
+				$enveloped = $attr['envelope_name'];
+				$targetData = [];
+				if($enveloped) {
+					$targetData = $this->input->post_put($group);
+				}else{
+					foreach ($this->input->post_put() as $field => $value) {
+						if(in_array($field, array_column($groupConfig, 'field'))){
+							$targetData[$field] = $value;
+						}
+					}
+				}
+
 				if($attr['group_repeater']) {
-					foreach ($this->input->post_put($group) as $i=>$item) {
+					$cnt = 0;
+					foreach ($targetData as $k => $v) {
+						$targetData[$k] = array_values($v);
+						if($cnt === 0) $cnt = count($v);
+						$cnt = min($cnt, count($v));
+					}
+
+					for($i = 0; $i <= $cnt; $i++) {
+						$item = [];
+						foreach ($targetData as $k => $v) $item[$k] = $v[$i];
 						$this->form_validation->set_data($item);
-						if($this->form_validation->run($groupConfig) === false) {
+						if($this->form_validation->run() === false) {
 							$errors = array_merge(
 								$errors,
 								$this->setValidateFormErrors(validation_errors_array(), $method, $group, $attr, $i),
@@ -430,8 +460,8 @@ class MY_Builder_API extends MY_Controller_API
 						}
 					}
 				}else{
-					$this->form_validation->set_data($this->input->post_put($group));
-					if($this->form_validation->run($groupConfig) === false) {
+					$this->form_validation->set_data($targetData);
+					if($this->form_validation->run() === false) {
 						$errors = array_merge(
 							$errors,
 							$this->setValidateFormErrors(validation_errors_array(), $method, $group, $attr),
