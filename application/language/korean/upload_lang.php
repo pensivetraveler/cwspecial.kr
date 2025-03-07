@@ -26,3 +26,5 @@ $lang['upload_no_filepath'] = '업로드 경로를 지정하여야 합니다.';
 $lang['upload_no_file_types'] = '허용할 파일형식을 지정하세요.';
 $lang['upload_bad_filename'] = '이미 존재하는 파일입니다.';
 $lang['upload_not_writable'] = '업로드 폴더에 파일을 작성할 수 없습니다.';
+
+$lang['allowed_maximum_upload_limit'] = '업로드 가능 최대 용량 : %s';
