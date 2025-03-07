@@ -456,6 +456,10 @@ async function getExtensionsForMimeType(mimeType) {
 	}
 }
 
+function nl2br(str) {
+	return str.replace(/\n/g, '<br>');
+}
+
 // 리스너를 추적하는 코드
 (function() {
 	var eventListeners = [];
