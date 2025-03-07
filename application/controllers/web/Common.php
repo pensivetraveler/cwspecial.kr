@@ -7,9 +7,9 @@ class Common extends MY_Builder_WEB
 	public string $viewPath;
 	public bool $formConfigExist;
 	public array $navAuth;
-	public bool $isLogin;
-	public bool $isAdmin;
-	public bool $isApproved;
+	public bool $isLogin = false;
+	public bool $isAdmin = false;
+	public bool $isApproved = false;
 	public array $messages;
 
 	function __construct()
