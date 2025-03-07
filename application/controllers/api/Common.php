@@ -121,30 +121,6 @@ class Common extends MY_Builder_API
 		]);
 	}
 
-	function isMyData_get($key, $model = null)
-	{
-		$tokenData = $this->validateToken();
-
-		if(!property_exists($this, 'Model')) {
-			if(is_null($model)) {
-				$this->response([
-					'code' => MODEL_IS_NOT_DEFINED,
-				]);
-			}
-		}else{
-			$model = $this->Model;
-		}
-
-		$articleData = $model->getData([], [
-			$model->identifier => $key,
-			'created_id' => $tokenData->user_id,
-		]);
-
-		$this->response([
-			'code' => $articleData?DATA_PROCESSED:NO_PERMISSION,
-		]);
-	}
-
 	public function message_read_patch($key)
 	{
 		$tokenData = $this->validateToken();
@@ -160,17 +136,5 @@ class Common extends MY_Builder_API
 		$this->response([
 			'code' => DATA_PROCESSED,
 		]);
-	}
-
-	protected function isAdmin($dto)
-	{
-		if(!property_exists($this, 'Model_User')) {
-			$this->load->model('Model_User');
-		}
-
-		return $this->Model_User->getCnt([
-			'user_id' => $dto['user_id'],
-			'user_cd' => 'USR001',
-		]) > 0;
 	}
 }
