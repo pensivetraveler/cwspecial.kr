@@ -26,7 +26,7 @@ function applyViewData(dataId) {
 }
 
 function setButtonsDisplay() {
-	const isMine = isMyData(common.KEY);
+	const isMine = isMyData(common.KEY, false);
 	if(!isMine) {
 		$('.btn-view-edit').remove();
 		$('.btn-view-delete').remove();
