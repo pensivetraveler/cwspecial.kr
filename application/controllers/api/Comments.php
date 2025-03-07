@@ -92,7 +92,7 @@ class Comments extends Common
 		}else{
 			$parentComment = $this->Model->getData([], [
 				'article_id' => $dto['article_id'],
-				'parent_id' => $dto['parent_id'],
+				'comment_id' => $dto['parent_id'],
 			]);
 
 			// 답글
