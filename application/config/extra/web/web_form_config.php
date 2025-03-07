@@ -26,16 +26,6 @@ $config['form_login_config'] = [
 			'placeholder' => 'Password Dots',
 		],
 	],
-	[
-		'field' => 'autologin',
-		'label' => 'lang:auth.autologin',
-		'rules' => '',
-		'errors' => [],
-		'type' => 'checkbox',
-		'subtype' => 'single',
-		'attributes' => [],
-		'form_attributes' => [],
-	],
 ];
 
 $config['form_find_id_config'] = [
@@ -166,7 +156,7 @@ $config['form_signup_config'] = [
 	[
 		'field' => 'password',
 		'label' => 'lang:user.password',
-		'rules' => 'trim|required_mod[add]|min_length[4]|max_length[15]',
+		'rules' => 'trim|required_mod[add]|min_length[4]|max_length[15]|strong_password',
 		'form' => true,
 		'errors' => [],
 		'category' => 'group',
@@ -575,7 +565,7 @@ $config['form_myinfo_config'] = [
 	[
 		'field' => 'password',
 		'label' => 'lang:user.password',
-		'rules' => 'trim|required_mod[add]|min_length[4]|max_length[15]',
+		'rules' => 'trim|required_mod[add]|min_length[4]|max_length[15]|strong_password',
 		'form' => true,
 		'errors' => [],
 		'category' => 'group',
