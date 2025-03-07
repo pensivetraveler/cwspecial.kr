@@ -407,6 +407,7 @@ class MY_Builder_API extends MY_Controller_API
 
 		// base rule validation
 		$config = array_map(function ($item) {
+			if(!$item['rules']) $item['rules'] = 'do_nothing';
 			if(is_empty($item, 'group')) $item['group'] = 'base';
 			return $item;
 		}, $config);
@@ -869,5 +870,33 @@ class MY_Builder_API extends MY_Controller_API
 				'data' => $data,
 			], RestController::HTTP_INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	function isMyData_get($key, $model = null)
+	{
+		$tokenData = $this->validateToken();
+
+		if(!property_exists($this, 'Model')) {
+			if(is_null($model)) {
+				$this->response([
+					'code' => MODEL_IS_NOT_DEFINED,
+				]);
+			}
+		}else{
+			$model = $this->Model;
+		}
+
+		$data = $model->getData([], [
+			$model->identifier => $key,
+		]);
+
+		if(!$data) $this->response(['code' => DATA_NOT_EXIST]);
+		if(!$tokenData->is_admin && $data->{CREATED_ID_COLUMN_NAME} !== $tokenData->user_id){
+			$this->response(['code' => NO_PERMISSION]);
+		}
+
+		$this->response([
+			'code' => DATA_PROCESSED,
+		]);
 	}
 }
