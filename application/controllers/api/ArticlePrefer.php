@@ -72,7 +72,7 @@ class ArticlePrefer extends Common
 
 			$this->db->group_by('created_id');
 			$commentList = $this->Model_Comment->getList(['created_id'], [
-				'article_id' => 11,
+				'article_id' => $dto['article_id'],
 				'depth' => 0,
 			]);
 			foreach ($commentList as $userId) {
