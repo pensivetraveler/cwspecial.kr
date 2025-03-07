@@ -73,6 +73,23 @@ function get_file_ext($filename)
 	return substr($filename,strrpos($filename,".")+1);
 }
 
+function get_file_size_unit($filesize)
+{
+	if(is_string($filesize)) $filesize = (int)$filesize;
+	$return = '';
+	$units = ['g','m','k'];
+	foreach ($units as $i=>$unit) {
+		$multiplier = 3-$i;
+		$divisor = pow(1024, $multiplier);
+		$result = floor($filesize/$divisor);
+		if($result > 0) {
+			$return = $unit;
+			break;
+		}
+	}
+	return $return;
+}
+
 // byte 단위의 파일크기를 KB로 변환
 // 크기가 1MB 이상이 되면 소수점을 생략하고
 // 그이하일 경우는 소수점 둘째자리까지 출력한다.
@@ -84,10 +101,12 @@ function get_file_size_to_kb($filesize)
 	$int_temp = round($filesize/1024,2);
 	$arr_temp = explode(".", $int_temp);
 
-	if (intval($arr_temp[0]) > 999 || intval($arr_temp[1]) == 0) {
-		$rtn = number_format($arr_temp[0]);
-	} else {
-		$rtn = number_format($arr_temp[0].".".$arr_temp[1],2);
+	if(count($arr_temp) > 1) {
+		if (intval($arr_temp[0]) > 999 || intval($arr_temp[1]) == 0) {
+			$rtn = number_format($arr_temp[0]);
+		} else {
+			$rtn = number_format($arr_temp[0].".".$arr_temp[1],2);
+		}
 	}
 
 	return $rtn;
@@ -104,10 +123,14 @@ function get_file_size_to_mb($filesize)
 	$int_temp = round($filesize/1024/1024,2);
 	$arr_temp = explode(".", $int_temp);
 
-	if (intval($arr_temp[0]) > 999 || intval($arr_temp[1]) == 0) {
-		$rtn = number_format($arr_temp[0]);
-	} else {
-		$rtn = number_format($arr_temp[0].".".$arr_temp[1],1);
+	if(count($arr_temp) > 1) {
+		if (intval($arr_temp[0]) > 999 || intval($arr_temp[1]) == 0) {
+			$rtn = number_format($arr_temp[0]);
+		} else {
+			$rtn = number_format($arr_temp[0].".".$arr_temp[1],1);
+		}
+	}else{
+		$rtn = number_format($int_temp);
 	}
 
 	return $rtn;
@@ -151,15 +174,48 @@ function is_url_exists($url)
 	return $status;
 }
 
-// 용량을 표시하는 문자열로부터 실제 바이크 크기를 반환
-function convert_to_bytes($size) {
-	$unit = strtoupper(substr($size, -1)); // 마지막 글자 (K, M, G)
-	$value = (int)$size; // 숫자 부분 추출
+function get_file_size($filesize, $add_unit_text = false)
+{
+	$units = ['g','m','k'];
+	$unit = get_file_size_unit($filesize);
 
-	switch ($unit) {
-		case 'K': return $value * 1024;
-		case 'M': return $value * 1024 * 1024;
-		case 'G': return $value * 1024 * 1024 * 1024;
-		default: return $value; // 기본적으로 숫자만 있을 경우 그대로 반환
+	$muliplier = 3 - array_search($unit, $units);
+	$divisor = pow(1024, $muliplier);
+
+	$int_temp = round($filesize/$divisor,2);
+	$arr_temp = explode(".", $int_temp);
+
+	if(count($arr_temp) > 1) {
+		if (intval($arr_temp[0]) > 999 || intval($arr_temp[1]) == 0) {
+			$rtn = number_format($arr_temp[0]);
+		} else {
+			$rtn = number_format($arr_temp[0].".".$arr_temp[1],1);
+		}
+	}else{
+		$rtn = number_format($int_temp);
 	}
+
+	if($add_unit_text) $rtn .= strtoupper($unit.'B');
+
+	return $rtn;
+
+}
+
+// 용량을 표시하는 문자열로부터 실제 바이크 크기를 반환
+function convert_to_bytes($size)
+{
+	$size = trim($size);
+	$last = strtolower($size[strlen($size)-1]); // 마지막 글자 (단위)
+	$size = (int) filter_var($size, FILTER_SANITIZE_NUMBER_INT); // 숫자만 추출
+
+	switch ($last) {
+		case 'g':
+			$size *= 1024;
+		case 'm':
+			$size *= 1024;
+		case 'k':
+			$size *= 1024;
+	}
+
+	return $size; // 바이트 단위로 변환
 }
