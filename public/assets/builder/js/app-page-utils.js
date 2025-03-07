@@ -126,8 +126,6 @@ function showAlert(obj = {}) {
 		if(!['success', 'warning', 'error'].includes(obj.type)) throw new Error(`showAlert : Type is not allowed. ${obj.type}`);
 		if(obj.title !== undefined) title = getLocale(obj.title, common.LOCALE);
 		if(obj.text !== undefined || obj.html !== undefined) text = getLocale(obj.text, common.LOCALE);
-		console.log(text)
-		console.log(obj.text)
 
 		switch (obj.type) {
 			case 'success' :
@@ -166,8 +164,7 @@ function swalKeydownHandler(event) {
 function showSwalAlert(obj) {
 	Swal.fire({
 		title: obj.title,
-		text: obj.text??null,
-		html: obj.html??null,
+		html: nl2br(obj.text??obj.html??null),
 		icon: obj.type,
 		customClass: {
 			confirmButton: 'btn btn-primary waves-effect waves-light'
