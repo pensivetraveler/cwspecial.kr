@@ -21,26 +21,30 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		parent::__construct();
 
 		$this->config->load('extra/autologin_config', false);
+
 		foreach (['builder_base_config', 'builder_form_config', 'builder_nav_config', 'builder_page_config'] as $config) {
 			$this->config->load('extra/builder/'.$config, false);
 		}
+
 		require_once APPPATH . 'config/extra/builder/builder_base_constants.php';
 		$this->load->helper(["builder/builder_web","builder/builder_base","builder/builder_form",]);
 		$this->lang->load("builder/base", $this->config->item('language'));
 		$this->lang->load('builder/form_validation', $this->config->item('language'));
 
 		if(!$this->flag) show_error("Platform flag is not set.");
+
+		$this->lang->load("{$this->flag}/custom", $this->config->item('language'));
+		$this->lang->load("{$this->flag}/nav", $this->config->item('language'));
+		$this->lang->load("{$this->flag}/form", $this->config->item('language'));
 		foreach (glob(APPPATH . "config/extra/{$this->flag}/*_config.php") as $file) {
 			$this->config->load("extra/{$this->flag}/" . substr(basename($file),0,strpos(basename($file),'.')));
 		}
 		foreach (glob(APPPATH . "config/extra/{$this->flag}/*_constants.php") as $file) {
 			require_once $file;
 		}
+
 		$this->baseViewPath = BUILDER_FLAGNAME."/layout/index";
 		$this->noLoginRedirect = "{$this->flag}/auth/login";
-		$this->lang->load("{$this->flag}/custom", $this->config->item('language'));
-		$this->lang->load("{$this->flag}/nav", $this->config->item('language'));
-		$this->lang->load("{$this->flag}/form", $this->config->item('language'));
 
 		$this->titleList = [ucfirst($this->flag)];
 		$this->pageConfig = [];
