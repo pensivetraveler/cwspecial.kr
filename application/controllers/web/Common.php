@@ -34,12 +34,6 @@ class Common extends MY_Builder_WEB
 			base_url('public/assets/builder/vendor/js/mega-dropdown.js'),
 		];
 
-		$this->addJS['tail'] = [
-			base_url('public/assets/builder/js/front-config.js'),
-			base_url('public/assets/builder/vendor/js/dropdown-hover.js'),
-			base_url('public/assets/builder/vendor/js/mega-dropdown.js'),
-		];
-
 		$this->isLogin = $this->session->userdata('user_id') && $this->session->userdata('token');
 		$this->isAdmin = is_null($this->session->userdata('is_admin'))?false:$this->session->userdata('is_admin');
 		$this->isApproved = $this->session->userdata('approve_yn')==='Y';
