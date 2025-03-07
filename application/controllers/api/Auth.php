@@ -133,6 +133,7 @@ class Auth extends Common
 				'user_id' => $userData->user_id,
 				'id' => $userData->id,
 				'name' => $userData->name,
+				'is_admin' => in_array($userData->user_cd, ['USR000', 'USR001']),
 			]),
 			'is_admin' => in_array($userData->user_cd, ['USR000', 'USR001']),
 			'approve_yn' => in_array($userData->user_cd, ['USR000', 'USR001'])?'Y':$userData->approve_yn,
