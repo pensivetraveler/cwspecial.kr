@@ -38,11 +38,16 @@ class MY_Form_validation extends CI_Form_validation
 
     public function build_error_msg($line, $field = '', $param = '')
     {
-        $line = parent::_build_error_msg($line, $field, $param);
+        $line = $this->_build_error_msg($line, $field, $param);
         return $this->CI->josa->__conv($line);
     }
 
-    public function error_array(): array
+	protected function _build_error_msg($line, $field = '', $param = '')
+	{
+		return parent::_build_error_msg($line, lang($field), $param);
+	}
+
+	public function error_array(): array
     {
         $errors = [];
         foreach ($this->_error_array as $field => $message) {
@@ -116,19 +121,20 @@ class MY_Form_validation extends CI_Form_validation
 
     public function strong_password($value, $params)
     {
-        $this->set_message('strong_password', "Password is not content with condition.");
-
         $num = preg_match("/[0-9]/u", $value);
         $eng = preg_match("/[a-zA-Z]/u", $value);
 //        $spe = preg_match("/[\!\@\#\$\%\^\&\*\(\)]/u",$value);
 
         //-- 공백안됨.
         if(preg_match("/\s/u", $value) == true) {
+			$this->set_message('strong_password', lang("form_validation_strong_password_space"));
             return false;
         }
 
 //        if( trim((string)$num) == "0" || trim((string)$eng) == "0" || trim((string)$spe) == "0" ) {
         if( trim((string)$num) == "0" || trim((string)$eng) == "0" ) {
+			if (trim((string)$num) == "0") $this->set_message('strong_password', lang("form_validation_strong_password_num"));
+			if (trim((string)$eng) == "0") $this->set_message('strong_password', lang("form_validation_strong_password_eng"));
             return false;
         }
 
@@ -145,7 +151,7 @@ class MY_Form_validation extends CI_Form_validation
      */
     function required_if($value, $params)
     {
-        $this->set_message('required_if', $this->CI->lang->line('con_the').' '.'%s'.' '.$this->CI->lang->line('not_field_required'));
+        $this->set_message('required_if', lang('con_the').' '.'%s'.' '.lang('not_field_required'));
         if ( ! is_array($value))
         {
             return (trim($value) == '') ? FALSE : TRUE;
@@ -160,7 +166,7 @@ class MY_Form_validation extends CI_Form_validation
     {
         $this->CI->load->database();
 
-        $this->set_message('check_conditions', "Sorry, that %s is already being added.");
+        $this->set_message('check_conditions', lang("Sorry, that %s is already being added."));
 
         list($tableInfo, $columns, $values) = explode("|", $params);
         $tableInfo 	= explode('.', $tableInfo);
@@ -187,7 +193,7 @@ class MY_Form_validation extends CI_Form_validation
     {
         $this->CI->load->database();
 
-        $this->set_message('edit_unique', "Sorry, that %s is already being added.");
+        $this->set_message('edit_unique', lang("Sorry, that %s is already being added."));
 
         list($table, $field, $current_id) = explode(".", $params);
 
@@ -268,7 +274,7 @@ class MY_Form_validation extends CI_Form_validation
     public function valid_youtube($value, $params)
     {
 		if(!$value) return true;
-        $this->set_message('required_mod', $this->CI->lang->line("form_validation_valid_youtube"));
+        $this->set_message('required_mod', lang("form_validation_valid_youtube"));
         $this->CI->load->library('youtube');
         $this->CI->youtube->set($value);
         return $this->CI->youtube->valid();
