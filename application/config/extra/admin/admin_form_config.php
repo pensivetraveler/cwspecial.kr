@@ -40,17 +40,6 @@ $config['form_login_config'] = [
 			'placeholder' => 'Password Dots',
 		],
 	],
-	[
-		'field' => 'autologin',
-		'label' => 'lang:auth.autologin',
-		'rules' => '',
-		'errors' => [],
-		'category' => 'basic',
-		'type' => 'checkbox',
-		'subtype' => 'single',
-		'attributes' => [],
-		'form_attributes' => [],
-	],
 ];
 
 $config['form_find_id_config'] = [
@@ -255,7 +244,7 @@ $config['form_administrators_config'] = [
 		'subtype' => 'unique',
 		'icon' => 'ri-font-family',
 		'attributes' => [
-			'placeholder' => '이메일을 입력하세요',
+			'placeholder' => 'Enter The User Email',
 		],
 		'form_attributes' => [
 			'editable' => false,
@@ -349,7 +338,7 @@ $config['form_students_config'] = [
 		'attributes' => [
 			'autocapitalize' => 'none',
 			'autocomplete' => 'off',
-			'placeholder' => '아이디를 입력하세요',
+			'placeholder' => 'Enter The User ID',
 		],
 		'form_attributes' => [
 			'editable' => false,
@@ -1044,7 +1033,7 @@ $config['form_myinfo_config'] = [
 		'attributes' => [
 			'autocapitalize' => 'none',
 			'autocomplete' => 'off',
-			'placeholder' => '아이디를 입력하세요',
+			'placeholder' => 'Enter The User ID',
 		],
 		'form_attributes' => [
 			'editable' => false,
