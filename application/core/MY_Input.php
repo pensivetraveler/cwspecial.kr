@@ -272,9 +272,13 @@ class MY_Input extends CI_Input
      */
     public function post_put($index = NULL, $xss_clean = NULL, $default_value = NULL)
     {
-        return isset($_POST[$index])
-            ? $this->post($index, $xss_clean, $default_value)
-            : $this->put($index, $xss_clean, $default_value);
+		if(is_null($index)) {
+			return !empty($this->post())?$this->post():$this->put();
+		}else{
+			return isset($_POST[$index])
+				? $this->post($index, $xss_clean, $default_value)
+				: $this->put($index, $xss_clean, $default_value);
+		}
     }
 
     // --------------------------------------------------------------------
