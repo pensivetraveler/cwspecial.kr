@@ -777,7 +777,7 @@ function setFormListItemFile(field, item, identifier = '') {
 	if(field.form_attributes.hasOwnProperty('list_sorter') && field.form_attributes.list_sorter) {
 		let output = `
             <li class="form-list-item list-group-item d-flex justify-content-between align-items-center px-2" data-identifier-val="${identifier}" data-full-item="${fullItem}" data-article-id="${articleId}" data-file-id="${fileId}">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center pe-4">
                     <i class="drag-handle cursor-move ri-menu-line align-text-bottom me-2"></i>
                     <span class="not-draggable">${item.orig_name}</span>
                 </div>
