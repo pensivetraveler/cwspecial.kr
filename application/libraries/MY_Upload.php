@@ -44,7 +44,7 @@ class MY_Upload extends CI_Upload
 					break;
 				case 'upload_invalid_filetype' :
 					// 허용된 파일 확장자가 아닙니다.
-					$line = 'allowed_maximum_upload_type';
+					$line = 'allowed_upload_type';
 					$replace = str_replace('|', ', ', $this->uploadConfig['allowed_types']);
 					break;
 			}
