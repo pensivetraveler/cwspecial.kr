@@ -265,7 +265,7 @@ class MY_Form_validation extends CI_Form_validation
 
 		sscanf($params, '%[^.].%[^.].%[^.]', $table, $field, $key);
 		if($key && isset($this->_field_data[$key], $this->_field_data[$key]['postdata'])) {
-			$this->CI->db->where_not_in($key, $this->_field_data[$key]['postdata']);
+			$this->CI->db->where_not_in($key, [$this->_field_data[$key]['postdata']]);
 		}
 
 		return $this->CI->db->limit(1)->get_where($table, array($field => $value))->num_rows() === 0;
@@ -300,5 +300,18 @@ class MY_Form_validation extends CI_Form_validation
 	public function do_nothing($value, $params)
 	{
 		return true;
+	}
+
+	public function password_matches($value, $param)
+	{
+		if($this->CI->input->get_post('_mode') === 'add') {
+			return $this->matches($value, $param);
+		}else{
+			if(isset($value, $this->_field_data[$param], $this->_field_data[$param]['postdata'])) {
+				return $this->matches($value, $param);
+			}else{
+				return true;
+			}
+		}
 	}
 }

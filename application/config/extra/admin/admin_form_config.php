@@ -206,7 +206,7 @@ $config['form_administrators_config'] = [
 	[
 		'field' => 'password_confirm',
 		'label' => 'lang:user.password_confirm',
-		'rules' => 'trim|required_mod[add]|matches[password]',
+		'rules' => 'trim|required_mod[add]|password_matches[password]',
 		'form' => true,
 		'errors' => [],
 		'category' => 'group',
@@ -379,7 +379,7 @@ $config['form_students_config'] = [
 	[
 		'field' => 'password_confirm',
 		'label' => 'lang:user.password_confirm',
-		'rules' => 'trim|required_mod[add]|matches[password]',
+		'rules' => 'trim|required_mod[add]|password_matches[password]',
 		'form' => true,
 		'errors' => [],
 		'category' => 'group',
@@ -1069,7 +1069,7 @@ $config['form_myinfo_config'] = [
 	[
 		'field' => 'password_confirm',
 		'label' => 'lang:user.password_confirm',
-		'rules' => 'trim|required_mod[add]|matches[password]',
+		'rules' => 'trim|required_mod[add]|password_matches[password]',
 		'form' => true,
 		'errors' => [],
 		'category' => 'group',

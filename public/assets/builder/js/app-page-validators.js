@@ -68,6 +68,17 @@ const customValidatorsPreset = {
 			},
 			validatorName : 'identical',
 		},
+		password_matches : {
+			regex : '^password_matches$',
+			options : function(form, item, matches) {
+				return {
+					compare: function() {
+						return form.querySelector(`[name="${password_matches[1]}"]`).value;
+					},
+				};
+			},
+			validatorName : 'identical',
+		},
 		required_if_value : {
 			regex : '^required_if_value\\[(.*?)\\]$',
 			options : function(form, item, matches) {
