@@ -587,7 +587,6 @@ function renderColumnHTML(data, full, column, wrap, inner) {
 	};
 
 	if(Object.keys(column.onclick).length) {
-		console.log(column)
 		wrap.classList.add('cursor-pointer');
 		attrs.onclick = getColumnOnclick(data, full, column);
 

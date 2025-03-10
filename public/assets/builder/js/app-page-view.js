@@ -83,5 +83,6 @@ $(function() {
 		});
 	});
 
-	document.getElementById('loader').classList.add('d-none');
+	if(document.getElementById('loader') !== null)
+		document.getElementById('loader').classList.add('d-none');
 });
