@@ -8,124 +8,107 @@ extract(trans_formdata_dit_type($viewData));
 	</nav>
 </div>
 <div class="row g-6 mb-6" id="view-container">
-	<div class="card mb-2">
-		<?php
-			echo form_open('', [
-				'id' => 'formRecord',
-				'class' => "view-record",
-				'onsubmit' => 'return false',
-			], [
-				'_mode' => 'view',
-				'_event' => '',
-			]);
-			echo form_input(
-				[
-					'type' => $identifier['type'],
-					'name' => $identifier['field'],
-					'id' => $identifier['id'],
-				],
-				set_admin_form_value($identifier['field'], $identifier['default'], null),
-				$identifier['attributes'],
-			);
-			echo form_input(
-				[
-					'type' => $open_yn['type'],
-					'name' => $open_yn['field'],
-					'id' => $open_yn['id'],
-				],
-				set_admin_form_value($open_yn['field'], $open_yn['default'], null),
-				$open_yn['attributes'],
-			);
-		?>
-		<div class="card-header">
-			<div class="mb-4 d-flex align-items-center justify-content-between">
-				<h5 id="subject" class="mb-0 w-100 view-data"><span></span></h5>
-				<div class="dropdown">
-					<button
-							class="btn btn-text-secondary rounded-pill text-muted border-0 p-1"
-							type="button"
-							id="actionBtns"
-							data-bs-toggle="dropdown"
-							aria-haspopup="true"
-							aria-expanded="false">
-						<i class="ri-more-2-line ri-20px"></i>
-					</button>
-					<div class="dropdown-menu dropdown-menu-end" aria-labelledby="actionBtns">
-						<?php foreach ($actions as $action): ?>
-						<a class="dropdown-item text-center btn-view-<?=$action?>" href="javascript:void(0);"><?=lang(ucfirst($action))?></a>
-						<?php endforeach; ?>
-					</div>
-				</div>
-			</div>
-			<div class="d-flex justify-content-between align-items-center">
-				<div class="d-flex align-items-center text-muted">
-					<i class="ri-account-circle-line me-1"></i>
-					<span id="created_id" class="fw-medium text-heading view-data"></span>
-				</div>
-				<div class="d-flex align-items-center text-muted">
-					<i class="ri-time-line me-1"></i>
-					<span id="created_dt" class="fw-medium me-2 view-data"><?=date('Y-m-d')?></span>
-					<i class="ri-eye-line me-1"></i>
-					<span id="view_count" class="fw-medium view-data">00</span>
-				</div>
-			</div>
-		</div>
-		<div class="card-body">
-			<div class="row">
-				<div class="col-sm-6 p-2">
-					<div class="border rounded-2 p-4">
-						<div class="thumbnail-wrap">
-							<div id="thumbnail" class="w-100 h-px-600 rounded-2 overflow-hidden"></div>
+	<div class="col-12 mb-lg-0 mb-6">
+		<div class="card mb-2">
+			<?php
+				echo form_open('', [
+					'id' => 'formRecord',
+					'class' => "view-record",
+					'onsubmit' => 'return false',
+				], [
+					'_mode' => 'view',
+					'_event' => '',
+				]);
+				echo form_input(
+					[
+						'type' => $identifier['type'],
+						'name' => $identifier['field'],
+						'id' => $identifier['id'],
+					],
+					set_admin_form_value($identifier['field'], $identifier['default'], null),
+					$identifier['attributes'],
+				);
+				echo form_input(
+					[
+						'type' => $open_yn['type'],
+						'name' => $open_yn['field'],
+						'id' => $open_yn['id'],
+					],
+					set_admin_form_value($open_yn['field'], $open_yn['default'], null),
+					$open_yn['attributes'],
+				);
+			?>
+			<div class="card-header">
+				<div class="mb-4 d-flex align-items-center justify-content-between">
+					<h5 id="subject" class="mb-0 w-100 view-data"><span></span></h5>
+					<div class="dropdown">
+						<button
+								class="btn btn-text-secondary rounded-pill text-muted border-0 p-1"
+								type="button"
+								id="actionBtns"
+								data-bs-toggle="dropdown"
+								aria-haspopup="true"
+								aria-expanded="false">
+							<i class="ri-more-2-line ri-20px"></i>
+						</button>
+						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="actionBtns">
+							<?php foreach ($actions as $action): ?>
+							<a class="dropdown-item text-center btn-view-<?=$action?>" href="javascript:void(0);"><?=lang(ucfirst($action))?></a>
+							<?php endforeach; ?>
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-6 p-2">
-					<div class="h-100 border rounded-2 p-4 view-data" id="content">
+				<div class="d-flex justify-content-between align-items-center">
+					<div class="d-flex align-items-center text-muted">
+						<i class="ri-account-circle-line me-1"></i>
+						<span id="created_id" class="fw-medium text-heading view-data"></span>
+					</div>
+					<div class="d-flex align-items-center text-muted">
+						<i class="ri-time-line me-1"></i>
+						<span id="created_dt" class="fw-medium me-2 view-data"><?=date('Y-m-d')?></span>
+						<i class="ri-eye-line me-1"></i>
+						<span id="view_count" class="fw-medium view-data">00</span>
 					</div>
 				</div>
 			</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-lg-4 col-sm-12">
+						<div class="position-relative border rounded-2 h-px-400">
+							<div id="thumbnail" class="w-100 h-100 overflow-hidden"></div>
+							<p class="no-thumbnail-text">
+								<span><?=lang('No Registered Thumbnail')?></span>
+							</p>
+						</div>
+					</div>
+					<div class="col-lg-8 col-sm-12">
+						<div class="mt-4 mt-lg-0 border rounded-4 p-4">
+							<div id="content" class="view-data"></div>
+							<?php if(!empty($uploads)): ?>
+								<hr>
+								<ul id="uploads" class="view-data mb-0 rounded-3 mw-100 list-group list-group-flush bg-lighter p-2 mt-4 d-none"></ul>
+							<?php endif; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php
+				echo form_close();
+			?>
 		</div>
-		<?php
-			echo form_close();
-		?>
+		<?php builder_view("$platformName/layout/view_comments"); ?>
 	</div>
-	<div class="card" id="comment-container">
-		<div class="card-header">
-			<?php
-			echo form_open('', [
-				'id' => 'formComment',
-				'class' => "needs-validation",
-				'onsubmit' => 'return false',
-			], [
-				'_mode' => 'add',
-				'_event' => '',
-			]);
-			echo form_hidden('comment_id');
-			echo form_hidden('depth');
-			echo form_hidden('parent_id', 0);
-			echo form_hidden('article_id', set_admin_form_value($identifier['field'], $identifier['default'], null));
-			?>
-			<div class="mb-4">
-				<h6 class="mb-0"><?=lang('Comments')?></h6>
+	<div id="loader" class="loading w-100 h-100 position-absolute top-0">
+		<div class="opacity-50 h-100 position-relative bg-lighter"></div>
+		<div class="position-absolute translate-middle" style="top:50%;left:50%">
+			<div class="sk-chase sk-primary">
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
 			</div>
-			<div class="row form-validation-unit">
-				<div class="target-comment-wrap" data-loaded="false">
-					<div class="d-flex justify-content-between rounded-2">
-						<p class="m-0">'<span id="target-comment-content"></span>'에 대한 <span id="target-comment-action"></span></p>
-						<button type="button" class="btn btn-dark rounded-circle p-0 w-px-20 h-px-20 btn-write-cancel">x</button>
-					</div>
-				</div>
-				<div class="d-flex justify-content-between">
-					<input type="text" class="form-control me-4" placeholder="댓글 입력" name="content" required="required">
-					<button class="btn btn-primary w-px-100"><?=lang('Submit')?></button>
-				</div>
-			</div>
-			<?php
-			echo form_close();
-			?>
-		</div>
-		<div class="card-body">
-			<ul class="border rounded-4 py-2 px-6 list-unstyled mb-0" id="comment-list"></ul>
 		</div>
 	</div>
 </div>
