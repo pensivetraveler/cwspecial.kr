@@ -291,10 +291,10 @@ function reformatFormData(form, data, regexp = {}, side = false) {
 					}
 				}else{
 					if(Object.keys(regexp).includes(rule)) {
-						item.validators[camelize(rule)] = {
+						item.validators['regexp'] = {
 							regexp: new RegExp(regexp[rule].exp, regexp[rule].flags)
 						};
-						if(curr.errors.hasOwnProperty(rule)) item.validators[camelize(rule)].message = curr.errors[rule];
+						if(curr.errors.hasOwnProperty(rule)) item.validators['regexp'].message = curr.errors[rule];
 					}else{
 						console.warn(`reformatFormData : ${rule} validator is not set.`);
 					}
