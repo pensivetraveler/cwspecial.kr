@@ -373,6 +373,15 @@ form[class*="form-type-"] .choice-wrapper.single-checkbox ~ label {
 .form-type-page .form-text.d-none~.input-group:has(.form-list-item-wrap:not(.d-none)) {
 	margin-top: 0 !important;
 }
+.form-list-item-wrap li>div:first-child {
+	max-width: calc(100% - 60px);
+}
+.form-list-item-wrap li>div:first-child span {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	word-break: break-all;
+}
 
 /*********************************************
     .form-type-side
@@ -564,9 +573,20 @@ html[data-style="dark"] .form-type-side .input-group .form-floating > div:has(.s
 	background-color: #eee;
 	background-repeat: no-repeat;
 	background-position: center;
+	background-size: contain;
+}
+[data-method="view"] .no-thumbnail-text {
+	display: none;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+[data-method="view"] #thumbnail.none~.no-thumbnail-text {
+	display: block;
 }
 [data-method="view"] #content {
-	min-height: 600px;
+	min-height: 400px;
 }
 [data-method="view"] #created_id {
 	min-width: 6rem;
