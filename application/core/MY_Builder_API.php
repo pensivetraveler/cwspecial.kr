@@ -57,18 +57,17 @@ class MY_Builder_API extends MY_Controller_API
 		require_once APPPATH . 'config/extra/builder/builder_base_constants.php';
 		$this->load->helper(["builder/builder_web","builder/builder_base","builder/builder_form",]);
 		$this->lang->load("builder/base", $this->config->item('language'));
-		$this->lang->load('builder/form_validation', $this->config->item('language'));
 
 		if(!$this->flag) show_error("Platform flag is not set.");
 
-		$this->lang->load("{$this->flag}/custom", $this->config->item('language'));
-		$this->lang->load("{$this->flag}/nav", $this->config->item('language'));
-		$this->lang->load("{$this->flag}/form", $this->config->item('language'));
 		foreach (glob(APPPATH . "config/extra/{$this->flag}/*_config.php") as $file) {
 			$this->config->load("extra/{$this->flag}/" . substr(basename($file),0,strpos(basename($file),'.')));
 		}
 		foreach (glob(APPPATH . "config/extra/{$this->flag}/*_constants.php") as $file) {
 			require_once $file;
+		}
+		foreach (glob(APPPATH.'language'.DIRECTORY_SEPARATOR.$this->config->item('language').DIRECTORY_SEPARATOR.$this->flag.DIRECTORY_SEPARATOR.'*_lang.php') as $file) {
+			$this->lang->load($this->flag.DIRECTORY_SEPARATOR.str_replace('_lang.php', '', basename($file)), $this->config->item('language'));
 		}
 	}
 
@@ -407,11 +406,12 @@ class MY_Builder_API extends MY_Controller_API
 
 		// base rule validation
 		$config = array_map(function ($item) {
-			if(!$item['rules']) $item['rules'] = 'do_nothing';
+			if(!array_key_exists('rules', $item) || !$item['rules']) $item['rules'] = 'do_nothing';
 			if(is_empty($item, 'group')) $item['group'] = 'base';
 			return $item;
 		}, $config);
 		$groups = array_flip(array_unique(array_column($config, 'group')));
+
 		foreach ($groups as $group=>$idx) {
 			if($group !== 'base') $groups[$group] = array_merge($this->config->get('builder_form_base_group_attributes'), $config[$idx]['group_attributes']);
 		}
@@ -422,6 +422,13 @@ class MY_Builder_API extends MY_Controller_API
 			$this->form_validation->set_rules($groupConfig);
 
 			if($group === 'base') {
+				$targetData = [];
+				foreach ($this->input->post_put() as $field => $value) {
+					if(in_array($field, array_column($groupConfig, 'field'))){
+						$targetData[$field] = $value;
+					}
+				}
+				$this->form_validation->set_data($targetData);
 				if($this->form_validation->run() === false) {
 					$errors = array_merge(
 						$errors,
@@ -653,7 +660,9 @@ class MY_Builder_API extends MY_Controller_API
 				if(is_file_posted($key)) {
 					$this->upload->initialize(
 						array_merge(
-							$this->config->item($key.'_upload_config')?:$this->config->item('base_upload_config'),
+							$this->config->item($this->router->class . '_' . $key . '_upload_config')
+								?: $this->config->item($key . '_upload_config')
+								?: $this->config->item('base_upload_config'),
 							[
 								'upload_path' => $uploadPath,
 							]
@@ -829,10 +838,11 @@ class MY_Builder_API extends MY_Controller_API
 
 	public function excelValidate_post()
 	{
+		$this->beforeExcelUpload();
+
 		$this->response([
-			'code' => DATA_PROCESSED,
-			'data' => $this->input->post('data'),
-		], RestController::HTTP_OK);
+			'code' => DATA_AVAILABLE,
+		]);
 	}
 
 	public function excelUpload_post()
@@ -842,10 +852,17 @@ class MY_Builder_API extends MY_Controller_API
 		$this->afterExcelUpload($data);
 	}
 
+	protected function validateExcelData($data): array
+	{
+		return $data;
+	}
+
 	protected function beforeExcelUpload()
 	{
 		$json_data = file_get_contents("php://input");
-		return json_decode($json_data, true);
+		$data = json_decode($json_data, true);
+
+		return $this->validateExcelData($data);
 	}
 
 	protected function afterExcelUpload($data)
