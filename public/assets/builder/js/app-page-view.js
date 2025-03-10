@@ -82,7 +82,4 @@ $(function() {
 			params: common.PAGE_LIST_URI,
 		});
 	});
-
-	if(document.getElementById('loader') !== null)
-		document.getElementById('loader').classList.add('d-none');
 });
