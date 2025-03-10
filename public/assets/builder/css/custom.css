@@ -134,7 +134,7 @@
 }
 
 /*********************************************
-    .form-type-* common
+    common
  *********************************************/
 /* border-color */
 .border-input {
@@ -143,12 +143,24 @@
 html[data-style="dark"] .border-input {
 
 }
-
 .flatpickr-side-position {
 	left: unset !important;
 	right: 6rem !important;
 }
+.absolute-center {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+.auto-linebreak {
+	white-space: pre-line;
+}
 
+
+/*********************************************
+    .form-type-* common
+ *********************************************/
 form[class*="form-type-"] .form-validation-unit {
 	position: relative;
 }
