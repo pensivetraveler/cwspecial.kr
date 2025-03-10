@@ -1,33 +1,209 @@
-<div class="position-relative">
-	<div class="h-px-800 d-flex flex-column justify-content-center">
+<div class="row mt-12 position-relative">
+	<div class="col-md-12 mb-6">
 		<div class="hero-text-box text-center">
 			<h2 class="text-primary hero-title fs-2 font-SFssaraknoon">SIGN-UP</h2>
-		</div>
-		<div class="w-px-600 mt-1 mx-auto">
 			<h3 class="mb-5 text-center font-santteutdotum-m">약관 동의</h3>
-			<div class="col-sm-12">
-				<h5 class="mb-2 font-santteutdotum-l">1. 이용 약관 동의</h5>
-				<div class="border border-1 rounded-4 p-4 bg-white">
-					Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-				</div>
-				<div class="form-check mt-4 d-flex justify-content-end">
-					<label class="form-check-label me-8" for="termsofuse"> 위 내용에 동의합니다. </label>
-					<input class="form-check-input" type="checkbox" value="" id="termsofuse">
+		</div>
+	</div>
+	<div class="col-md-6 mx-auto">
+		<div class="col-sm-12">
+			<h5 class="mb-2 font-santteutdotum-l">1. 이용 약관 동의</h5>
+			<div class="border border-1 rounded-4 p-4 bg-white">
+				<div class="h-px-400 ps auto-linebreak">
+					서비스 이용약관 동의입니다.
+					제 1장 총칙
+					제 2장 서비스 이용 계약
+					제 3장 서비스의 이용
+					제 4장 의무
+					제 5장 저작권 및 면책
+
+					-------------------------------------------------------------------------------------
+
+					제 1 장 총칙
+
+					제 1 조 (목적)
+					이 약관은 "경남AAC"에서 제공하는 홈페이지 서비스(이하 서비스)의 이용에 관한 조건 및 절차와 기타 필요한 사항을 규정하는 것을 목적으로 합니다.
+
+					제 2 조 (용어의 정의)
+					이 약관에서 사용하는 용어의 정의는 다음과 같습니다.
+					① "이용자"라 함은 이용계약 체결 여부와 관계없이 "경남AAC"에서 제공하는 서비스를 받는 회원 및 비회원
+					② "회원"이라 함은 약관에 동의하고 아이디(ID)와 비밀번호를 발급 받아 이용계약을 체결한 대상
+					③ "비회원"이라 함은 이용계약을 체결하지 않고 서비스를 이용하는 대상
+					④ "아이디(ID)"라 함은 이용자 식별과 이용자의 서비스 이용을 위하여 이용계약 체결 시 이용자의 선택에 의하여 "경남AAC"에서 부여하는 문자와 숫자의 조합
+					⑤ "비밀번호"라 함은 이용자 자신의 비밀을 보호하기 위하여 이용자 자신이 설정한 문자와 숫자의 조합
+					⑥ "게시물"이라 함은 "회원"이 서비스를 이용함에 있어 홈페이지에 게시한 글, 이미지, 문서를 의미
+					⑦ "이용계약"이라 함은 "경남AAC"의 서비스를 제공받기 위하여 이 약관으로 "경남AAC"와 이용자 간의 체결하는 계약
+					⑧ "이용해지"이라 함은 "경남AAC"의 서비스를 더이상 제공받지 않고 이용계약을 종료시키는 의사표시
+
+					제 3 조 (약관의 효력과 변경)
+					① 이 약관은 "경남AAC" 홈페이지에 게시하여 이용자가 회원가입함으로써 효력을 발생합니다.
+					② "경남AAC"는 합리적인 사유가 발생한 경우에는 이 약관을 변경할 수 있으며, 약관을 변경한 경우에는 변경내용을 최소 7일 이전에 공시합니다.
+					③ 등록자는 변경된 약관사항에 동의하지 않으면, 언제나 서비스 이용을 중단하고 이용계약을 해지할 수 있습니다. 약관의 효력발생일 이후의 계속적인 서비스 이용은 약관의 변경사항에 등록자가 동의한 것으로 간주됩니다.
+
+					제 4 조 (약관 외 준칙)
+					이 약관에 명시되지 않은 사항이 관계 법령에 규정되어 있을 경우 그 규정에 따르며, 그렇지 않은 경우에는 일반적인 관례에 따릅니다.
+
+					제 5 조 (적용범위)
+					① 이 약관은 "경남AAC"의 홈페이지 "회원"에게 적용합니다.
+					② 이 약관에 명시되지 아니한 사항에 대해서는 관계 법령 및 서비스별 이용안내의 취지에 따라 적용할 수 있습니다.
+
+
+					제 2 장 서비스 이용 계약
+
+					제 6 조 (이용계약의 성립)
+					① 이용계약은 이용자의 약관내용에 대한 동의와 이용자의 이용신청에 대한 "경남AAC"의 승낙으로 성립됩니다.
+					② 제1항의 규정에 의해 이용자가 이용신청을 할 때에는 "경남AAC"의 이용자 관리 시 필요로 하는 사항을 "회원가입" 서비스를 통하여 신청하여야 합니다.
+					③ 이용계약의 성립 시기는 회원가입 절차가 완료된 시점으로 합니다.
+
+					제 7 조(서비스 이용신청)
+					① 회원으로 가입하여 서비스를 이용하고자 하는 자는 "경남AAC"에서 요청하는 제반정보(성명, 연락처 등)를 제공하여야 합니다.
+					③ 타인의 명의를 도용하는 등 관계법령을 위반하여 이용신청을 한 회원의 모든 ID는 삭제되며, 관계법령에 따라 처벌을 받을 수 있습니다.
+
+					제 8 조 (이용계약 승인의 유보와 거절)
+					① "경남AAC"는 다음 각 호에 해당하는 경우에는 이용계약의 승인을 유보할 수 있습니다.
+					1. 서비스관련설비에 여유가 없거나 기술상에 지장이 있는 경우
+					2. 서비스의 효율적인 운영 등을 위하여 필요하다고 판단하는 경우
+
+					② "경남AAC"는 다음 각 호에 해당하는 이용계약 신청에 대한 승인을 거절할 수 있습니다.
+					1. 타인의 명의를 도용하여 이용신청을 하였을 때
+					2. 이용계약 신청서의 내용을 허위로 기재하였을 때
+					3. 이용자의 귀책사유로 인하여 승인이 불가능하거나 기타 규정한 제반 사항을 위반하며 신청하는 경우
+
+
+					제 3 장 서비스의 이용
+
+					제 9 조 (서비스 이용시간)
+					서비스의 이용 시간은 "경남AAC"의 업무 및 기술상 특별한 지장이 없는 한 연중무휴, 1일 24시간(00:00-24:00)을 원칙으로 합니다.
+					다만 정기점검 등의 필요로 "경남AAC"에서 정한 날이나 시간은 그러하지 아니합니다. 그리고 서비스의 중지 및 제한에 대해서는 별도의 조항에 따릅니다.
+
+					제 10 조 (이용계약의 해지 및 서비스 이용의 제한)
+					① "회원"이 서비스 이용계약을 해지하고자 하는 때에는 "경남AAC"에 해지신청을 하여야 합니다.
+					② "경남AAC"는 "회원"이 다음 각 호에 해당하는 경우 사전통지 없이 이용계약을 해지하거나 전부 또는 일부의 서비스 제공을 중지할 수 있습니다.
+					1. 타인의 아이디(ID) 및 비밀번호를 도용한 경우
+					2. 다량의 정보를 전송하여 서비스의 안정적 운영을 방해하는 경우
+					3. 수신자의 의사에 반하는 광고성 정보, 전자우편을 전송하는 경우
+					4. 정보통신윤리위원회로부터의 이용제한 요구 대상인 경우
+					5. 서비스를 이용하여 얻은 정보를 "경남AAC"의 동의 없이 상업적으로 이용하는 경우
+					6. 기타 "경남AAC"에서 부적당하다고 판단한 경우
+
+					제 11 조 (게시물의 삭제 이용 제한)
+					① "경남AAC"는 서비스용 설비의 용량에 여유가 없다고 판단하는 경우 관련 사항을 사전공지 후 필요에 따라 이용자가 게재 또는 등록한 내용물을 삭제하거나 이용자의 서비스 이용을 부분적으로 제한할 수 있습니다.
+					② "경남AAC"는 이용자가 게재 또는 등록하는 서비스내의 내용물이 다음 각 호에 해당한다고 판단하는 경우에 이용자에게 사전 통지 없이 삭제할 수 있습니다.
+					1. 다른 이용자 또는 제 3자를 비방하거나 중상모략으로 명예를 손상시키는 경우
+					2. 해당 게시판의 운영 목적에 적합하지 않다고 판단되는 경우
+					3. 공공질서 및 미풍양속에 위반되는 내용의 정보, 문장, 도형 등을 유포하는 경우
+					4. 반국가적, 반사회적, 범죄적 행위와 결부된다고 판단되는 경우
+					5. 게시 기간이 규정된 기간을 초과한 경우
+					6. 기타 관계 법령에 위배된다고 판단되는 경우
+
+					제 12 조 (서비스의 중지 및 제한)
+					① "경남AAC"는 다음 각 호에 해당하는 경우 서비스 제공을 중지할 수 있습니다.
+					1. 서비스용 설비의 보수 또는 공사로 인한 부득이한 경우
+					2. 전기통신사업법에 규정된 기간통신사업자가 전기통신 서비스를 중지했을 때
+					② "경남AAC"는 국가비상사태, 서비스 설비의 장애 또는 서비스 이용의 폭주 등으로 서비스 이용에 지장이 있는 때에는 서비스 제공을 중지하거나 제한할 수 있습니다.
+
+
+					제 4 장 의무
+
+					제 13 조 ("경남AAC"의 의무)
+					① "경남AAC"는 "경남AAC"의 설비를 안정적인 서비스 제공에 적합하도록 유지하여야 하며 서비스용 설비에 장애 발생 시 조속히 복구하도록 노력하여야 합니다.
+					② 서비스 내용의 변경 또는 추가사항이 있는 경우 그 사항을 온라인을 통해 서비스 화면에 공지합니다.
+
+					제 14 조 (개인정보보호)
+					① "경남AAC"는 공공기관의정보공개에관한법률, 정보통신망이용촉진등에관한법률 등 관계법령에 따라 이용신청 시 제공받는 "회원"의 개인정보, 이후에 추가로 제공받는 개인정보 및 서비스 이용 중 생성되는 개인정보를 보호하여야 합니다.
+					② "경남AAC"는 개인정보를 이용고객의 별도의 동의 없이 제3자에게 제공하지 않으며, 다음 각 호의 경우는 이용고객의 별도 동의 없이 제3자에게 등록자의 개인정보를 제공할 수 있습니다.
+					1. 수사상 목적에 따른 수사기관의 서면 요구가 있는 경우에 수사협조의 목적으로 국가수사 기관에 성명, 주소등 신상정보를 제공하는 경우
+					2. 신용정보의 이용 및 보호에 관한 법률, 전기통신 관련법률 등 법률에 특별한 규정이 있는 경우
+					3. 통계작성, 학술연구 또는 시장조사를 위하여 필요한 경우로서 특정 개인을 식별할 수 없는 형태로 제공하는 경우
+					③ "회원"은 언제나 자신이 입력한 개인정보를 열람할 수 있으며, 오류를 수정 할 수 있습니다. 자세한 방법은 이용안내에서 정한 바에 따릅니다.
+					④ "회원"은 언제나 이용계약을 해지함으로써 개인정보의 수집 및 이용에 대한 동의, 목적 외 사용에 대한 별도동의, 제3자 제공에 대한 별도의 동의를 철회 할 수 있습니다. 해지는 회원이 원하는 경우 "경남AAC"의 해지절차를 통해 하실 수 있습니다.
+
+					제 15 조 ("회원"의 의무)
+					① "회원"은 서비스를 이용할 때 다음 각 호의 행위를 하지 않아야 합니다.
+					. 신청 또는 변경 시 허위내용의 등록
+					. 타인의 정보도용
+					. "경남AAC"가 게시한 정보의 변경
+					. "경남AAC"가 정한 정보 이외의 정보(컴퓨터 프로그램 등) 등의 송신 또는 게시
+					. "경남AAC"와 기타 제3자의 저작권 등 지적재산권에 대한 침해
+					. "경남AAC" 및 기타 제3자의 명예를 손상시키거나 업무를 방해하는 행위
+					. 외설 또는 폭력적인 메시지, 화상, 음성, 기타 공서양속에 반하는 정보를 "서비스"에 공개 또는 게시하는 행위
+					. "경남AAC"의 동의 없이 영리를 목적으로 "서비스"를 사용하는 행위
+					. 기타 불법적이거나 부당한 행위
+					② "회원"은 관계법, 이 약관의 규정 및 "서비스"와 관련하여 공지한 주의사항, "경남AAC"이 통지하는 사항 등을 준수하여야 하며, 기타 "경남AAC"의 업무에 방해되는 행위를 하여서는 안 됩니다.
+					③ "회원"이 사용하는 단말기 등은 전기통신설비의 기술기준에 관한 규칙이 정하는 기준에 적합하여야 하며, "서비스"에 장애를 주지 않아야 합니다.
+
+					제 16 조 (ID 및 비밀번호 등)
+					① ID 및 비밀번호에 대한 모든 관리책임은 "회원"에게 있습니다.
+					② "회원"은 ID를 공유, 양도 또는 변경할 수 없습니다.
+					③ "회원"에게 부여된 ID에 의하여 발생되는 서비스 이용 상의 과실 또는 제3자에 의한 부정사용 등에 대한 모든 책임은 "회원"에게 있습니다.
+
+
+					제 5 장 저작권 및 면책
+
+					제 17 조 (게재된 자료에 대한 권리)
+					① "회원"이 "서비스" 내에 게시한 "게시물"의 저작권은 해당 게시물의 저작자에게 귀속됩니다.
+					② "회원"이 "서비스" 내에 게시하는 "게시물"은 검색결과 내지 "서비스" 및 관련 이벤트 등에 노출될 수 있습니다. 이 경우, "경남AAC"는 저작권법 규정을 준수하며, "회원"은 언제든지 게시물에 대해 삭제 등의 조치를 취할 수 있습니다.
+					③ "경남AAC"는 제2항 이외의 방법으로 "회원"의 "게시물"을 이용하고자 하는 경우에는 전화, 팩스, 전자우편 등을 통해 사전에 "회원"의 동의를 얻어야 합니다.
+
+					제 18 조 (면책)
+					① "경남AAC"는 천재지변 또는 이에 준하는 불가항력으로 인하여 "서비스"를 제공할 수 없는 경우에는 "서비스" 제공에 관한 책임이 면제됩니다.
+					② "경남AAC"는 "회원"의 귀책사유로 인한 "서비스" 이용의 장애에 대하여는 책임을 지지 않습니다.
+					③ "경남AAC"는 "회원"이 "서비스"와 관련하여 게재한 정보, 자료, 사실의 신뢰도, 정확성 등의 내용에 관하여는 책임을 지지 않습니다.
+					④ "경남AAC"는 "회원" 간 또는 "회원"과 제3자 상호간에 "서비스"를 매개로 하여 거래 등을 한 경우에는 책임이 면제됩니다.
+					⑤ "경남AAC"는 서비스 이용과 관련하여 관련법에 특별한 규정이 없는 한 책임을 지지 않습니다.
+
+					제 19 조 (분쟁의 해결)
+					① "경남AAC"와 "회원" 간 제기된 소송은 대한민국법을 준거법으로 합니다.
+					② "경남AAC"와 "회원"은 서비스와 관련하여 발생한 분쟁을 원만하게 해결하기 위하여 필요한 모든 노력을 하여야 합니다.
+					③ "경남AAC"와 "회원"간 발생한 분쟁에 관한 소송은 민사소송법 상의 관할법원에 제소합니다.
+
+
+					▶ 이용약관 시행일자 : 2025년 03월 10일
 				</div>
 			</div>
-			<div class="col-sm-12">
-				<h5 class="mb-2 font-santteutdotum-l">2. 개인정보 수집 동의</h5>
-				<div class="border border-1 rounded-4 p-4 bg-white">
-					It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-				</div>
-				<div class="form-check mt-4 d-flex justify-content-end">
-					<label class="form-check-label me-8" for="privacy"> 위 내용에 동의합니다. </label>
-					<input class="form-check-input" type="checkbox" value="" id="privacy">
+			<div class="form-check mt-4 d-flex justify-content-end">
+				<label class="form-check-label me-8" for="termsofuse"> 위 내용에 동의합니다. </label>
+				<input class="form-check-input" type="checkbox" value="" id="termsofuse">
+			</div>
+		</div>
+		<div class="col-sm-12">
+			<h5 class="mb-2 font-santteutdotum-l">2. 개인정보 수집 동의</h5>
+			<div class="border border-1 rounded-4 p-4 bg-white">
+				<div class="h-px-400 ps auto-linebreak">
+					개인정보의 수집 및 이용 목적
+					경남AAC 사이트에서 제공하는 서비스는 다음의 목적을 위해 개인정보를 수집 및 이용합니다. 수집된 개인정보는 다음 목적 이외의 용도로는 이용되지 않습니다.
+					1.홈페이지 회원가입 및 관리
+					2.사이트 업무와 관련된 연락․통지
+					3.사이트 관련 서비스 제공, 본인인증 등
+					4.접속 빈도 파악 또는 회원의 서비스 이용에 대한 통계
+
+					수집하려는 개인정보의 항목
+					- 필수항목 : 아이디, 비밀번호, 이름, 휴대폰번호
+					- 선택항목 : 전화번호, SMS 수신여부, EMAIL 수신여부
+
+					개인정보의 보유 및 이용기간
+					회원가입 일로부터 탈퇴시까지 또는 사이트 운영종료일까지
+
+					개인정보 수집에 대한 거부 권리 및 그에 따른 서비스 제한사항
+					이용자는 본 사이트에서 수집하는 개인정보에 대해 동의를 거부할 권리가 있으나 필수항목에 대한 수집, 이용에 대한 동의 거부 시 회원가입과 서비스 이용에 제한을 받을 수 있습니다.
 				</div>
 			</div>
-			<div class="mt-4">
-				<button class="btn btn-primary d-grid w-100" type="button" onclick="checkAgree();">다음으로</button>
+			<div class="form-check mt-4 d-flex justify-content-end">
+				<label class="form-check-label me-8" for="privacy"> 위 내용에 동의합니다. </label>
+				<input class="form-check-input" type="checkbox" value="" id="privacy">
 			</div>
+		</div>
+		<div class="mt-4">
+			<button class="btn btn-primary d-grid w-100" type="button" onclick="checkAgree();">다음으로</button>
 		</div>
 	</div>
 </div>
+<!--<div class="position-relative">-->
+<!--	<div class="d-flex flex-column justify-content-center">-->
+<!--		<div class="hero-text-box text-center">-->
+<!--			<h2 class="text-primary hero-title fs-2 font-SFssaraknoon">SIGN-UP</h2>-->
+<!--		</div>-->
+<!--		<div class="w-px-600 mt-1 mx-auto">-->
+<!--		</div>-->
+<!--	</div>-->
+<!--</div>-->
