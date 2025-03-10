@@ -29,18 +29,17 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		require_once APPPATH . 'config/extra/builder/builder_base_constants.php';
 		$this->load->helper(["builder/builder_web","builder/builder_base","builder/builder_form",]);
 		$this->lang->load("builder/base", $this->config->item('language'));
-		$this->lang->load('builder/form_validation', $this->config->item('language'));
 
 		if(!$this->flag) show_error("Platform flag is not set.");
 
-		$this->lang->load("{$this->flag}/custom", $this->config->item('language'));
-		$this->lang->load("{$this->flag}/nav", $this->config->item('language'));
-		$this->lang->load("{$this->flag}/form", $this->config->item('language'));
 		foreach (glob(APPPATH . "config/extra/{$this->flag}/*_config.php") as $file) {
 			$this->config->load("extra/{$this->flag}/" . substr(basename($file),0,strpos(basename($file),'.')));
 		}
 		foreach (glob(APPPATH . "config/extra/{$this->flag}/*_constants.php") as $file) {
 			require_once $file;
+		}
+		foreach (glob(APPPATH.'language'.DIRECTORY_SEPARATOR.$this->config->item('language').DIRECTORY_SEPARATOR.$this->flag.DIRECTORY_SEPARATOR.'*_lang.php') as $file) {
+			$this->lang->load($this->flag.DIRECTORY_SEPARATOR.str_replace('_lang.php', '', basename($file)), $this->config->item('language'));
 		}
 
 		$this->baseViewPath = BUILDER_FLAGNAME."/layout/index";
@@ -78,7 +77,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			$data['backLink'] = WEB_HISTORY_BACK;
 			$this->viewApp($data);
 		}else{
-			$this->{"{$this->pageConfig['type']}"}();
+			$this->{"{$this->pageConfig['properties']['baseMethod']}"}();
 		}
 	}
 
@@ -104,7 +103,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 
 	public function view($key = 0)
 	{
-		if(!$key) alert('잘못된 접근입니다.');
+		if(!$key) alert(lang('Incorrect Access'));
 
 		$this->phptojs->append(['KEY' => $key]);
 
@@ -156,7 +155,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 	{
 		if($this->sideForm) show_404();
 
-		if(!$key) alert('잘못된 접근입니다.');
+		if(!$key) alert(lang('Incorrect Access'));
 
 		$this->phptojs->append(['KEY' => $key]);
 
