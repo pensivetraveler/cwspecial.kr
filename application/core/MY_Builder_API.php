@@ -449,22 +449,43 @@ class MY_Builder_API extends MY_Controller_API
 				}
 
 				if($attr['group_repeater']) {
-					$cnt = 0;
-					foreach ($targetData as $k => $v) {
-						$targetData[$k] = array_values($v);
-						if($cnt === 0) $cnt = count($v);
-						$cnt = min($cnt, count($v));
-					}
+					if($enveloped) {
+						foreach ($targetData as $i => $item) {
+							foreach ($item as $field => $value) {
+								if(empty($value)) {
+									unset($targetData[$i]);
+									break;
+								}
+							}
+						}
+						$targetData = array_values($targetData);
+						for($i = 0; $i < count($targetData); $i++) {
+							$this->form_validation->set_data($targetData[$i]);
+							if($this->form_validation->run() === false) {
+								$errors = array_merge(
+									$errors,
+									$this->setValidateFormErrors(validation_errors_array(), $method, $group, $attr, $i),
+								);
+							}
+						}
+					}else{
+						$cnt = 0;
+						foreach ($targetData as $field => $value) {
+//							$targetData[$field] = array_values($value);
+							if($cnt === 0) $cnt = count($value);
+							$cnt = min($cnt, count($value));
+						}
 
-					for($i = 0; $i <= $cnt; $i++) {
-						$item = [];
-						foreach ($targetData as $k => $v) $item[$k] = $v[$i];
-						$this->form_validation->set_data($item);
-						if($this->form_validation->run() === false) {
-							$errors = array_merge(
-								$errors,
-								$this->setValidateFormErrors(validation_errors_array(), $method, $group, $attr, $i),
-							);
+						for($i = 0; $i <= $cnt; $i++) {
+							$item = [];
+							foreach ($targetData as $k => $v) $item[$k] = $v[$i];
+							$this->form_validation->set_data($item);
+							if($this->form_validation->run() === false) {
+								$errors = array_merge(
+									$errors,
+									$this->setValidateFormErrors(validation_errors_array(), $method, $group, $attr, $i),
+								);
+							}
 						}
 					}
 				}else{
