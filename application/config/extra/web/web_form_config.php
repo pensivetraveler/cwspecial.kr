@@ -462,6 +462,31 @@ $config['form_notices_config'] = [
 		'attributes' => [],
 		'list' => false,
 	],
+	[
+		'field' => 'uploads',
+		'label' => 'lang:article.uploads',
+		'form' => true,
+		'rules' => 'trim',
+		'errors' => [],
+		'category' => 'basic',
+		'type' => 'file',
+		'icon' => 'ri-file-image-line',
+		'attributes' => [
+			'accept' => 'image/jpeg,image/png',
+		],
+		'form_text' => [
+			'line' => 'Upload File Only',
+			'replace' => 'IMG',
+			'icon' => 'ri-file-image-fill',
+			'icon_size' => 16,
+		],
+		'form_attributes' => [
+			'with_list' => true,
+			'list_sorter' => true,
+			'list_delete' => 'attachment',
+		],
+		'list' => false,
+	],
 ];
 
 $config['form_inquiries_config'] = [

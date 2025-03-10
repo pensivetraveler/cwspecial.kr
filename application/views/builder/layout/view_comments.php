@@ -1,4 +1,4 @@
-<div class="card mb-2" id="comment-container">
+<div class="card mt-4" id="comment-container">
 	<div class="card-header">
 		<?php
 		echo form_open('', [
