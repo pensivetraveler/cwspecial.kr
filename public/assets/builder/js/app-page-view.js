@@ -1,3 +1,18 @@
+function setViewListItemFile(item) {
+	const fullItem = JSON.stringify(item).replace(/"/g, "'");
+	return `
+        <div class="form-list-item d-flex align-items-center" data-full-item="${fullItem}">
+            <div class="badge text-body text-truncate">
+                <a href="${common.CURRENT_URI}/downloader/${item.file_id}">
+                    <i class="ri-file-download-fill ri-16px align-middle"></i>
+                    <span class="h6 mb-0 align-middle">${item.orig_name}</span>
+                </a>
+            </div>
+        </div>
+    `;
+
+}
+
 function applyViewData(dataId) {
 	const data = getData(dataId);
 	const container = document.getElementById('view-container');
@@ -13,8 +28,22 @@ function applyViewData(dataId) {
 					if(data[key] !== null && data[key].length && data[key][0].file_link !== null) {
 						container.querySelector(`#${key}`).style.backgroundImage = `url(${data[key][0].file_link})`
 					}else{
-						container.querySelector('.thumbnail-wrap').style.display = 'none';
+						container.querySelector(`#${key}`).classList.add('none');
 					}
+					break;
+				case 'uploads' :
+					let html = '';
+					if(data[key] !== null && data[key].length) {
+						let list = [];
+						if(!isEmpty(data[key])) {
+							isArray(data[key]) ? list = data[key] : list.push(data[key]);
+							list.forEach((item) => {
+								html += setViewListItemFile(item);
+							});
+							container.querySelector(`#${key}`).classList.remove('d-none');
+						}
+					}
+					document.querySelector(`#${key}`).innerHTML = html;
 					break;
 				default :
 					container.querySelector(`#${key}`).innerHTML = data[key];
@@ -53,4 +82,6 @@ $(function() {
 			params: common.PAGE_LIST_URI,
 		});
 	});
+
+	document.getElementById('loader').classList.add('d-none');
 });
