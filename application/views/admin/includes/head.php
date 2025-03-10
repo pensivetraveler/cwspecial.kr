@@ -72,14 +72,15 @@ $bodyAttrs = implode(' ', array_map(
 	<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/select2/select2.css');?>" />
 	<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/bootstrap-select/bootstrap-select.css');?>" />
 	<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/quill/editor.css');?>" />
+	<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/libs/spinkit/spinkit.css');?>" />
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/css/custom.css');?>" />
 
 	<!-- Page CSS -->
 	<!-- Page -->
 	<?php if(isset($addCSS)) add_stylesheet($addCSS); ?>
 	<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/vendor/css/pages/page-misc.css');?>" />
-
-	<!-- Custom CSS -->
-	<link rel="stylesheet" href="<?php echo base_url('public/assets/builder/css/custom.css');?>" />
 
 	<!-- Base JS -->
 	<script src="<?php echo base_url('public/assets/base/js/html5.min.js');?>"></script>
@@ -92,6 +93,7 @@ $bodyAttrs = implode(' ', array_map(
 	<!-- Core JS -->
 	<script src="<?php echo base_url('public/assets/builder/vendor/libs/jquery/jquery.js');?>"></script>
 	<script src="<?php echo base_url('public/assets/builder/vendor/js/bootstrap.js');?>"></script>
+	<!-- endbuild -->
 
 	<!-- Helpers -->
 	<script src="<?php echo base_url('public/assets/builder/vendor/js/helpers.js');?>"></script>
@@ -107,14 +109,14 @@ $bodyAttrs = implode(' ', array_map(
 	<script src="<?php echo base_url('public/assets/builder/js/app-page-errors.js');?>"></script>
 
 	<?php if(!isset($status_code) || !in_array($status_code, [404, 500])): ?>
-	<script>
-		const appName = '<?=$this->config->config['phptojs']['namespace']?>';
-		window.<?=$this->config->config['phptojs']['namespace']?> = window.<?=$this->config->config['phptojs']['namespace']?> || {};
-	</script>
-	<script src="<?php echo base_url('public/assets/builder/js/builder-common.js');?>"></script>
+		<script>
+			const appName = '<?=$this->config->config['phptojs']['namespace']?>';
+			window.<?=$this->config->config['phptojs']['namespace']?> = window.<?=$this->config->config['phptojs']['namespace']?> || {};
+		</script>
+		<script src="<?php echo base_url('public/assets/builder/js/builder-common.js');?>"></script>
 
-	<?php if(isset($addJS['head'])) add_javascript($addJS['head']); ?>
-	<?php if(property_exists($this, 'phptojs')) echo $this->phptojs->getJsVars(); ?>
+		<?php if(isset($addJS['head'])) add_javascript($addJS['head']); ?>
+		<?php if(property_exists($this, 'phptojs')) echo $this->phptojs->getJsVars(); ?>
 	<?php endif; ?>
 
 	<?php if(ENVIRONMENT === 'production'): ?>
