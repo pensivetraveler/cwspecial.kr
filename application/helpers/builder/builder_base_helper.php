@@ -84,10 +84,10 @@ function get_builder_html_attributes($flag): string
 function get_builder_body_attributes($production = false): string
 {
 	$append = [
-		'oncontextmenu' => 'return true',
-		'onselectstart' => 'return true',
-		'ondragstart' => 'return true',
-		'onkeydown' => 'return true',
+//		'oncontextmenu' => 'return true',
+//		'onselectstart' => 'return true',
+//		'ondragstart' => 'return true',
+//		'onkeydown' => 'return true',
 	];
 
 	$CI =& get_instance();
