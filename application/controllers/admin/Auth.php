@@ -52,7 +52,6 @@ class Auth extends Common
 		$data['subPage'] = 'admin/auth/first_registration';
 		$data['backLink'] = WEB_HISTORY_BACK;
 		$data['formData'] = restructure_admin_form_data($this->jsVars['FORM_DATA'], false);
-		$data['formType'] = 'page';
 
 		$this->viewApp($data);
 	}
