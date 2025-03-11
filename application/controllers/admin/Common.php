@@ -30,7 +30,7 @@ class Common extends MY_Builder_WEB
 		if(!$this->session->userdata('user_id')) redirect('admin/auth');
 
 		$user = $this->Model_User->getData([], ['user_id' => $this->session->userdata('user_id')]);
-		if(!$user || $user->user_cd !== 'USR001') alert('잘못된 전급입니다.', '/');
+		if(!$user || !in_array($user->user_cd, ['USR000', 'USR001'])) alert(lang('Incorrect Access'), base_url('admin/auth'));
 
 		if($this->session->userdata('token')) {
 			$this->validateToken();
