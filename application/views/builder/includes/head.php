@@ -1,33 +1,4 @@
-<?php
-$bodyAttrsList = [
-		'data-class' => $class ?? '',
-		'data-method' => $method ?? '',
-		'data-onload' => 'false',
-];
-if (ENVIRONMENT === 'production') {
-	$bodyAttrsList = array_merge($bodyAttrsList, [
-			'oncontextmenu' => 'return false',
-			'onselectstart' => 'return false',
-			'ondragstart' => 'return true',
-			'onkeydown' => 'return false',
-	]);
-}
-$bodyAttrs = implode(' ', array_map(
-		function ($key, $value) {
-			return $key . '="' . $value . '"';
-		},
-		array_keys($bodyAttrsList),
-		$bodyAttrsList
-));
-?>
-<html
-		lang="ko"
-		class="light-style layout-navbar-fixed layout-menu-fixed layout-compact"
-		dir="ltr"
-		data-theme="theme-default"
-		data-assets-path="/public/assets/builder/"
-		data-template="vertical-menu-template-starter"
-		data-style="light">
+<html <?=$htmlAttrs??''?>>
 <head>
 	<title><?=isset($data['title'])?$data['title']:APP_NAME_EN;?></title>
 	<meta charset="utf-8">
@@ -125,4 +96,4 @@ $bodyAttrs = implode(' ', array_map(
 		</script>
 	<?php endif; ?>
 </head>
-<body <?=$bodyAttrs?>>
+<body <?=$bodyAttrs??''?>>
