@@ -19,7 +19,7 @@ class MY_Router extends CI_Router
 
         // Is the class name in except router?
 
-        if (in_array($class, $this->routes['except_folders'])) {
+        if (in_array($class, $this->routes['except_folders']??[])) {
             parent::_set_default_controller();
         }
 
