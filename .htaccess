@@ -1,16 +1,16 @@
-<IfModule mod_php5.c>
+<IfModule mod_php.c>
     #Session timeout
     php_value session.cookie_lifetime 43200
     php_value session.gc_maxlifetime 43200
 </IfModule>
 <IfModule mod_env.c>
     #Set Environment(development,testing,production)
-    SetEnv CI_ENV development
+    SetEnv CI_ENV production
 </IfModule>
 <IfModule mod_rewrite.c>
     #if mod_env module not enabled in server
     #Set Environment(development,testing,production)
-    RewriteRule ^ - [E=CI_ENV:development]
+    RewriteRule ^ - [E=CI_ENV:production]
 
     Options +FollowSymlinks -Indexes
     RewriteEngine On
