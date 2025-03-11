@@ -13,8 +13,8 @@ define('CLI_YN', php_sapi_name() === 'cli');
 | NAME
 |--------------------------------------------------------------------------
 */
-define("APP_NAME_EN", getenv('APP_NAME_EN'));
-define("APP_NAME_KR", getenv('APP_NAME_KR'));
+//define("APP_NAME", getenv('APP_NAME'));
+//define("APP_NAME_KR", getenv('APP_NAME_KR'));
 
 /*
 |--------------------------------------------------------------------------

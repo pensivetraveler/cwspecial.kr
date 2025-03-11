@@ -22,6 +22,9 @@ class MY_Hooks
 		$dotenv->usePutenv();
 		if(getenv('CI_ENV') && file_exists(FCPATH.'.env.'.getenv('CI_ENV')))
 			$dotenv->load(FCPATH.'.env.'.getenv('CI_ENV'));
+
+		define("APP_NAME", getenv('APP_NAME'));
+		define("APP_NAME_KR", getenv('APP_NAME_KR'));
 	}
 
 	public function SystemOfInspection()
