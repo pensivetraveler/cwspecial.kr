@@ -1,6 +1,6 @@
 <html <?=$htmlAttrs??''?>>
 <head>
-	<title><?=isset($data['title'])?$data['title']:APP_NAME_EN;?></title>
+	<title><?=isset($data['title'])?$data['title']:APP_NAME;?></title>
 	<meta charset="utf-8">
 	<meta name="author" content="" />
 

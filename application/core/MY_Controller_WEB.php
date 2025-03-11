@@ -135,7 +135,7 @@ class MY_Controller_WEB extends MY_Controller
 		$this->addJS['head'] = unravel_list($this->addJS['head']);
 		$this->addJS['tail'] = unravel_list($this->addJS['tail']);
 
-        $data['title'] = get_site_title(APP_NAME_EN, $this->titleList);
+        $data['title'] = get_site_title(APP_NAME, $this->titleList);
         $data['addCSS'] = $this->addCSS;
         $data['addJS'] = $this->addJS;
         $data['dialog'] = $this->session->flashdata('dialog');
