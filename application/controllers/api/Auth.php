@@ -270,9 +270,10 @@ class Auth extends Common
 
 		delete_cookie('autologin');
 
+		foreach ($this->session->userdata() as $key=>$val) {
+			$this->session->unset_userdata($key);
+		}
 		$this->session->sess_destroy();
-		$this->session->unset_userdata('user_id');
-		$this->session->unset_userdata('token');
 
 		// 세션 쿠키 삭제
 		if (isset($_COOKIE[$this->config->item('sess_cookie_name')])) {
