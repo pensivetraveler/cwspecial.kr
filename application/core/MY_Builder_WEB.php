@@ -252,6 +252,10 @@ class MY_Builder_WEB extends MY_Controller_WEB
 
 		$data['platformName'] = PLATFORM_NAME??'builder';
 
+		// builder attributes
+		$data['htmlAttrs'] = get_builder_html_attributes($this->flag);
+		$data['bodyAttrs'] = get_builder_body_attributes(ENVIRONMENT !== 'production');
+
 		parent::viewApp($data);
 	}
 

@@ -37,3 +37,30 @@ if ( ! function_exists('percentize'))
 		return $formatter->format($fraction);
 	}
 }
+
+
+// --------------------------------------------------------------------
+
+if ( ! function_exists('get_language_code'))
+{
+	function get_language_code($language): string
+	{
+		$languages = [
+			'english' => 'en',
+			'korean' => 'ko',
+			'japanese' => 'ja',
+			'chinese' => 'zh',
+			'french' => 'fr',
+			'german' => 'de',
+			'spanish' => 'es',
+			'italian' => 'it',
+			'russian' => 'ru',
+			'portuguese' => 'pt',
+			'arabic' => 'ar',
+			'hindi' => 'hi'
+		];
+
+		$language = strtolower($language);
+		return $languages[$language] ?? 'en';
+	}
+}

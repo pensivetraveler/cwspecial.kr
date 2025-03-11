@@ -46,3 +46,62 @@ if ( ! function_exists('reformat_bool_type_list'))
 		}));
 	}
 }
+
+function get_builder_html_attributes($flag): string
+{
+	$classList = [];
+	$template = '';
+	switch ($flag) {
+		case 'admin' :
+			$classList = ['light-style','layout-navbar-fixed','layout-menu-fixed','layout-compact'];
+			$template = 'vertical-menu-template-starter';
+			break;
+		case 'web' :
+			$classList = ['light-style','layout-navbar-fixed','layout-wide'];
+			$template = 'front-pages';
+			break;
+	}
+
+	$attrs = [
+		'lang' => get_language_code(config_item('language')),
+		'class' => implode(' ', $classList),
+		'dir' => 'ltr',
+		'data-theme' => 'theme-default',
+		'data-assets-path' => '/'.BUILDER_ASSET_URI,
+		'data-template' => $template,
+		'data-style' => 'light',
+	];
+
+	return implode(' ', array_map(
+		function ($key, $value) {
+			return $key . '="' . $value . '"';
+		},
+		array_keys($attrs),
+		$attrs
+	));
+}
+
+function get_builder_body_attributes($production = false): string
+{
+	$append = [
+		'oncontextmenu' => 'return true',
+		'onselectstart' => 'return true',
+		'ondragstart' => 'return true',
+		'onkeydown' => 'return true',
+	];
+
+	$CI =& get_instance();
+	$attrs = array_merge([
+		'data-class' => $CI->router->class,
+		'data-method' => $CI->router->method,
+		'data-onload' => 'false',
+	], $production ? $append : []);
+
+	return implode(' ', array_map(
+		function ($key, $value) {
+			return $key . '="' . $value . '"';
+		},
+		array_keys($attrs),
+		$attrs
+	));
+}
