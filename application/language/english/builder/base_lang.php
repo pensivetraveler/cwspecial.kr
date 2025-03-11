@@ -58,3 +58,5 @@ $lang['Find ID'] = 'Find ID';
 $lang['Find Password'] = 'Find Password';
 $lang['Administrator'] = 'Administrator';
 $lang['Registration'] = 'Registration';
+$lang['Add Event'] = 'Add Event';
+$lang['System Administrator Registration'] = 'System Administrator Registration';

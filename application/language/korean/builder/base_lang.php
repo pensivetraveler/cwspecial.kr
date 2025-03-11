@@ -58,3 +58,5 @@ $lang['Find ID'] = '아이디 찾기';
 $lang['Find Password'] = '비밀번호 찾기';
 $lang['Administrator'] = '관리자';
 $lang['Registration'] = '등록';
+$lang['Add Event'] = '일정 등록';
+$lang['System Administrator Registration'] = '시스템 관리자 추가';
