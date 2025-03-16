@@ -19,5 +19,6 @@ function readMessage(messageId, articleId) {
 }
 
 $(function(){
-	new PerfectScrollbar(document.querySelector('.dropdown-notifications-list'));
+	if(document.querySelectorAll('.dropdown-notifications-list').length)
+		new PerfectScrollbar(document.querySelector('.dropdown-notifications-list'));
 })
