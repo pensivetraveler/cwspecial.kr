@@ -153,6 +153,7 @@ class Auth extends Common
 			'user_id' => $userData->user_id,
 			'token' => $this->setToken([
 				'user_id' => $userData->user_id,
+				'user_cd' => $userData->user_cd,
 				'id' => $userData->id,
 				'name' => $userData->name,
 				'is_admin' => in_array($userData->user_cd, ['USR000', 'USR001']),
