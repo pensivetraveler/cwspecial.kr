@@ -17,6 +17,7 @@ class MY_Controller_WEB extends MY_Controller
     protected array $validateCallback;
 
     public string $baseViewPath = '';
+    public string $isLoginRedirect;
     public string $noLoginRedirect;
     public array $data;
     public array $titleList;
@@ -60,9 +61,9 @@ class MY_Controller_WEB extends MY_Controller
         }
     }
 
-    protected function auth(): bool
+    protected function checkLogin(): bool
     {
-        return true;
+        return false;
     }
 
     protected function validateToken()
@@ -76,9 +77,9 @@ class MY_Controller_WEB extends MY_Controller
 				$this->session->unset_userdata('token');
                 switch ($decodedToken['message']) {
                     case 'Token Time Expire.':
-						alert('토큰 유효 시간이 지났습니다.', base_url($this->noLoginRedirect));
+						alert(lang('Token Expired'), base_url($this->noLoginRedirect));
                     default:
-						alert('올바른 토큰 값이 아닙니다.', base_url($this->noLoginRedirect));
+						alert(lang('Invalid Token'), base_url($this->noLoginRedirect));
                 }
             }else{
                 $this->session->set_userdata('token', $token);

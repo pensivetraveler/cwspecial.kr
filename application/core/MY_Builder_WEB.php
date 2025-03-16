@@ -4,10 +4,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class MY_Builder_WEB extends MY_Controller_WEB
 {
 	public string $flag = '';
+	public string $baseUri = '';
 	public array $pageConfig;
 	public string $pageType;
 	public bool $sideForm;
 	public array $headerData;
+	public object $loginData;
 	public string $href;
 	public array $listConfig;
 	public array $listColumns;
@@ -15,6 +17,9 @@ class MY_Builder_WEB extends MY_Controller_WEB
 	public array $formConfig;
 	public array $formColumns;
 	public string $viewPath;
+	public array $navAuth;
+	public bool $isLogin = false;
+	public bool $isAdmin = false;
 
 	public function __construct()
 	{
@@ -43,33 +48,36 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		}
 
 		$this->baseViewPath = BUILDER_FLAGNAME."/layout/index";
-		$this->noLoginRedirect = "{$this->flag}/auth/login";
+		$this->baseUri = $this->flag === $this->router->routes['default_platform'] ? '' : $this->flag;
+		$this->isLoginRedirect = "$this->baseUri/{$this->config->item('platform_config.isLoginRedirect')}";
+		$this->noLoginRedirect = "$this->baseUri/{$this->config->item('platform_config.noLoginRedirect')}";
 
 		$this->titleList = [ucfirst($this->flag)];
 		$this->pageConfig = [];
 		$this->pageType = 'form';
 		$this->sideForm = false;
 		$this->headerData = [];
-		if($this->router->routes['default_platform'] === $this->flag){
-			$this->href = base_url("/".$this->router->class);
-		}else{
-			$this->href = base_url("/{$this->flag}/".$this->router->class);
-		}
+		$this->href = base_url("$this->baseUri/{$this->router->class}");
 		$this->listConfig = $this->formConfig = [];
 		$this->listColumns = $this->formColumns = [];
-		$this->viewPath = "{$this->flag}/".$this->router->class;
+		$this->viewPath = "$this->flag/{$this->router->class}";
 		$this->jsVars = [
 			'TITLE' => $this->router->class,
 			'API_URI' => '',
 			'API_PARAMS' => [],
 		];
 
+		$this->isLogin = $this->checkLogin();
 		if($this->router->class !== 'common') $this->setProperties();
 		if(ENVIRONMENT === 'development') $this->output->enable_profiler(TRUE);
 	}
 
 	public function index()
 	{
+		if(!$this->Model_User->getCnt(['user_cd' => 'USR000'])){
+			$this->first_registration();
+		}
+
 		parent::index();
 
 		if(empty($this->pageConfig)) {
@@ -77,6 +85,14 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			$data['backLink'] = WEB_HISTORY_BACK;
 			$this->viewApp($data);
 		}else{
+			if(!$this->pageConfig['properties']['allowNoLogin'] && !$this->isLogin){
+				redirect($this->noLoginRedirect);
+			}
+
+			if($this->router->class === 'common') {
+				redirect("$this->baseUri/$this->defaultController");
+			}
+
 			$this->{"{$this->pageConfig['properties']['baseMethod']}"}();
 		}
 	}
@@ -269,7 +285,6 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		){
 			$pageConfig = $this->config->get("page_config")[$this->router->class]??$this->config->get("page_config")[strtolower($this->router->class)];
 			if(is_empty($pageConfig, 'properties')) $pageConfig['properties'] = [];
-			if(is_empty($pageConfig['properties'], 'baseMethod')) $pageConfig['properties']['baseMethod'] = $pageConfig['type'];
 			if(!array_key_exists( 'allows', $pageConfig['properties'])) $pageConfig['properties']['allows'] = [];
 			if(empty($pageConfig['properties']['allows'])) $pageConfig['properties']['allows'][] = $pageConfig['properties']['baseMethod'];
 		}
@@ -720,5 +735,62 @@ class MY_Builder_WEB extends MY_Controller_WEB
 			}
 		}
 		return $sampleUri;
+	}
+
+	public function first_registration()
+	{
+		if($this->Model_User->getCnt(['user_cd' => 'USR000'])) show_error('System Administrator Is Already Registered.');
+
+		$this->formColumns = $this->setFormColumns('first_registration');
+		$this->addJsVars([
+			'API_URI' => '/api/auth',
+			'API_URI_ADD' => 'firstRegistration',
+			'FORM_DATA' => $this->setFormData(),
+			'FORM_REGEXP' => $this->config->item('regexp'),
+			'REDIRECT_URI' => '/admin/auth'
+		]);
+
+		$this->addCSS[] = [
+			base_url('public/assets/builder/vendor/css/pages/page-auth.css'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
+			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css'),
+		];
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/vendor/libs/@form-validation/popular.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/bootstrap5.js'),
+			base_url('public/assets/builder/vendor/libs/@form-validation/auto-focus.js'),
+			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js'),
+		];
+
+		$this->addJS['tail'][] = [
+			base_url('public/assets/builder/js/app-page-auth.js'),
+		];
+
+		$data['platformName'] = BUILDER_FLAGNAME;
+		$data['subPage'] = 'builder/layout/first_registration';
+		$data['backLink'] = WEB_HISTORY_BACK;
+		$data['formData'] = restructure_admin_form_data($this->jsVars['FORM_DATA'], false);
+		$data['includes'] = [
+			'head' => true,
+			'header' => false,
+			'modalPrepend' => true,
+			'modalAppend' => true,
+			'footer' => false,
+			'tail' => true,
+		];
+
+		parent::viewApp($data);
+	}
+
+	protected function checkLogin(): bool
+	{
+		if($this->session->userdata('token')) {
+			$this->loginData = $this->validateToken();
+			$this->isAdmin = in_array($this->loginData->user_cd, ['USR000', 'USR001']);
+			return true;
+		}
+
+		return parent::checkLogin();
 	}
 }
