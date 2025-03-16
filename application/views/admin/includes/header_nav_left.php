@@ -28,7 +28,6 @@
 				<a href="<?=$submenuHref?>" class="menu-link">
 					<?php if($submenu['icon']): ?><i class="menu-icon tf-icons <?=$submenu['icon']?>"></i><?php endif; ?>
 					<div data-i18n="<?=lang('nav.'.$submenu['title'])?>"><?=lang('nav.'.$submenu['title'])?></div>
-					<!--div data-i18n="<?//=lang($submenu['title'])?>"><?//=$submenu['title']?></div-->
 				</a>
 			</li>
 			<?php

@@ -1,8 +1,8 @@
 <ul class="menu-inner py-1">
 	<?php
-		foreach ($this->config->get('admin_nav_side', $this->config->get('admin_nav_side_sample', []), false) as $menuName=>$menu):
+		foreach ($this->config->get('admin_nav_side', $this->config->get('builder_nav_side_sample', []), false) as $menuName=>$menu):
 			$menu = array_merge(
-					$this->config->get('admin_nav_side_base', []),
+					$this->config->get('builder_nav_side_base', []),
 					$menu
 			);
 
@@ -28,7 +28,6 @@
 				<a href="<?=$submenuHref?>" class="menu-link">
 					<?php if($submenu['icon']): ?><i class="menu-icon tf-icons <?=$submenu['icon']?>"></i><?php endif; ?>
 					<div data-i18n="<?=lang('nav.'.$submenu['title'])?>"><?=lang('nav.'.$submenu['title'])?></div>
-					<!--div data-i18n="<?//=lang($submenu['title'])?>"><?//=$submenu['title']?></div-->
 				</a>
 			</li>
 			<?php
