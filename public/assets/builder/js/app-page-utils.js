@@ -199,6 +199,18 @@ function showSwalAlert(obj) {
 }
 
 function reformatFormData(form, data, regexp = {}, side = false) {
+	if(data === undefined) {
+		data = [];
+		for(const input of form.querySelectorAll('input')) {
+			if(['hidden','button'].includes(input.type)) continue;
+			data.push({
+				field: input.name,
+				rules: 'required',
+				errors: [],
+			});
+		}
+	}
+
 	return data.reduce((acc, curr, i) => {
 		if(curr.type === 'hidden') return acc;
 
