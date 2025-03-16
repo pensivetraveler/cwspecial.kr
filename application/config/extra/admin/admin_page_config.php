@@ -5,9 +5,10 @@ $config['admin_page_config_loaded'] = true;
 $config['page_config'] = [
 	'auth' => [
 		'category' => 'auth',
-		'type' => 'view',
+		'type' => 'page',
 		'properties' => [
 			'baseMethod' => 'login',
+			'allowNoLogin' => true,
 			'includes' => [
 				'head' => true,
 				'header' => false,
@@ -20,7 +21,7 @@ $config['page_config'] = [
 	],
 	'dashboard' => [
 		'category' => 'page',
-		'type' => 'view',
+		'type' => 'page',
 		'subType' => 'dashboard',
 		'properties' => [
 			'baseMethod' => 'view',
@@ -34,7 +35,7 @@ $config['page_config'] = [
 	],
 	'administrators' => [
 		'category' => 'page',
-		'type' => 'list',
+		'type' => 'page',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
@@ -59,7 +60,7 @@ $config['page_config'] = [
 	],
 	'students' => [
 		'category' => 'page',
-		'type' => 'list',
+		'type' => 'page',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
@@ -84,7 +85,7 @@ $config['page_config'] = [
 	],
 	'works' => [
 		'category' => 'page',
-		'type' => 'list',
+		'type' => 'page',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
@@ -114,7 +115,7 @@ $config['page_config'] = [
 	],
 	'notices' => [
 		'category' => 'page',
-		'type' => 'list',
+		'type' => 'page',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
@@ -141,7 +142,7 @@ $config['page_config'] = [
 	],
 	'inquiries' => [
 		'category' => 'page',
-		'type' => 'list',
+		'type' => 'page',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
@@ -171,7 +172,7 @@ $config['page_config'] = [
 	],
 	'myinfo' => [
 		'category' => 'page',
-		'type' => 'view',
+		'type' => 'page',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'edit',

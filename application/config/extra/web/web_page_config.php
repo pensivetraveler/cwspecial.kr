@@ -2,9 +2,17 @@
 $config['page_config_loaded'] = true;
 
 $config['page_config'] = [
+	'auth' => [
+		'category' => 'auth',
+		'type' => 'page',
+		'properties' => [
+			'baseMethod' => 'login',
+			'allowNoLogin' => true,
+		],
+	],
 	'works' => [
 		'category' => 'page',
-		'type' => 'list',
+		'type' => 'page',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
@@ -35,7 +43,7 @@ $config['page_config'] = [
 	],
 	'myworks' => [
 		'category' => 'page',
-		'type' => 'list',
+		'type' => 'page',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
@@ -65,7 +73,7 @@ $config['page_config'] = [
 	],
 	'notices' => [
 		'category' => 'page',
-		'type' => 'list',
+		'type' => 'page',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
@@ -99,7 +107,7 @@ $config['page_config'] = [
 	],
 	'inquiries' => [
 		'category' => 'page',
-		'type' => 'list',
+		'type' => 'page',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'list',
@@ -131,7 +139,7 @@ $config['page_config'] = [
 	],
 	'myinfo' => [
 		'category' => 'page',
-		'type' => 'view',
+		'type' => 'page',
 		'subType' => 'base',
 		'properties' => [
 			'baseMethod' => 'edit',

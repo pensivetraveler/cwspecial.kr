@@ -12,7 +12,7 @@ $config['base_includes_config'] = [
 
 $config['page_base_config'] = [
 	'category' => 'page',
-	'type' => 'view',
+	'type' => 'page',
 	'subType' => 'base',
 	'properties' => [
 		'baseMethod' => 'view',
@@ -21,6 +21,7 @@ $config['page_base_config'] = [
 		'formExist' => false,
 		'listExist' => false,
 		'includes' => $config['base_includes_config'],
+		'allowNoLogin' => false,
 	],
 	'formProperties' => [
 		'formConfig' => '',
