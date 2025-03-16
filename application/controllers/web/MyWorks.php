@@ -18,13 +18,6 @@ class MyWorks extends Common
 		]);
 	}
 
-	public function index()
-	{
-		if(!$this->isLogin) redirect('/auth');
-
-		$this->list();
-	}
-
 	public function add()
 	{
 		$this->addCSS[] = [
@@ -42,12 +35,10 @@ class MyWorks extends Common
 
 	public function edit($key = 0)
 	{
-		$tokenData = $this->validateToken();
-
 		$this->load->model('Model_Article');
 		$articleData = $this->Model_Article->getData([], [
 			'article_id' => $key,
-			'created_id' => $tokenData->user_id,
+			'created_id' => $this->loginData->user_id,
 		]);
 		if(!$articleData) parent::edit(0);
 
@@ -66,12 +57,10 @@ class MyWorks extends Common
 
 	public function view($key = 0)
 	{
-		$tokenData = $this->validateToken();
-
 		$this->load->model('Model_Article');
 		$articleData = $this->Model_Article->getData([], [
 			'article_id' => $key,
-			'created_id' => $tokenData->user_id,
+			'created_id' => $this->loginData->user_id,
 		]);
 		if(!$articleData) parent::view(0);
 

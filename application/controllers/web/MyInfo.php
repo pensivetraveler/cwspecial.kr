@@ -14,15 +14,12 @@ class MyInfo extends Common
 		]);
 	}
 
-	public function index()
+	public function edit($key = 0)
 	{
-		if(!$this->isLogin) redirect('/auth');
-
-		$tokenData = $this->validateToken();
 		$this->load->model('Model_Student');
 		$student_id = $this->Model_Student->getData(['student_id'], [
-			'user_id' => $tokenData->user_id,
+			'user_id' => $this->loginData->user_id,
 		]);
-		$this->edit($student_id);
+		parent::edit($student_id);
 	}
 }

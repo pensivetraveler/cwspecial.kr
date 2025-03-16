@@ -17,13 +17,6 @@ class Notices extends Common
 		]);
 	}
 
-	public function index()
-	{
-		if(!$this->isLogin) redirect('/auth');
-
-		$this->list();
-	}
-
 	public function add()
 	{
 		$this->addJS['tail'][] = [

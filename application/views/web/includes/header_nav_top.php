@@ -54,9 +54,11 @@
 				<li class="nav-item">
 					<a class="nav-link fw-medium" href="<?=base_url('/inquiries')?>"><?=lang('nav.Inquiries')?></a>
 				</li>
+				<?php if($isLogin): ?>
 				<li class="nav-item">
 					<a class="nav-link fw-medium" href="<?=base_url('/auth/passwordCheck?redirect_to=/myInfo')?>"><?=lang('nav.MyInfo')?></a>
 				</li>
+				<?php endif; ?>
 				<?php endif; ?>
 			</ul>
 		</div>

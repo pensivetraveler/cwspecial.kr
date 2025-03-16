@@ -16,7 +16,7 @@ class Dashboard extends Common
 		$this->viewPath = 'admin/'.$this->router->class;
 	}
 
-	public function index()
+	public function view($key = 0)
 	{
 		$adminList = $this->Model_User->getList(['user_id'], [
 			'user_cd' => 'USR001'

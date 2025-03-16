@@ -5,9 +5,7 @@ class Common extends MY_Builder_WEB
 {
 	public string $token;
 	public object $userData;
-	public string $viewPath;
 	public bool $formConfigExist;
-	public array $navAuth;
 
 	public function __construct()
 	{
@@ -20,40 +18,25 @@ class Common extends MY_Builder_WEB
 		$this->navAuth = [];
 		$this->defaultController = 'dashboard';
 
-		if($this->router->class !== 'auth') $this->auth();
-
 		$this->addCSS[] = base_url('public/assets/admin/css/style.css');
 	}
 
-	protected function auth(): bool
+	protected function checkLogin(): bool
 	{
-		if(!$this->session->userdata('user_id')) redirect('admin/auth');
+		if(parent::checkLogin()) {
+			$user = $this->Model_User->getData([], ['user_id' => $this->session->userdata('user_id')]);
+			if(!$user || !$this->isAdmin) alert(lang('Incorrect Access'), base_url('admin/auth'));
 
-		$user = $this->Model_User->getData([], ['user_id' => $this->session->userdata('user_id')]);
-		if(!$user || !in_array($user->user_cd, ['USR000', 'USR001'])) alert(lang('Incorrect Access'), base_url('admin/auth'));
-
-		if($this->session->userdata('token')) {
-			$this->validateToken();
-		}else{
-			$this->session->set_userdata('token', $this->setToken([
-				'user_id' => $user->user_id,
+			$this->userData = $user;
+			$this->headerData = [
 				'id' => $user->id,
+				'user_id' => $user->user_id,
 				'name' => $user->name,
-				'tel' => $user->tel,
-				'through' => 'admin',
-			]));
+				'user_cd' => $user->user_cd,
+			];
 		}
 
-		$this->userData = $user;
-
-		$this->headerData = [
-			'id' => $user->id,
-			'user_id' => $user->user_id,
-			'name' => $user->name,
-			'user_cd' => $user->user_cd,
-		];
-
-		return true;
+		return parent::checkLogin();
 	}
 
 	public function list()

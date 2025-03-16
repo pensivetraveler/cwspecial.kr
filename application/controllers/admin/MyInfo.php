@@ -14,9 +14,8 @@ class MyInfo extends Common
 		]);
 	}
 
-	public function index()
+	public function edit($key = 0)
 	{
-		$tokenData = $this->validateToken();
-		$this->edit($tokenData->user_id);
+		parent::edit($this->loginData->user_id);
 	}
 }

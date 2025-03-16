@@ -10,11 +10,6 @@ class Auth extends Common
 		parent::__construct();
 	}
 
-	public function index()
-	{
-		$this->login();
-	}
-
 	public function login()
 	{
 		if($this->session->userdata('user_id') && $this->session->userdata('token')) redirect('dashboard');

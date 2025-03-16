@@ -10,55 +10,9 @@ class Auth extends Common
         parent::__construct();
     }
 
-    public function index()
-    {
-		if($this->Model_User->getCnt(['user_cd' => 'USR000'])){
-			$this->login();
-		}else{
-			$this->first_registration();
-		}
-    }
-
-	public function first_registration()
-	{
-		if($this->Model_User->getCnt(['user_cd' => 'USR000'])) show_404();
-
-		$this->formColumns = $this->setFormColumns('first_registration');
-		$this->addJsVars([
-			'API_URI' => '/api/auth',
-			'API_URI_ADD' => 'firstRegistration',
-			'FORM_DATA' => $this->setFormData(),
-			'FORM_REGEXP' => $this->config->item('regexp'),
-			'REDIRECT_URI' => '/admin/auth'
-		]);
-
-		$this->addCSS[] = [
-			base_url('public/assets/builder/vendor/css/pages/page-auth.css'),
-			base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
-			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css'),
-		];
-
-		$this->addJS['tail'][] = [
-			base_url('public/assets/builder/vendor/libs/@form-validation/popular.js'),
-			base_url('public/assets/builder/vendor/libs/@form-validation/bootstrap5.js'),
-			base_url('public/assets/builder/vendor/libs/@form-validation/auto-focus.js'),
-			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js'),
-		];
-
-		$this->addJS['tail'][] = [
-			base_url('public/assets/builder/js/app-page-auth.js'),
-		];
-
-		$data['subPage'] = 'admin/auth/first_registration';
-		$data['backLink'] = WEB_HISTORY_BACK;
-		$data['formData'] = restructure_admin_form_data($this->jsVars['FORM_DATA'], false);
-
-		$this->viewApp($data);
-	}
-
     public function login()
     {
-		if($this->session->userdata('user_id') && $this->session->userdata('token')) redirect('admin/dashboard');
+		if($this->isLogin) redirect($this->isLoginRedirect);
 
 		$this->formColumns = $this->setFormColumns('login');
 		$this->addJsVars([
@@ -95,7 +49,7 @@ class Auth extends Common
 
     public function logout()
     {
-        if (!$this->session->userdata('user_id')) redirect('admin/auth');
+		if(!$this->isLogin) redirect($this->noLoginRedirect);
 
         $this->Model_User_Autologin->delData([
             'user_id' => $this->session->userdata('user_id'),
@@ -118,7 +72,7 @@ class Auth extends Common
 
 	public function findId()
 	{
-		if($this->session->userdata('user_id') && $this->session->userdata('token')) redirect('admin/dashboard');
+		if($this->isLogin) redirect($this->isLoginRedirect);
 
 		$this->formColumns = $this->setFormColumns('find_id');
 		$this->addJsVars([
@@ -155,7 +109,7 @@ class Auth extends Common
 
 	public function findPassword()
 	{
-		if($this->session->userdata('user_id') && $this->session->userdata('token')) redirect('admin/dashboard');
+		if($this->isLogin) redirect($this->isLoginRedirect);
 
 		$this->formColumns = $this->setFormColumns('find_password');
 		$this->addJsVars([

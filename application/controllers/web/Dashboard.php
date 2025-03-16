@@ -13,17 +13,8 @@ class Dashboard extends Common
 		$this->load->model('Model_Article');
 	}
 
-	public function index()
+	public function view($key = 0)
 	{
-		if(!$this->isLogin) redirect('/auth');
-
-		$user_id = $this->session->userdata('user_id');
-		$userData = $this->Model_User->getData([], ['user_id' => $user_id]);
-		if(!$userData) {
-			$this->session->sess_destroy();
-			redirect('/auth/login');
-		}
-
 		$list = $this->Model_Article->getList([], [
 			'board_id' => 3,
 			'open_yn' => 'Y',

@@ -18,17 +18,6 @@ class Inquiries extends Common
 		]);
 	}
 
-	public function index()
-	{
-		if(!$this->isLogin) redirect('/auth');
-
-		if (!$this->session->userdata('user_id')) {
-			redirect('/auth');
-		} else {
-			$this->list();
-		}
-	}
-
 	public function add()
 	{
 		$this->addJS['tail'][] = [

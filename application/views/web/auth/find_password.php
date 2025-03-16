@@ -1,6 +1,6 @@
 <div class="position-relative">
-	<div class="authentication-wrapper authentication-basic container-p-y p-4 p-sm-0">
-		<div class="authentication-inner py-6">
+	<div class="h-px-800 d-flex align-items-center">
+		<div class="w-px-400 mx-auto">
 			<!-- Login -->
 			<div class="card p-md-7 p-1">
 				<div class="card-header p-0">
@@ -98,12 +98,6 @@
 				</div>
 			</div>
 			<!-- /Login -->
-			<img
-				alt="mask"
-				src="<?=base_url('/public/assets/builder/img/illustrations/auth-basic-login-mask-light.png')?>"
-				class="authentication-image d-none d-lg-block"
-				data-app-light-img="illustrations/auth-basic-login-mask-light.png"
-				data-app-dark-img="illustrations/auth-basic-login-mask-dark.png" />
 		</div>
 	</div>
 </div>
