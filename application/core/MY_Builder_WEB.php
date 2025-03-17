@@ -74,9 +74,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 
 	public function index()
 	{
-		if(!$this->Model_User->getCnt(['user_cd' => 'USR000'])){
-			$this->first_registration();
-		}
+		$this->setupBuilderDB();
 
 		parent::index();
 
@@ -350,11 +348,17 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		$this->addJsVars($data);
 	}
 
-	protected function setFormColumns($name): array
+	protected function setFormColumns($configData = null): array
 	{
-		$config = $this->config->item('form_'.$name.'_config');
-		if(empty($config)){
-			$this->logger("setFormColumns : config $name does not exist.", E_USER_WARNING, false);
+		$config = [];
+		if(is_array($configData)) {
+			$config = $configData;
+		}elseif(is_string($configData)){
+			$config = $this->config->item('form_'.$configData.'_config');
+		}
+
+		if(is_null($configData) || empty($config)){
+			$this->logger("setFormColumns : config does not exist.", E_USER_WARNING, false);
 			return [];
 		}else{
 			return array_reduce($config, function($carry, $item) {
@@ -413,7 +417,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		$rules = preg_split('/\|(?![^\[]*\])/', $item['rules']);
 
 		if($matches = preg_grep('/^required$/', $rules)) {
-			$item['attributes']['required'] = $matches[1];
+			$item['attributes']['required'] = $matches[1]??$matches[0];
 		}
 
 		if($matches = preg_grep('/^required_mod\[(.*?)\]$/', $rules)) {
@@ -737,50 +741,111 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		return $sampleUri;
 	}
 
-	public function first_registration()
+	protected function setupBuilderDB()
 	{
-		if($this->Model_User->getCnt(['user_cd' => 'USR000'])) show_error('System Administrator Is Already Registered.');
+		if($this->Model_Common->getTableCount()) {
+			$this->addSystemUser();
+			return;
+		}
 
-		$this->formColumns = $this->setFormColumns('first_registration');
-		$this->addJsVars([
-			'API_URI' => '/api/auth',
-			'API_URI_ADD' => 'firstRegistration',
-			'FORM_DATA' => $this->setFormData(),
-			'FORM_REGEXP' => $this->config->item('regexp'),
-			'REDIRECT_URI' => '/admin/auth'
-		]);
+		if($this->input->post('sql')){
+			$this->load->library('sql_parser');
+			$sql = $this->sql_parser->parsing($this->input->post('sql'));
+			foreach (explode(';', $sql) as $qry) {
+				try {
+					$this->db->query($qry);
+				}catch (Exception $e) {
+					$this->input->raw_input_stream = null; // 원본 요청 데이터 초기화
+					$this->Model_Common->deleteAllTables();
+					show_error($e->getMessage(), 500);
+					break;
+				}
+			}
 
-		$this->addCSS[] = [
-			base_url('public/assets/builder/vendor/css/pages/page-auth.css'),
-			base_url('public/assets/builder/vendor/libs/@form-validation/form-validation.css'),
-			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css'),
-		];
+			$_POST[] = '';
+			redirect($this->baseUri);
+		}else{
+			$this->formColumns = $this->setFormColumns([
+				[
+					'field' => 'sql',
+					'label' => 'sql',
+					'rules' => 'required',
+				]
+			]);
+			$this->addJsVars([
+				'FORM_DATA' => $this->setFormData(),
+				'FORM_REGEXP' => $this->config->item('regexp'),
+			]);
 
-		$this->addJS['tail'][] = [
-			base_url('public/assets/builder/vendor/libs/@form-validation/popular.js'),
-			base_url('public/assets/builder/vendor/libs/@form-validation/bootstrap5.js'),
-			base_url('public/assets/builder/vendor/libs/@form-validation/auto-focus.js'),
-			base_url('public/assets/builder/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js'),
-		];
+			$data['platformName'] = BUILDER_FLAGNAME;
+			$data['subPage'] = 'builder/setup/set_db';
+			$data['backLink'] = WEB_HISTORY_BACK;
+			$data['formData'] = restructure_admin_form_data($this->jsVars['FORM_DATA'], false);
+			$data['includes'] = [
+				'head' => true,
+				'header' => false,
+				'modalPrepend' => true,
+				'modalAppend' => true,
+				'footer' => false,
+				'tail' => true,
+			];
 
-		$this->addJS['tail'][] = [
-			base_url('public/assets/builder/js/app-page-auth.js'),
-		];
+			parent::viewApp($data);
+		}
+	}
 
-		$data['platformName'] = BUILDER_FLAGNAME;
-		$data['subPage'] = 'builder/layout/first_registration';
-		$data['backLink'] = WEB_HISTORY_BACK;
-		$data['formData'] = restructure_admin_form_data($this->jsVars['FORM_DATA'], false);
-		$data['includes'] = [
-			'head' => true,
-			'header' => false,
-			'modalPrepend' => true,
-			'modalAppend' => true,
-			'footer' => false,
-			'tail' => true,
-		];
+	public function addSystemUser()
+	{
+		$cnt = $this->db
+			->where(['user_cd' => 'USR000'])
+			->from(USER_TABLE_NAME)
+			->count_all_results();
+		if($cnt) return;
 
-		parent::viewApp($data);
+		$userColumns = [];
+		$columns = $this->Model_Common->getNotNullColumns(USER_TABLE_NAME);
+		if(empty($columns)) show_error(lang('Check The User Table'));
+
+		foreach ($columns as $field) {
+			if(in_array($field, [USER_ID_COLUMN_NAME, USER_CD_COLUMN_NAME])) continue;
+			$userColumns[] = [
+				'field' => $field,
+				'label' => $field,
+			];
+		}
+
+		if($this->input->post()) {
+			$set = array_merge([
+				USER_CD_COLUMN_NAME => 'USR000',
+			], array_intersect_key($this->input->post(), array_flip($columns)));
+			if(array_key_exists('password', $set))
+				$set['password'] = $this->encryption->encrypt($this->input->post('password'));
+
+			$this->db->set($set)->insert(USER_TABLE_NAME);
+
+			redirect($this->baseUri);
+		}else{
+			$this->formColumns = $this->setFormColumns($userColumns);
+			$this->addJsVars([
+				'FORM_DATA' => $this->setFormData(),
+				'FORM_REGEXP' => $this->config->item('regexp'),
+			]);
+
+			$data['platformName'] = BUILDER_FLAGNAME;
+			$data['subPage'] = 'builder/setup/add_system_user';
+			$data['backLink'] = WEB_HISTORY_BACK;
+			$data['formData'] = restructure_admin_form_data($this->jsVars['FORM_DATA'], false);
+			$data['includes'] = [
+				'head' => true,
+				'header' => false,
+				'modalPrepend' => true,
+				'modalAppend' => true,
+				'footer' => false,
+				'tail' => true,
+			];
+
+			parent::viewApp($data);
+		}
 	}
 
 	protected function checkLogin(): bool
