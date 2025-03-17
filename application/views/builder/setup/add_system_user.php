@@ -9,7 +9,8 @@
 					echo form_open_multipart('', [
 							'id' => 'formAuth',
 							'class' => "add-new-record needs-validation form-type-page",
-							'onsubmit' => 'return false',
+							'method' => 'post',
+							'action' => '',
 					], [
 							'_mode' => $this->router->method,
 							'_event' => '',
