@@ -40,7 +40,9 @@ const UPLOAD_LINK = '/public/uploads/';
 | EXTRA DB CONFIG
 |--------------------------------------------------------------------------
 */
+const USER_TABLE_NAME = 'user';
 const USER_ID_COLUMN_NAME = 'user_id';
+const USER_CD_COLUMN_NAME = 'user_cd';
 const CREATED_DT_COLUMN_NAME = 'created_dt';
 const CREATED_ID_COLUMN_NAME = 'created_id';
 const UPDATED_DT_COLUMN_NAME = 'updated_dt';
