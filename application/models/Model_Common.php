@@ -237,4 +237,60 @@ class Model_Common extends MY_Model
 			$this->db->like("{$this->table}.{$like['field']}", $like['value']);
 		}
 	}
+
+	public function getTableList()
+	{
+		$query = $this->db->query("
+            SELECT *
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_SCHEMA = DATABASE()
+        ");
+
+		return $query->result_array();
+	}
+
+	public function getTableCount()
+	{
+		$query = $this->db->query("
+            SELECT COUNT(*) AS table_count
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_SCHEMA = DATABASE()
+        ");
+
+		return $query->row()->table_count;
+	}
+
+	public function getNotNullColumns($tableName)
+	{
+		$tableName = $this->db->dbprefix.$tableName;
+		$query = $this->db->query("
+            SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE() 
+            AND TABLE_NAME = ?
+            AND IS_NULLABLE = 'NO'
+            AND COLUMN_DEFAULT IS NULL
+        ", [$tableName]);
+
+		return array_column($query->result_array(), 'COLUMN_NAME');
+	}
+
+	public function deleteAllTables()
+	{
+		$this->db->query("
+SET FOREIGN_KEY_CHECKS = 0;
+
+SET @sql = (
+    SELECT GROUP_CONCAT('DROP TABLE IF EXISTS `', table_name, '`')
+    FROM INFORMATION_SCHEMA.TABLES
+    WHERE table_schema = DATABASE()
+);
+
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET FOREIGN_KEY_CHECKS = 1;
+		");
+	}
 }
