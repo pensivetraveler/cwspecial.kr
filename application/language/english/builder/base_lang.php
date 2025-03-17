@@ -60,3 +60,5 @@ $lang['Administrator'] = 'Administrator';
 $lang['Registration'] = 'Registration';
 $lang['Add Event'] = 'Add Event';
 $lang['System Administrator Registration'] = 'System Administrator Registration';
+$lang['ADD DB SQL'] = 'Set DB';
+$lang['Check The User Table'] = 'The User table is empty.';
