@@ -19,28 +19,6 @@ class Auth extends Common
 		$this->indexAPI = false;
 	}
 
-	public function firstRegistration_post()
-	{
-		if($this->Model_User->getCnt(['user_cd' => 'USR000'])) {
-			$this->response([
-				'code' => DATA_ALREADY_EXIST,
-			]);
-		}
-
-		$this->Model_User->addData([
-			'user_cd' => 'USR000',
-			'id' => $this->input->post('id'),
-			'password' => $this->encryption->encrypt($this->input->post('password')),
-			'name' => $this->input->post('name'),
-			'email' => $this->input->post('email'),
-			'tel' => $this->input->post('tel'),
-		]);
-
-		$this->response([
-			'code' => DATA_CREATED,
-		]);
-	}
-
 	public function dupCheck_get()
 	{
 		$key = $this->input->get('key');
