@@ -54,7 +54,15 @@ class Sql_parser
 					$autoIncrementStatements[$tableName] = "ALTER TABLE `$tableName` MODIFY COLUMN `{$columnMatches[1][0]}` BIGINT(11) UNSIGNED NOT NULL AUTO_INCREMENT;";
 				}
 
-				$createTableStatements[$tableName] = $modifiedSql.'ENGINE=INNODB DEFAULT CHARSET=utf8mb4';
+				if(strpos($modifiedSql, 'ENGINE=') === false) {
+					$modifiedSql .= ' ENGIN=INNODB ';
+				}
+
+				if(strpos($modifiedSql, 'DEFAULT CHARSET=') === false) {
+					$modifiedSql .= ' DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ';
+				}
+
+				$createTableStatements[$tableName] = $modifiedSql;
 			}
 
 			// Collect ALTER TABLE statements for multiple primary key columns
