@@ -185,9 +185,14 @@ class Model_Common extends MY_Model
 	protected function getValidSetData($set): array
 	{
 		$columnList = $this->getColumnList();
-		return array_filter($set, function($key) use ($columnList) {
+		$set = array_filter($set, function($key) use ($columnList) {
 			return in_array($key, $columnList);
 		}, ARRAY_FILTER_USE_KEY);
+
+		if($this->isCreatedId && is_empty($set, CREATED_ID_COLUMN_NAME)) {
+			$set[CREATED_ID_COLUMN_NAME] = $this->session->userdata(USER_ID_COLUMN_NAME) ?? 1;
+		}
+		return $set;
 	}
 
 	public function getColumnList(): array

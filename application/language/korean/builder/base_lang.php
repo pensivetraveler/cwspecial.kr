@@ -60,3 +60,5 @@ $lang['Administrator'] = '관리자';
 $lang['Registration'] = '등록';
 $lang['Add Event'] = '일정 등록';
 $lang['System Administrator Registration'] = '시스템 관리자 추가';
+$lang['ADD DB SQL'] = 'DB 셋업';
+$lang['Check The User Table'] = 'User 테이블을 점검해주세요.';

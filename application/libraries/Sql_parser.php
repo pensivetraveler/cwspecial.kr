@@ -55,7 +55,7 @@ class Sql_parser
 				}
 
 				if(strpos($modifiedSql, 'ENGINE=') === false) {
-					$modifiedSql .= ' ENGIN=INNODB ';
+					$modifiedSql .= ' ENGINE=INNODB ';
 				}
 
 				if(strpos($modifiedSql, 'DEFAULT CHARSET=') === false) {

@@ -331,6 +331,8 @@ $(function() {
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 
+		document.getElementById('totalRowCount').innerHTML = 0;
+		document.getElementById('totalErrorCount').innerHTML = 0;
 		document.getElementById('excelFormSubmit').setAttribute('disabled', 'disabled');
 		document.getElementById('btnErrorFind').setAttribute('disabled', 'disabled');
 	});

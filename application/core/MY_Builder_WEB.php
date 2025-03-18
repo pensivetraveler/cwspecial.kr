@@ -710,6 +710,8 @@ class MY_Builder_WEB extends MY_Controller_WEB
 							->getFont()->setBold(true)
 							->getColor()->setARGB(PHPExcel_Style_Color::COLOR_RED);
 					}
+
+					$sheet->getColumnDimension($alphabet)->setWidth(24);
 				}
 				$lastAlphabet = number_to_alphabet(count($data)-1);
 
@@ -756,7 +758,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 					$this->db->query($qry);
 				}catch (Exception $e) {
 					$this->input->raw_input_stream = null; // 원본 요청 데이터 초기화
-					$this->Model_Common->deleteAllTables();
+//					$this->Model_Common->deleteAllTables();
 					show_error($e->getMessage(), 500);
 					break;
 				}
@@ -807,7 +809,7 @@ class MY_Builder_WEB extends MY_Controller_WEB
 		if(empty($columns)) show_error(lang('Check The User Table'));
 
 		foreach ($columns as $field) {
-			if(in_array($field, [USER_ID_COLUMN_NAME, USER_CD_COLUMN_NAME])) continue;
+			if(in_array($field, [USER_ID_COLUMN_NAME, USER_CD_COLUMN_NAME, CREATED_ID_COLUMN_NAME, CREATED_DT_COLUMN_NAME, UPDATED_ID_COLUMN_NAME, UPDATED_DT_COLUMN_NAME, DEL_YN_COLUMN_NAME, USE_YN_COLUMN_NAME])) continue;
 			$userColumns[] = [
 				'field' => $field,
 				'label' => $field,
