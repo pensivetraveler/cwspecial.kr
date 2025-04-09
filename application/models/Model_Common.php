@@ -238,8 +238,20 @@ class Model_Common extends MY_Model
 		}
 
 		$like = $filter['like'] ?? [];
-		if(!is_empty($like, 'field') && !is_empty($like, 'value')) {
-			$this->db->like("{$this->table}.{$like['field']}", $like['value']);
+		if(!is_empty($like, 'value')) {
+			if(!is_empty($like, 'field')) {
+				$this->db->like("{$this->table}.{$like['field']}", $like['value'], 'both');
+			}else{
+				if(count($this->strList)) {
+					foreach ($this->strList as $i=>$field) {
+						if($i === 0){
+							$this->db->like("{$this->table}.$field", $like['value'], 'both');
+						}else{
+							$this->db->or_like("{$this->table}.$field", $like['value'], 'both');
+						}
+					}
+				}
+			}
 		}
 	}
 
