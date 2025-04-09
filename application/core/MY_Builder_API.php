@@ -93,7 +93,7 @@ class MY_Builder_API extends MY_Controller_API
 					case 'like' :
 						if($filter['field'] && $filter['value']) {
 							$data['filter']['like'] = [
-								'field' => $filter['field'],
+								'field' => $filter['field']??'',
 								'value' => $filter['value'],
 							];
 						}
@@ -809,7 +809,19 @@ class MY_Builder_API extends MY_Controller_API
 		if(!$model) $model = $this->Model;
 		if(count($model->uniqueKeyList) > 0){
 			foreach ($model->uniqueKeyList as $key) {
-				if($this->checkDuplicate([$key => $dto[$key]], $model, !$add?$dto:[])){
+				if(!array_search($key, array_column($this->formConfig, 'field'))) continue;
+				if(!$add && !array_key_exists($key, $dto)) continue;
+
+				$idx = array_search($key, array_column($this->formConfig, 'field'));
+				$config = $this->formConfig[$idx];
+				if(!$add && !$config['form_attributes']['editable']) continue;
+
+				$isIncludeDeleted = false;
+				if(array_key_exists('form_attributes', $this->formConfig[$idx]) && !is_empty($this->formConfig[$idx]['form_attributes'], 'check_delete')) {
+					$isIncludeDeleted = $config['form_attributes']['check_delete'];
+				}
+
+				if($this->checkDuplicate([$key => $dto[$key]], $model, !$add?$dto:[], $isIncludeDeleted)){
 					$lang = $model?lang($model->table.'.'.$key):$key;
 					$this->response([
 						'code' => DATA_ALREADY_EXIST,
@@ -821,17 +833,9 @@ class MY_Builder_API extends MY_Controller_API
 		}
 	}
 
-	protected function checkDuplicate($unique, $model = null, $dto = [])
+	protected function checkDuplicate($unique, $model = null, $dto = [], $isIncludeDeleted = false)
 	{
 		foreach ($unique as $key=>$val) {
-			$isIncludeDeleted = false;
-			if(array_search($key, array_column($this->formConfig, 'field')) !== false) {
-				$idx = array_search($key, array_column($this->formConfig, 'field'));
-				if(array_key_exists('form_attributes', $this->formConfig[$idx]) && !is_empty($this->formConfig[$idx]['form_attributes'], 'check_delete')) {
-					$isIncludeDeleted = $this->formConfig[$idx]['form_attributes']['check_delete'];
-				}
-			}
-
 			if(is_null($model)) {
 				if(property_exists($this, 'Model_Parent') && in_array($key, $this->Model_Parent->uniqueKeyList)) {
 					$model = $this->Model_Parent;
@@ -843,7 +847,7 @@ class MY_Builder_API extends MY_Controller_API
 			}
 
 			$whereNot = is_empty($dto)?[]:[$model->identifier => $dto[$model->identifier]];
-			$model->checkDuplicate($unique, $whereNot, $isIncludeDeleted);
+			return $model->checkDuplicate($unique, $whereNot, $isIncludeDeleted);
 		}
 	}
 
